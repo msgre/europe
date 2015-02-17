@@ -5,6 +5,7 @@ from django.db import models, migrations
 
 
 COUNTRIES = [
+    u'Albánie',
     u'Andora',
     u'Arménie',
     u'Ázerbajdžán',
