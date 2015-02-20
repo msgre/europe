@@ -11,9 +11,9 @@ Jak rozjet a pracovat s kontejnerem pro evropu
 
    Spusti se kontejner se jmenem "europe", odvozeny z image "msgre/europe", do
    ktereho je nasdilen adresar se zdrojovymi kody projektu.
-   Kontos se pricmrdne na port 8000 hosta a je dostupny z vnejsi (tj. pokud
-   na kontos chci sahnout zevnitr VBoxu kontaktuji 0.0.0.0:8000, pokud z vnejsku
-   pak pres IP:8000).Napr. `curl -XGET 172.17.0.71:8000`.
+   Kontos se pricmrdne na port 8000 hosta (tj. pokud na kontos chci sahnout
+   zevnitr VBoxu kontaktuji localhost:8000, pokud z vnejsku pak pres
+   IP:8000). Napr. `curl -XGET 172.17.0.71:8000`.
    Vevnitr jede Djangoidni devel server, v konzoli budou objevovat stdout
    hlasky zevnitr kontejneru (vystup runserver).
 
