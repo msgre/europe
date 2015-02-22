@@ -1,0 +1,20 @@
+{
+  "name": "europe",
+  "version": "0.0.0",
+  "authors": [
+    "Michal Valoušek <michal@plovarna.cz>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone.radio": "~0.9.0",
+    "bootstrap": "~3.3.2",
+    "marionette": "~2.3.2"
+  }
+}
