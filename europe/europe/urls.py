@@ -16,14 +16,14 @@ from geo.views import CountryList, CountryDetail
 
 
 urlpatterns = [
-    url(r'^countries$', CountryList.as_view()),
-    url(r'^countries/(?P<id>\d+)$', CountryDetail.as_view()),
+    url(r'^api/countries$', CountryList.as_view()),
+    url(r'^api/countries/(?P<id>\d+)$', CountryDetail.as_view()),
 
-    url(r'^categories$', CategoryList.as_view()),
+    url(r'^api/categories$', CategoryList.as_view()),
 
-    url(r'^questions/(?P<id>\d+)$', QuestionList.as_view()),
+    url(r'^api/questions/(?P<id>\d+)$', QuestionList.as_view()),
 
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
