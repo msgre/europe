@@ -41,12 +41,32 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             total: 0
             current: 0
 
+        initialize: () ->
+            that = @
+
+            # progress penalty due to passing wrong tunnel
+            Mod.channel.vent.on 'penalty', (count) ->
+                current = that.get('current')
+                total = that.get('total')
+                current += count
+                if current > total
+                    current = total
+                that.set('current', current)
+
     Mod.Info = Backbone.Model.extend
         defaults:
             question: 1
             total_questions: null
             category: null
             time: 0
+
+        initialize: () ->
+            that = @
+
+            # time penalty due to passing wrong tunnel
+            Mod.channel.vent.on 'penalty', (count) ->
+                time = that.get('time')
+                that.set('time', time + count * 10) # TODO: penalta se tyka 2 casti systemu, kazdy jede v jine jednotce; mel bych to nejak sjednotit
 
     Mod.Question = Backbone.Model.extend
         idAttribute: 'id'
@@ -107,7 +127,6 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             @model.on 'change', () =>
                 @render()
 
-
     Mod.QuestionItemView = Marionette.ItemView.extend
         tagName: 'h1'
         template: (serialized_model) ->
@@ -123,6 +142,25 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             @model.on 'change', () =>
                 @render()
 
+            that = @
+            # event about tunnel crossing
+            window.main_channel.vent.on 'tunnel', (number) ->
+                country = that.model.get('country')
+                if "#{number}" == "#{country.sensor}"
+                    Mod.channel.vent.trigger('next')
+                else
+                    Mod.channel.vent.trigger('penalty', 3)
+
+            window.main_channel.vent.on 'good', (number) ->
+                Mod.channel.vent.trigger('next')
+
+            window.main_channel.vent.on 'bad', (number) ->
+                Mod.channel.vent.trigger('penalty', 3)
+
+        onBeforeDestroy: () ->
+            window.main_channel.vent.off('bad')
+            window.main_channel.vent.off('good')
+            window.main_channel.vent.off('tunnel')
 
     Mod.QuestionLayout = Marionette.LayoutView.extend
         el: '#content'
@@ -145,64 +183,80 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             progress: '#progress'
 
 
+    Mod.on "start", (options) ->
+
+        # data pro horni/dolni linku
+        info = new Mod.Info
+            total_questions: options.total_questions
+            category: options.category.title
+
+        progress = new Mod.Progress
+            total: options.total_questions
+            current: 0
+
+        # data pro prostredek (otazky ze serveru)
+        questions = new Mod.Questions(options.category.id)
+        questions.fetch()
+        questions.on 'sync', () ->
+
+            # layout
+            q_layout = new Mod.QuestionLayout()
+            q_layout.render()
+
+            # info radek nahore
+            info_view = new Mod.InfoItemView
+                model: info
+            q_layout.getRegion('info').show(info_view)
+
+            # otazka
+            question_view = new Mod.QuestionItemView
+                model: questions.at(info.get('question') - 1)
+            q_layout.getRegion('question').show(question_view)
+
+            # progress bar
+            progress_view = new Mod.ProgressItemView
+                model: progress
+            q_layout.getRegion('progress').show(progress_view)
+
+            # nastaveni casovace
+            Mod.channel.commands.setHandler 'main', (msg) ->
+                time = info.get('time') + 1
+                info.set('time', time)
+
+                current = progress.get('current')
+                total = progress.get('total')
+                if current >= total
+                    Mod.channel.vent.trigger('next')
+                else
+                    progress.set('current', current + .1)
+
+            Mod.channel.vent.on 'next', () ->
+                question = info.get('question') + 1
+                if question > options.total_questions
+                    Mod.clear_timer()
+                    console.log 'Prechod na obrazovku #5'
+                    console.log elapsed(info.get('time'))
+                    # TODO: bude se toho mozna muset poslat vic, pokud to nebude v option (napr. kategorie, sada dotazu, apod)
+                else
+                    info.set('question', question)
+                    progress.set('current', 0)
+
+                    question_view.destroy()
+                    question_view = new Mod.QuestionItemView
+                        model: questions.at(question - 1)
+                    q_layout.getRegion('question').show(question_view)
+
+            Mod.set_timer()
+
+
+
 # --- inicializace aplikace
 
-App.addInitializer (options) ->
+# TODO: zatim definovano pouze staticky
+options =
+    total_questions: 10
+    category:
+        id: 1
+        title: 'Hlavní města'
 
-    #category_id = options.category_id   # TODO:
-    category_id = 1
-
-    # modul
-    Game = App.module("Game")
-
-    # data (set dotazu)
-    info = new Game.Info
-        total_questions: 10     # TODO: options
-        category: 'unknown'     # TODO: options
-
-    progress = new Game.Progress
-        total: 10               # TODO: options
-        current: 0
-
-    # otazky ze serveru
-    questions = new Game.Questions(category_id)
-    questions.fetch()
-    questions.on 'sync', () ->
-
-        # layout
-        q_layout = new Game.QuestionLayout()
-        q_layout.render()
-
-        # info radek nahore
-        info_view = new Game.InfoItemView({model: info})
-        q_layout.getRegion('info').show(info_view)
-
-        # otazka
-        question_view = new Game.QuestionItemView({model: questions.at(info.get('question'))})
-        q_layout.getRegion('question').show(question_view)
-
-        # progress bar
-        progress_view = new Game.ProgressItemView({model: progress})
-        q_layout.getRegion('progress').show(progress_view)
-
-        # nastaveni casovace
-        Game.channel.commands.setHandler 'main', (msg) ->
-            time = info.get('time') + 1
-            info.set('time', time)
-
-            current = progress.get('current')
-            total = progress.get('total')
-            if current >= total
-                question = info.get('question') + 1
-                info.set('question', question)
-                progress.set('current', 0)
-
-                question_view = new Game.QuestionItemView({model: questions.at(question)})
-                q_layout.getRegion('question').show(question_view)
-
-            else
-                progress.set('current', current + .1)
-
-        Game.set_timer()
-
-App.start()
+App.start(options)

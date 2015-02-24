@@ -13,6 +13,12 @@ document['onkeypress'] = (e) ->
         window.main_channel.commands.execute('main', 'key-down')
     else if evt.keyCode == 32   # mezera
         window.main_channel.commands.execute('main', 'key-fire')
+
+    # debug ucely (klavesy pro spravnou/blbou odpoved)
+    else if evt.keyCode == 49   # 1
+        window.main_channel.vent.trigger('good')
+    else if evt.keyCode == 48   # 0
+        window.main_channel.vent.trigger('bad')
     return
 
 # http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss

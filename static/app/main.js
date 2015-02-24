@@ -13,6 +13,10 @@ document['onkeypress'] = function(e) {
     window.main_channel.commands.execute('main', 'key-down');
   } else if (evt.keyCode === 32) {
     window.main_channel.commands.execute('main', 'key-fire');
+  } else if (evt.keyCode === 49) {
+    window.main_channel.vent.trigger('good');
+  } else if (evt.keyCode === 48) {
+    window.main_channel.vent.trigger('bad');
   }
 };
 
