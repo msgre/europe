@@ -12,9 +12,10 @@ class Category(models.Model):
     Category of question.
     """
     title = models.CharField(_('Category'), max_length=128, unique=True)
+    order = models.IntegerField(_('Order'), default=10)
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('order', )
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
