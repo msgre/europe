@@ -59,7 +59,7 @@ RECORDS = [
 
 for r in RECORDS:
     Question.objects.create(
-        question = u'Co je hlavní město %s? (%s)' % (r[0], r[1]),
+        question = u'Ve které zemi se nachází město %s?' % (r[1], ),
         country = Country.objects.get(title=r[0]),
         category = category
     )
