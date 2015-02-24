@@ -13,7 +13,8 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
 class QuestionsSerializer(serializers.HyperlinkedModelSerializer):
     country = CountrySerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Question
-        fields = ('id', 'question', 'image', 'country', )
+        fields = ('id', 'question', 'image', 'country', 'category')
