@@ -43,6 +43,10 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
         if number == 0
             clear_timer()
             window.channel.command('countdown:close', _options)
+        else if number == 1
+            window.sfx.honk.play()
+        else
+            window.sfx.button.play()
 
     # --- module
 

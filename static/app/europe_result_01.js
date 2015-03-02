@@ -84,7 +84,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
   });
   TypewriterView = Marionette.ItemView.extend({
     template: function(serialized_model) {
-      return _.template("<p>Tvůj čas se dostal do žebříčku! Zadej jméno svého týmu:</p>\n<h1><span><%= name %></span><span style=\"background:#000;color:#fff;padding-left:.1em;padding-right:.1em\"><%= letter %></span></h1>\n<p><%= show_alphabet() %></p>\n<p><em>Tlačítky nahoru/dolů vybírej písmena, tlačítkem OK vyber konkrétní znak.<br/>Symbolem " + LETTER_BACKSPACE + " smažeš předchozí znak, symbolem " + LETTER_ENTER + " jméno uložíš.<br/>Délka jména maximálně " + NAME_MAX_LENGTH + " znaků.</em></p>")(serialized_model);
+      return _.template("<p>Tvůj čas se dostal do žebříčku! Zadej jméno svého týmu:</p>\n<h1><span><%= name %></span><span style=\"background:#000;color:#fff;padding-left:.1em;padding-right:.1em\"><%= letter %></span><span style=\"color:#ccc\"><%= show_empty() %></span></h1>\n<p><%= show_alphabet() %></p>\n<p><em>Tlačítky nahoru/dolů vybírej písmena, tlačítkem OK vyber konkrétní znak.<br/>Symbolem " + LETTER_BACKSPACE + " smažeš předchozí znak, symbolem " + LETTER_ENTER + " jméno uložíš.<br/>Délka jména maximálně " + NAME_MAX_LENGTH + " znaků.</em></p>")(serialized_model);
     },
     templateHelpers: function() {
       return {
@@ -92,6 +92,17 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
           var index;
           index = LETTERS.indexOf(this.letter);
           return "" + (LETTERS.substring(0, index)) + "<span style=\"background:#000;color:#fff;\">" + this.letter + "</span>" + (LETTERS.substring(index + 1));
+        },
+        show_empty: function() {
+          var i, out, rest, _i;
+          rest = NAME_MAX_LENGTH - this.name.length;
+          out = "";
+          if (rest > 1) {
+            for (i = _i = 1; 1 <= rest ? _i < rest : _i > rest; i = 1 <= rest ? ++_i : --_i) {
+              out += "␣";
+            }
+          }
+          return out;
         }
       };
     },
@@ -108,19 +119,27 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
         index = LETTERS.indexOf(letter);
         _name = that.model.get('name');
         if (msg === 'up' && index > 0) {
+          window.sfx.button.play();
           index -= 1;
           that.model.set('letter', LETTERS[index]);
         } else if (msg === 'down' && index < (LETTERS.length - 1)) {
+          window.sfx.button.play();
           index += 1;
           that.model.set('letter', LETTERS[index]);
         } else if (msg === 'fire') {
-          if (letter === LETTER_BACKSPACE && _name.length > 0) {
-            that.model.set('name', _name.substring(0, _name.length - 1));
-          } else if (letter === LETTER_ENTER && _name.length > 0) {
-            window.channel.command('result:save', _name);
+          window.sfx.button2.play();
+          if (letter === LETTER_BACKSPACE) {
+            if (_name.length > 0) {
+              that.model.set('name', _name.substring(0, _name.length - 1));
+            }
+          } else if (letter === LETTER_ENTER) {
+            if (_name.length > 0) {
+              window.channel.command('result:save', _name);
+            }
           } else if (_name.length < NAME_MAX_LENGTH) {
             that.model.set('name', "" + _name + letter);
-            if (that.model.get('name').length === NAME_MAX_LENGTH) {
+            _name = that.model.get('name');
+            if (_name.length === NAME_MAX_LENGTH) {
               window.channel.command('result:save', _name);
             }
           }
@@ -151,6 +170,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
   };
   Mod.onStart = function(options) {
     _options = options;
+    window.sfx.surprise.play();
     time = new Time({
       time: options.time
     });

@@ -72,6 +72,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
         } else if (msg === 'down' && that.index < that.collection.length - 1) {
           that.index += 1;
         } else if (msg === 'fire') {
+          window.sfx.button2.play();
           obj = that.collection.at(that.index);
           window.channel.command('gamemode:close', _.extend(_options, {
             category: obj.toJSON()
@@ -81,6 +82,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
           set_new_timeout = false;
         }
         if (set_new_timeout) {
+          window.sfx.button.play();
           set_delay(handler, IDLE_TIMEOUT);
         }
         if (old_index !== that.index) {

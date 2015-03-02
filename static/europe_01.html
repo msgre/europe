@@ -37,6 +37,7 @@
         <script type="text/javascript" src="bower_components/backbone.babysitter/lib/backbone.babysitter.min.js"></script>
         <script type="text/javascript" src="bower_components/backbone.radio/build/backbone.radio.min.js"></script>
         <script type="text/javascript" src="bower_components/marionette/lib/backbone.marionette.min.js"></script>
+        <script type="text/javascript" src="bower_components/howler/howler.min.js"></script>
         <script type="text/javascript" src="app/shim.js"></script>
 
         <!-- application -->
@@ -51,6 +52,15 @@
             var options={
                 total_questions: 10
             };
+            window.sfx = {
+                button: new Howl({urls: ['sfx/beep.mp3']}),
+                button2: new Howl({urls: ['sfx/beep2.mp3']}),
+                yes: new Howl({urls: ['sfx/yes.mp3']}),
+                no: new Howl({urls: ['sfx/no.mp3']}),
+                surprise: new Howl({urls: ['sfx/surprise.mp3']}),
+                honk: new Howl({urls: ['sfx/honk.mp3']})
+            };
+
             App.start(options);
         </script>
     </body>

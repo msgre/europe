@@ -213,6 +213,11 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       }));
       local_channel.on('next', function(user_answer) {
         var old_q, output, question;
+        if (user_answer) {
+          window.sfx.yes.play();
+        } else {
+          window.sfx.no.play();
+        }
         question = info.get('question');
         old_q = questions.at(question - 1);
         old_q.set('answer', user_answer);

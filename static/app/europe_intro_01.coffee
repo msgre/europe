@@ -64,6 +64,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
             Intro04
         ]
         window.channel.on 'keypress', () ->
+            window.sfx.button.play()
             window.channel.command('intro:close', options)
         handler()
         set_timer(handler, TIME_PER_SCREEN)

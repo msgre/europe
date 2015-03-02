@@ -45,6 +45,7 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
     state = 0;
     view_list = [Intro01, Intro02, Intro03, Intro04];
     window.channel.on('keypress', function() {
+      window.sfx.button.play();
       return window.channel.command('intro:close', options);
     });
     handler();

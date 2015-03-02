@@ -213,6 +213,10 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             q_layout.getRegion('progress').show(new ProgressItemView({model: progress}))
 
             local_channel.on 'next', (user_answer) ->
+                if user_answer
+                    window.sfx.yes.play()
+                else
+                    window.sfx.no.play()
                 question = info.get('question')
 
                 # record user answer

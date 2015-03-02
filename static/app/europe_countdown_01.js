@@ -45,6 +45,10 @@ App.module("Countdown", function(Mod, App, Backbone, Marionette, $, _) {
     if (number === 0) {
       clear_timer();
       return window.channel.command('countdown:close', _options);
+    } else if (number === 1) {
+      return window.sfx.honk.play();
+    } else {
+      return window.sfx.button.play();
     }
   };
   Mod.onStart = function(options) {
