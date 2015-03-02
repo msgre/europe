@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'quiz',
     'scores',
     'options',
+    'results',
 )
 
 MIDDLEWARE_CLASSES = (
