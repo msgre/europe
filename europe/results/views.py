@@ -8,7 +8,7 @@ from options.models import Option
 
 from quiz.models import Category
 from .models import Result
-from .serializers import ResultsSerializer, RankSerializer
+from .serializers import ResultsSerializer, RankSerializer, ScoreSerializer
 
 
 class MainResultList(generics.ListAPIView):
@@ -52,7 +52,7 @@ class ResultRank(generics.RetrieveAPIView):
             category = Category.objects.get(pk=self.kwargs['id'])
         except:
             raise Http404
-        time = int(self.kwargs['id'])
+        time = int(self.kwargs['time'])
         count = Option.objects.get(key='POCET_OTAZEK')
         count = int(count.value)
 
@@ -65,8 +65,16 @@ class ResultRank(generics.RetrieveAPIView):
         return {
             'position': position,
             'total': total,
-            'top': total > count and position <= count,
+            'top': position <= count,
             'category_position': category_position,
             'category_total': category_total,
-            'category_top': category_total > count and category_position <= count,
+            'category_top': category_position <= count,
         }
+
+
+class CreateScoreRecord(generics.CreateAPIView):
+    """
+    TODO:
+    """
+    serializer_class = ScoreSerializer
+    queryset = Result.objects.all()

@@ -13,7 +13,7 @@ from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from quiz.views import CategoryList, QuestionList
 from geo.views import CountryList, CountryDetail
-from results.views import MainResultList, CategoryResultList, ResultRank
+from results.views import MainResultList, CategoryResultList, ResultRank, CreateScoreRecord
 
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^api/results$', MainResultList.as_view()),
     url(r'^api/results/(?P<id>\d+)$', CategoryResultList.as_view()),
     url(r'^api/results/(?P<id>\d+)/(?P<time>\d+)$', ResultRank.as_view()),
+    url(r'^api/score$', CreateScoreRecord.as_view()),
 
     #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

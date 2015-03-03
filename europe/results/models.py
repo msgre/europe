@@ -17,7 +17,7 @@ class Result(models.Model):
     created   = models.DateTimeField(_('Created'), auto_now_add=True)
 
     class Meta:
-        ordering = ('time', )
+        ordering = ('time', '-created')
         verbose_name = _('Result')
         verbose_name_plural = _('Results')
 
@@ -42,3 +42,6 @@ class AnsweredQuestion(models.Model):
     question = models.ForeignKey('quiz.Question')
     order    = models.IntegerField(_('Order'))
     correct  = models.BooleanField(_('Correct answer'), default=None)
+
+    class Meta:
+        ordering = ('order', )
