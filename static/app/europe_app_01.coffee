@@ -53,7 +53,15 @@ App.on 'start', (global_options) ->
         state_handler("Result", options)
 
     window.channel.comply 'result:close', (options) ->
-        console.log 'presun na 6 obrazovku (asi vysledky)'
+        window.channel.command('score:start', options)
+
+    # --- score
+
+    window.channel.comply 'score:start', (options) ->
+        state_handler("Score", options)
+
+    window.channel.comply 'score:close', (options) ->
+        console.log 'presun na 7 obrazovku (vysledky)'
         console.log options # tu se prenasi informace o tom jaky mod hry si vybral
 
     # start!

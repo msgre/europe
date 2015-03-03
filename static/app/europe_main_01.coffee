@@ -1,3 +1,13 @@
+# TempScore = Backbone.Model.extend
+#     defaults:
+#         name: undefined
+#         time: undefined
+#         category: undefined
+#         questions: undefined
+#     url: '/api/score'
+# 
+# window.temp_score = new TempScore()
+
 # --- main comunication channel ----------------------------------------------
 
 window.channel = Backbone.Radio.channel('main')
@@ -69,6 +79,7 @@ delay_id = undefined
 clear_delay = () ->
     if delay_id != undefined
         window.clearTimeout(delay_id)
+    delay_id = undefined
 
 set_delay = (fn, delay) ->
     clear_delay()
@@ -81,7 +92,8 @@ timer_id = undefined
 
 clear_timer = () ->
     if timer_id != undefined
-        window.clearTimeout(timer_id)
+        window.clearInterval(timer_id)
+    timer_id = undefined
 
 set_timer = (fn, delay) ->
     clear_timer()

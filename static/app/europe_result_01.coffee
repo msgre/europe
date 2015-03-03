@@ -51,6 +51,14 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
             name: ''
             letter: 'A'
 
+    Score = Backbone.Model.extend
+        defaults:
+            name: undefined
+            time: undefined
+            category: undefined
+            questions: undefined
+        url: '/api/score'
+
     # --- views
 
     GreatTimeView = Marionette.ItemView.extend
@@ -84,7 +92,13 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
         template: (serialized_model) ->
             _.template("""
                 <p>Tvůj čas se dostal do žebříčku! Zadej jméno svého týmu:</p>
-                <h1><span><%= name %></span><span style="background:#000;color:#fff;padding-left:.1em;padding-right:.1em"><%= letter %></span><span style="color:#ccc"><%= show_empty() %></span></h1>
+                <div class="row">
+                    <div class="col-md-3">&nbsp;</div>
+                    <div class="col-md-6 text-left">
+                        <h1><span><%= name %></span><span style="background:#000;color:#fff;padding-left:.1em;padding-right:.1em"><%= letter %></span><span style="color:#ccc"><%= show_empty() %></span></h1>
+                    </div>
+                    <div class="col-md-3">&nbsp;</div>
+                </div>
                 <p><%= show_alphabet() %></p>
                 <p><em>Tlačítky nahoru/dolů vybírej písmena, tlačítkem OK vyber konkrétní znak.<br/>Symbolem #{ LETTER_BACKSPACE } smažeš předchozí znak, symbolem #{ LETTER_ENTER } jméno uložíš.<br/>Délka jména maximálně #{ NAME_MAX_LENGTH } znaků.</em></p>
             """)(serialized_model)
@@ -127,11 +141,13 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                     else if letter == LETTER_ENTER
                         if _name.length > 0
                             window.channel.command('result:save', _name)
+                            return
                     else if _name.length < NAME_MAX_LENGTH
                         that.model.set('name', "#{ _name }#{ letter }")
                         _name = that.model.get('name')
                         if _name.length == NAME_MAX_LENGTH
                             window.channel.command('result:save', _name)
+                            return
 
                 set_delay(handler, IDLE_DELAY)
 
@@ -187,8 +203,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
 
         # get rank of player score from server
         rank.on 'sync', () ->
-            #if rank.get('top') or rank.get('category_top')
-            if 1
+            if rank.get('top') or rank.get('category_top')
                 layout.getRegion('time').show(new GreatTimeView({model: time}))
                 layout.getRegion('typewriter').show(new TypewriterView({model: name}))
             else
@@ -197,13 +212,17 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
         # save results to server
         window.channel.comply 'result:save', (_name) ->
             clear_delay()
-            # TODO: tohle chybi udelat -- odeslani dat na server
-            # a jakmile to bude tak zavolat close
-            # return hodnota by mohla obsahovat alespon ID zaznamu, at to na dalsi obrazovce muzu v tabulce zvyraznit...
-            console.log 'ulozeni dat'
-            console.log _options
-            console.log _name
-            window.channel.command('result:close')
+            questions = _.map _options.answers, (i) ->
+                {question: i.id, correct: i.answer}
+            score = new Score
+                name: _name
+                time: _options.time
+                category: _options.category.id
+                questions: questions
+            score.save()
+            score.on 'sync', () ->
+                window.channel.command('result:close', _options) # TODO: asi bych mel do _options jeste neco pridat
+                score.off('sync')
 
         set_delay(handler, IDLE_DELAY)
 
@@ -214,4 +233,5 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
         clear_delay()
         time = undefined
         rank = undefined
+        score = undefined
         layout.destroy()

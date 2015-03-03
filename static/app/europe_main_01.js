@@ -55,8 +55,9 @@ delay_id = void 0;
 
 clear_delay = function() {
   if (delay_id !== void 0) {
-    return window.clearTimeout(delay_id);
+    window.clearTimeout(delay_id);
   }
+  return delay_id = void 0;
 };
 
 set_delay = function(fn, delay) {
@@ -68,8 +69,9 @@ timer_id = void 0;
 
 clear_timer = function() {
   if (timer_id !== void 0) {
-    return window.clearTimeout(timer_id);
+    window.clearInterval(timer_id);
   }
+  return timer_id = void 0;
 };
 
 set_timer = function(fn, delay) {

@@ -46,7 +46,13 @@ App.on('start', function(global_options) {
     return state_handler("Result", options);
   });
   window.channel.comply('result:close', function(options) {
-    console.log('presun na 6 obrazovku (asi vysledky)');
+    return window.channel.command('score:start', options);
+  });
+  window.channel.comply('score:start', function(options) {
+    return state_handler("Score", options);
+  });
+  window.channel.comply('score:close', function(options) {
+    console.log('presun na 7 obrazovku (vysledky)');
     return console.log(options);
   });
   return window.channel.command('intro:start', global_options);
