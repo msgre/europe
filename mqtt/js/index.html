@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>HiveMQ demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="mqttws31.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <h1>HiveMQ demo</h1>
+        <pre id="messages"></pre>
+        <script>
+
+function mqtt_connect(hostname, port, topic) {
+
+    function onConnect() {
+      console.log("onConnect");
+      client.subscribe(topic);
+    };
+    function onConnectionLost(responseObject) {
+      if (responseObject.errorCode !== 0)
+        console.log("onConnectionLost:"+responseObject.errorMessage);
+    };
+    function onMessageArrived(message) {
+      // console.log("onMessageArrived:"+message.payloadString);
+        $('#messages').append(message.payloadString + '\n');
+    };	
+
+    client = new Paho.MQTT.Client(hostname, port, '/mqtt', "javascript_client");
+    client.onConnectionLost = onConnectionLost;
+    client.onMessageArrived = onMessageArrived;
+    // NOTE: tohle me navedlo na mqttVersion option
+    // https://github.com/mcollina/mows/issues/5#issuecomment-33538244
+    client.connect({mqttVersion: 3, onSuccess:onConnect});
+    return client;
+}
+
+var client = mqtt_connect('dm', 8000, 'game');
+
+        </script>
+    </body>
+</html>
