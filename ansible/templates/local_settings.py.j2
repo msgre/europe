@@ -1,0 +1,3 @@
+import os
+
+SECRET_KEY = open(os.path.join(os.path.dirname(__file__), '.secret_key')).read().strip()

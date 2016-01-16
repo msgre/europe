@@ -1,0 +1,24 @@
+#!/bin/bash
+
+docker run \
+    --name europe-api \
+    -d \
+    -p 8080:8080 \
+    -v {{app_dir}}/europe:/src/api \
+    -v {{app_conf_dir}}/.secret_key:/src/api/europe/.secret_key \
+    -v {{app_conf_dir}}/local_settings.py:/src/api/europe/local_settings.py \
+    -v {{app_conf_dir}}/db.sqlite3:/src/api/db.sqlite3 \
+    msgre/common:europe-api
+
+docker create \
+    --name europe-js \
+    msgre/common:europe-js
+
+docker run \
+    -d \
+    -p 80:80 \
+    --name nginx \
+    --volumes-from europe-js \
+    --link europe-api \
+    -v $HOME/europe/europe.nginx.conf:/etc/nginx/conf.d/default.conf:ro \
+    nginx

@@ -1,0 +1,208 @@
+---
+- name: Bootstrap Europe machine
+  hosts: europe
+  remote_user: root
+  gather_facts: no
+  vars:
+    app_dir: /src/europe
+    home_dir: /root
+    app_conf_dir: "{{home_dir}}/europe"
+
+  tasks:
+    # -- basic 
+
+    - name: Update apt
+      apt: update_cache=yes
+      tags:
+        - basic
+
+    - name: Install basic system packages
+      apt: name={{item}}
+      with_items:
+        - vim
+        - git
+      tags:
+        - basic
+
+    # -- docker
+
+    - name: Add apt key
+      apt_key:
+        keyserver: hkp://p80.pool.sks-keyservers.net:80
+        id: 58118E89F3A912897C070ADBF76221572C52609D
+      tags:
+        - docker
+      
+    - name: Create sources.list docker file
+      file:
+        state: touch
+        path: /etc/apt/sources.list.d/docker.list
+      tags:
+        - docker
+
+    - name: Update sources.list docker file
+      lineinfile:
+        dest: /etc/apt/sources.list.d/docker.list
+        regexp: ^deb\s+https://apt.dockerproject.org/repo\s+ubuntu-trusty\s+main$
+        line: deb https://apt.dockerproject.org/repo ubuntu-trusty main
+      tags:
+        - docker
+
+    - name: Update apt
+      apt: update_cache=yes
+      tags:
+        - docker
+
+    - name: Get kernel ID
+      command: uname -r
+      register: uname
+      tags:
+        - docker
+
+    - name: Install Docker packages
+      apt: name={{item}}
+      with_items:
+        - linux-image-extra-{{uname.stdout}}
+        - docker-engine
+      tags:
+        - docker
+
+    - name: Start docker daemon
+      service:
+        name: docker
+        state: started
+      tags:
+        - docker
+
+    - name: Docker conf dir in home
+      file:
+        path: "{{home_dir}}/.docker"
+        state: directory
+      tags:
+        - docker
+
+    - name: Auth file for docker
+      copy:
+        src: files/docker_config.json
+        dest: "{{home_dir}}/.docker/config.json"
+      tags:
+        - docker
+
+    # -- application
+
+    - name: Prepare directory for application source codes
+      file: 
+        path: "{{app_dir}}"
+        state: directory
+      tags:
+        - app
+        - sources
+
+    - name: Get application sources from GitHub
+      git: 
+        repo: git@github.com:msgre/europe.git
+        dest: "{{app_dir}}"
+        accept_hostkey: yes
+      tags:
+        - app
+        - sources
+    
+    # -- application config
+
+    - name: Prepare directory for application configuration
+      file:
+        path: "{{app_conf_dir}}"
+        state: directory
+      tags:
+        - app
+        - config
+
+    - name: Copy Nginx configuration file
+      copy:
+        src: files/europe.nginx.conf
+        dest: "{{app_conf_dir}}/"
+      tags:
+        - app
+        - config
+
+    - name: Check .secret_key file presence
+      stat: 
+        path: "{{app_conf_dir}}/.secret_key"
+      register: secret_key_file
+      tags:
+        - app
+        - config
+
+    - name: Copy helper script for generating .secret_key file
+      template: 
+        src: templates/generate_secret_key.sh.j2
+        dest: "{{app_conf_dir}}/generate_secret_key.sh"
+        mode: 0755
+      tags:
+        - app
+        - config
+
+    - name: Generate .secret_key file
+      command: ./generate_secret_key.sh
+      args:
+        chdir: "{{app_conf_dir}}"
+      when: not secret_key_file.stat.exists
+      tags:
+        - app
+        - config
+  
+    - name: Copy Nginx configuration file
+      template:
+        src: templates/local_settings.py.j2
+        dest: "{{app_conf_dir}}/local_settings.py"
+      tags:
+        - app
+        - config
+
+    - name: Copy initial SQLite database
+      copy:
+        src: files/db.sqlite3
+        dest: "{{app_conf_dir}}/db.sqlite3"
+      tags:
+        - app
+        - config
+
+    - name: Helper stop script
+      copy:
+        src: files/stop.sh
+        dest: "{{app_conf_dir}}/stop.sh"
+        mode: 0755
+      tags:
+        - app
+        - config
+
+    - name: Helper restart script
+      copy:
+        src: files/stop.sh
+        dest: "{{app_conf_dir}}/restart.sh"
+        mode: 0755
+      tags:
+        - app
+        - config
+
+    - name: Helper start script
+      template:
+        src: templates/start.sh.j2
+        dest: "{{app_conf_dir}}/start.sh"
+        mode: 0755
+      tags:
+        - app
+        - config
+
+    # -- maintenance
+
+    # NOTE: time is set to 20:00 which is in our time zone 2:00
+    - name: Clean high score after midnight
+      cron:
+        name: "clean high scores"
+        minute: 0
+        hour: 20
+        job: /usr/bin/docker exec europe-api /src/api/manage.py clear_high_scores >>{{app_conf_dir}}/clear_high_scores.log 2>&1
+      tags:
+        - maintenance
+      
