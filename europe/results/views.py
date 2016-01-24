@@ -4,6 +4,7 @@ from django.http import Http404
 from django.db.models import Min
 
 from rest_framework import generics
+from rest_framework.exceptions import ValidationError
 
 from options.models import Option
 
@@ -34,7 +35,12 @@ class CategoryResultList(generics.ListAPIView):
             category = Category.objects.get(pk=self.kwargs[self.lookup_url_kwarg])
         except:
             raise Http404
-        results = Result.objects.filter(category=category)
+        if 'difficulty' not in self.request.query_params:
+            raise ValidationError("Query parameter 'difficulty' is missing.")
+        valid_params = [Result.RESULT_DIFFICULTY_EASY, Result.RESULT_DIFFICULTY_HARD]
+        if self.request.query_params['difficulty'] not in valid_params:
+            raise ValidationError("Query parameter 'difficulty' set to unknown value. Valid values are: %s" % (valid_params ,))
+        results = Result.objects.filter(category=category, difficulty=self.request.query_params['difficulty'])
         count = Option.objects.get(key='POCET_OTAZEK')
         return results[:int(count.value)]
 

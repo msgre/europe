@@ -10,11 +10,19 @@ class Result(models.Model):
     """
     Result of game.
     """
-    name      = models.CharField(_('Players Name'), max_length=32, blank=True, null=True)
-    time      = models.IntegerField(_('Time'))
-    category  = models.ForeignKey('quiz.Category')
-    questions = models.ManyToManyField('quiz.Question', through='AnsweredQuestion')
-    created   = models.DateTimeField(_('Created'), auto_now_add=True)
+    RESULT_DIFFICULTY_EASY = 'E'
+    RESULT_DIFFICULTY_HARD = 'H'
+    RESULT_DIFFICULTY = (
+        (RESULT_DIFFICULTY_EASY, _('Easy')),
+        (RESULT_DIFFICULTY_HARD, _('Hard')),
+    )
+
+    name       = models.CharField(_('Players Name'), max_length=32, blank=True, null=True)
+    time       = models.IntegerField(_('Time'))
+    category   = models.ForeignKey('quiz.Category')
+    difficulty = models.CharField(_('Difficulty'), max_length=1, choices=RESULT_DIFFICULTY, default=RESULT_DIFFICULTY_EASY)
+    questions  = models.ManyToManyField('quiz.Question', through='AnsweredQuestion')
+    created    = models.DateTimeField(_('Created'), auto_now_add=True)
 
     class Meta:
         ordering = ('time', '-created')

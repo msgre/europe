@@ -39,7 +39,7 @@ class ResultsSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Result
-        fields = ('id', 'name', 'time', 'category', 'created')
+        fields = ('id', 'name', 'time', 'category', 'difficulty', 'created')
 
 
 class RankSerializer(serializers.Serializer):
