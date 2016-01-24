@@ -53,12 +53,20 @@ class Question(models.Model):
     """
     Quiz question.
     """
-    question = models.TextField(_('Question'), blank=True, null=True)
-    image    = models.ImageField(_('Image'), upload_to=None, max_length=256)
-    country  = models.ForeignKey('geo.Country')
-    category = models.ForeignKey('Category')
-    created  = models.DateTimeField(_('Created'), auto_now_add=True)
-    updated  = models.DateTimeField(_('Updated'), auto_now=True)
+    QUESTION_DIFFICULTY_EASY = 'E'
+    QUESTION_DIFFICULTY_HARD = 'H'
+    QUESTION_DIFFICULTY = (
+        (QUESTION_DIFFICULTY_EASY, _('Easy')),
+        (QUESTION_DIFFICULTY_HARD, _('Hard')),
+    )
+
+    difficulty = models.CharField(_('Difficulty'), max_length=1, choices=QUESTION_DIFFICULTY, default=QUESTION_DIFFICULTY_EASY)
+    question   = models.TextField(_('Question'), blank=True, null=True)
+    image      = models.ImageField(_('Image'), upload_to=None, max_length=256)
+    country    = models.ForeignKey('geo.Country')
+    category   = models.ForeignKey('Category')
+    created    = models.DateTimeField(_('Created'), auto_now_add=True)
+    updated    = models.DateTimeField(_('Updated'), auto_now=True)
 
     class Meta:
         ordering = ('category', 'question', 'image')
