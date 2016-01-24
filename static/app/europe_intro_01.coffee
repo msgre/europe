@@ -56,6 +56,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
+        console.log 'intro'
         state = 0
         view_list = [
             Intro01
@@ -64,6 +65,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
             Intro04
         ]
         window.channel.on 'keypress', () ->
+            console.log 'intro keypress'
             window.sfx.button.play()
             window.channel.command('intro:close', options)
         handler()
