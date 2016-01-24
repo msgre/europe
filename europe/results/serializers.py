@@ -13,7 +13,28 @@ from .models import Result, AnsweredQuestion
 QUESTIONS_RE = re.compile('^(\d+):(0|1)$')
 
 
+class ResultsTopSerializer(serializers.ModelSerializer):
+    """
+    Top results, aggregated minimum times for each category.
+    """
+    title = serializers.SerializerMethodField('get_category_title')
+    time = serializers.SerializerMethodField('get_best_time')
+
+    class Meta:
+        model = Result
+        fields = ('title', 'time', )
+
+    def get_category_title(self, obj):
+        return obj['category__title']
+
+    def get_best_time(self, obj):
+        return obj['best_time']
+
+
 class ResultsSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Standard serializer for categorized results.
+    """
     category = CategorySerializer(read_only=True)
 
     class Meta:

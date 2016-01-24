@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.http import Http404
+from django.db.models import Min
 
 from rest_framework import generics
 
@@ -8,19 +9,17 @@ from options.models import Option
 
 from quiz.models import Category
 from .models import Result
-from .serializers import ResultsSerializer, RankSerializer, ScoreSerializer
+from .serializers import ResultsTopSerializer, ResultsSerializer, RankSerializer, ScoreSerializer
 
 
 class MainResultList(generics.ListAPIView):
     """
     Top results from all categories.
     """
-    serializer_class = ResultsSerializer
+    serializer_class = ResultsTopSerializer
 
     def get_queryset(self):
-        results = Result.objects.all()
-        count = Option.objects.get(key='POCET_VYSLEDKU')
-        return results[:int(count.value)]
+        return Result.objects.values('category__title').annotate(best_time=Min('time')).order_by('category')
 
 
 class CategoryResultList(generics.ListAPIView):
