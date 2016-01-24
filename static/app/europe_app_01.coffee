@@ -32,10 +32,22 @@ App.on 'start', (global_options) ->
         if options.crossroad.id == 'game'
             window.channel.command('gamemode:start', options)
         else
-            set_delay () ->
-                # NOTE: without delay, intro immediately recognise keypress and go to crossroad again
-                window.channel.command('intro:start', options) # TODO: sup na vysledky
-            , 100
+            # set_delay () ->
+            #     # NOTE: without delay, intro immediately recognise keypress and go to crossroad again
+            #     window.channel.command('intro:start', options) # TODO: sup na vysledky
+            # , 100
+            window.channel.command('scores:start', options)
+
+    # --- scores
+
+    window.channel.comply 'scores:start', (options) ->
+        state_handler("Scores", options)
+
+    window.channel.comply 'scores:idle', (options) ->
+        window.channel.command('intro:start', options)
+
+    window.channel.comply 'scores:close', (options) ->
+        window.channel.command('crossroad:start', options)
 
     # --- gamemode
 

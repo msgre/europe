@@ -30,10 +30,17 @@ App.on('start', function(global_options) {
     if (options.crossroad.id === 'game') {
       return window.channel.command('gamemode:start', options);
     } else {
-      return set_delay(function() {
-        return window.channel.command('intro:start', options);
-      }, 100);
+      return window.channel.command('scores:start', options);
     }
+  });
+  window.channel.comply('scores:start', function(options) {
+    return state_handler("Scores", options);
+  });
+  window.channel.comply('scores:idle', function(options) {
+    return window.channel.command('intro:start', options);
+  });
+  window.channel.comply('scores:close', function(options) {
+    return window.channel.command('crossroad:start', options);
   });
   window.channel.comply('gamemode:start', function(options) {
     return state_handler("GameMode", options);
