@@ -1,0 +1,24 @@
+FROM python:2.7
+
+RUN mkdir -p /src/api
+VOLUME ["/src/api"]
+WORKDIR "/src/api"
+EXPOSE 8080
+ENTRYPOINT ["uwsgi"]
+CMD ["--socket", "0.0.0.0:8080", \
+     "--master", \
+     "--processes", "3", \
+     "--harakiri", "20", \
+     "--max-requests", "5000", \
+     "--env", "DJANGO_SETTINGS_MODULE=europe.settings", \
+     "--module", "europe.wsgi:application", \
+     "--chdir", "/src/api"]
+
+RUN pip install \
+    Django==1.7.4 \
+    Pillow==2.7.0 \
+    django-extensions==1.5.0 \
+    djangorestframework==3.0.5 \
+    uwsgi==2.0 \
+    ipdb \
+    ipython
