@@ -188,12 +188,14 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
+        console.log 'result'
+        console.log options
         _options = options
         window.sfx.surprise.play()
 
         # put results data into models
         time = new Time({time: options.time})
-        rank = new Rank(options.category.id, options.time)
+        rank = new Rank(options.gamemode.category, options.time)
         name = new Name()
 
         # render basic layout
@@ -217,7 +219,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
             score = new Score
                 name: _name
                 time: _options.time
-                category: _options.category.id
+                category: _options.gamemode.category
                 questions: questions
             score.save()
             score.on 'sync', () ->

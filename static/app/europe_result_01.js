@@ -178,12 +178,14 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     return window.channel.command('result:save', _name);
   };
   Mod.onStart = function(options) {
+    console.log('result');
+    console.log(options);
     _options = options;
     window.sfx.surprise.play();
     time = new Time({
       time: options.time
     });
-    rank = new Rank(options.category.id, options.time);
+    rank = new Rank(options.gamemode.category, options.time);
     name = new Name();
     layout = new ResultLayout({
       el: make_content_wrapper()
@@ -215,7 +217,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
       score = new Score({
         name: _name,
         time: _options.time,
-        category: _options.category.id,
+        category: _options.gamemode.category,
         questions: questions
       });
       score.save();
