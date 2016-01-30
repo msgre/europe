@@ -193,9 +193,8 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         questions = new Questions null, 
             difficulty: options.gamemode.difficulty
             category: options.gamemode.category
-        questions.fetch()
-        questions.on 'sync', () ->
 
+        questions.on 'sync', () ->
             # layout
             q_layout = new QuestionLayout({el: make_content_wrapper()})
             q_layout.render()
@@ -229,6 +228,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
                     # end of the game is near...
                     clear_timer()
                     output = _.extend _options,
+                        questions: questions.toJSON()
                         answers: questions.map (i) ->
                             id: i.get('id')
                             answer: i.get('answer')
@@ -246,6 +246,8 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
 
             # start this screen
             set_timer(handler, TIMER_DELAY)
+
+        questions.fetch()
 
     Mod.onStop = (options) ->
         clear_timer()

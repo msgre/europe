@@ -67,6 +67,12 @@ App.on('start', function(global_options) {
     return state_handler("Result", options);
   });
   window.channel.comply('result:close', function(options) {
+    return window.channel.command('recap:start', options);
+  });
+  window.channel.comply('recap:start', function(options) {
+    return state_handler("Recap", options);
+  });
+  window.channel.comply('recap:close', function(options) {
     return window.channel.command('score:start', options);
   });
   window.channel.comply('score:start', function(options) {

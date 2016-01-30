@@ -188,8 +188,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       difficulty: options.gamemode.difficulty,
       category: options.gamemode.category
     });
-    questions.fetch();
-    return questions.on('sync', function() {
+    questions.on('sync', function() {
       var question_view;
       q_layout = new QuestionLayout({
         el: make_content_wrapper()
@@ -219,6 +218,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
         if (question > options.total_questions) {
           clear_timer();
           output = _.extend(_options, {
+            questions: questions.toJSON(),
             answers: questions.map(function(i) {
               return {
                 id: i.get('id'),
@@ -240,6 +240,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       });
       return set_timer(handler, TIMER_DELAY);
     });
+    return questions.fetch();
   };
   return Mod.onStop = function(options) {
     clear_timer();
