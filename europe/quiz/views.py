@@ -27,8 +27,9 @@ class QuestionList(generics.ListAPIView):
     lookup_url_kwarg = 'id'
 
     def get_queryset(self):
+        (difficulty, pk) = self.kwargs[self.lookup_url_kwarg].split('-')
         try:
-            category = Category.objects.get(pk=self.kwargs[self.lookup_url_kwarg])
+            category = Category.objects.get(pk=int(pk))
         except:
             raise Http404
         count = Option.objects.get(key='POCET_OTAZEK')

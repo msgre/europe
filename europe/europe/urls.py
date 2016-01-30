@@ -22,7 +22,7 @@ urlpatterns = [
 
     url(r'^api/categories$', CategoryList.as_view()),
 
-    url(r'^api/questions/(?P<id>\d+)$', QuestionList.as_view()),
+    url(r'^api/questions/(?P<id>(E|H)-\d+)$', QuestionList.as_view()),
 
     url(r'^api/results$', MainResultList.as_view()),
     url(r'^api/results/(?P<id>\d+)$', CategoryResultList.as_view()),

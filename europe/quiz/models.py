@@ -24,21 +24,21 @@ class Category(models.Model):
     def __unicode__(self):
         return self.title
 
-    def get_random_questions(self, count):
+    def get_random_questions(self, difficulty, count):
         """
         Return list of randomly choosen Questions. There will be "count" records
         at max (but should be less). It is guaranteed that there will be no more
         than one question from same Country.
         """
         # all countries for which we have questions in current category
-        country_ids = Question.objects.filter(category=self).values_list('country', flat=True)
+        country_ids = Question.objects.filter(category=self, difficulty=difficulty).values_list('country', flat=True)
         # get first random "count" countries
         random_ids = list(set(country_ids))
         random.shuffle(random_ids)
 
         # get questions for random countries
         # beware! there could be more than one question for given country
-        data = Question.objects.select_related().filter(category=self, country__id__in=random_ids[:count]).order_by('country')
+        data = Question.objects.select_related().filter(category=self, difficulty=difficulty, country__id__in=random_ids[:count]).order_by('country')
 
         out = []
         for k, g in itertools.groupby(data, lambda a: a.country.id):

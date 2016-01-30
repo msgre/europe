@@ -62,8 +62,8 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         model: Question
         parse: (response, options) ->
             response.results
-        initialize: (category_id) ->
-            @url = "/api/questions/#{ category_id }"
+        initialize: (models, options) ->
+            @url = "/api/questions/#{ options.difficulty }-#{ options.category }"
 
     # --- views
 
@@ -195,7 +195,9 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             current: 0
 
         # data for questions
-        questions = new Questions(options.gamemode.category)
+        questions = new Questions null, 
+            difficulty: options.gamemode.difficulty
+            category: options.gamemode.category
         questions.fetch()
         questions.on 'sync', () ->
 

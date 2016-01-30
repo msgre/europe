@@ -63,8 +63,8 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
     parse: function(response, options) {
       return response.results;
     },
-    initialize: function(category_id) {
-      return this.url = "/api/questions/" + category_id;
+    initialize: function(models, options) {
+      return this.url = "/api/questions/" + options.difficulty + "-" + options.category;
     }
   });
   InfoItemView = Marionette.ItemView.extend({
@@ -194,7 +194,10 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       total: options.total_questions,
       current: 0
     });
-    questions = new Questions(options.gamemode.category);
+    questions = new Questions(null, {
+      difficulty: options.gamemode.difficulty,
+      category: options.gamemode.category
+    });
     questions.fetch();
     return questions.on('sync', function() {
       var question_view;
