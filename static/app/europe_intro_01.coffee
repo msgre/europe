@@ -75,3 +75,5 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
         clear_timer()
         window.channel.off('keypress')
         view.destroy()
+        view_list = undefined
+        state = undefined

@@ -54,6 +54,8 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
   return Mod.onStop = function() {
     clear_timer();
     window.channel.off('keypress');
-    return view.destroy();
+    view.destroy();
+    view_list = void 0;
+    return state = void 0;
   };
 });

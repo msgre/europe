@@ -188,13 +188,13 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
     local_channel = Backbone.Radio.channel('game');
     info = new Info({
       total_questions: options.total_questions,
-      category: options.category.title
+      category: options.gamemode.title
     });
     progress = new Progress({
       total: options.total_questions,
       current: 0
     });
-    questions = new Questions(options.category.id);
+    questions = new Questions(options.gamemode.category);
     questions.fetch();
     return questions.on('sync', function() {
       var question_view;

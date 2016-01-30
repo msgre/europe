@@ -2,7 +2,7 @@
 App.module("Crossroad", function(Mod, App, Backbone, Marionette, $, _) {
   var IDLE_TIMEOUT, Item, ItemView, Items, ItemsView, _options, handler, view;
   Mod.startWithParent = false;
-  IDLE_TIMEOUT = 40000;
+  IDLE_TIMEOUT = 4000;
   _options = void 0;
   view = void 0;
   Item = Backbone.Model.extend({
@@ -72,7 +72,7 @@ App.module("Crossroad", function(Mod, App, Backbone, Marionette, $, _) {
           window.sfx.button2.play();
           obj = that.collection.at(that.index);
           window.channel.command('crossroad:close', _.extend(_options, {
-            crossroad: obj.toJSON()
+            crossroad: obj.get('id')
           }));
           set_new_timeout = false;
         } else {

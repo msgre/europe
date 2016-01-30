@@ -1,5 +1,7 @@
 # Screen #4, game
 #
+# TODO:
+# - zpropagovat obtiznost do query na server
 
 App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
 
@@ -186,14 +188,14 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         # data for top/bottom of the screen
         info = new Info
             total_questions: options.total_questions
-            category: options.category.title
+            category: options.gamemode.title
 
         progress = new Progress
             total: options.total_questions
             current: 0
 
         # data for questions
-        questions = new Questions(options.category.id)
+        questions = new Questions(options.gamemode.category)
         questions.fetch()
         questions.on 'sync', () ->
 

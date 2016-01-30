@@ -27,7 +27,7 @@ App.on('start', function(global_options) {
     return window.channel.command('intro:start', options);
   });
   window.channel.comply('crossroad:close', function(options) {
-    if (options.crossroad.id === 'game') {
+    if (options.crossroad === 'game') {
       return window.channel.command('gamemode:start', options);
     } else {
       return window.channel.command('scores:start', options);

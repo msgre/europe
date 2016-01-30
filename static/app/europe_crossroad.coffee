@@ -7,8 +7,7 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- constants & variables
 
-    #IDLE_TIMEOUT = 4000
-    IDLE_TIMEOUT = 40000
+    IDLE_TIMEOUT = 4000
     _options = undefined
     view = undefined
 
@@ -70,7 +69,7 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
                 else if msg == 'fire'
                     window.sfx.button2.play()
                     obj = that.collection.at(that.index)
-                    window.channel.command('crossroad:close', _.extend(_options, {crossroad: obj.toJSON()}))
+                    window.channel.command('crossroad:close', _.extend(_options, {crossroad: obj.get('id')}))
                     set_new_timeout = false
                 else
                     set_new_timeout = false

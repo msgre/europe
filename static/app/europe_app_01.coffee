@@ -29,7 +29,7 @@ App.on 'start', (global_options) ->
         window.channel.command('intro:start', options)
 
     window.channel.comply 'crossroad:close', (options) ->
-        if options.crossroad.id == 'game'
+        if options.crossroad == 'game'
             window.channel.command('gamemode:start', options)
         else
             # set_delay () ->
