@@ -117,20 +117,9 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   QuestionItemView = Marionette.ItemView.extend({
-    tagName: 'h1',
+    tagName: 'div',
     template: function(serialized_model) {
-      return _.template("<%= display_question() %>")(serialized_model);
-    },
-    templateHelpers: function() {
-      return {
-        display_question: function() {
-          if (this.image !== null) {
-            return this.image;
-          } else {
-            return this.question;
-          }
-        }
-      };
+      return _.template("<% if (image) {%><img height=\"150\" src=\"<%= image %>\" /><% } %><h1><%= question %></h1>")(serialized_model);
     },
     initialize: function(options) {
       var that;
@@ -164,7 +153,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   QuestionLayout = Marionette.LayoutView.extend({
-    template: _.template("<div class=\"row\">\n    <div class=\"col-md-12\" id=\"info\"></div>\n</div>\n<div class=\"row\">\n    <div class=\"col-md-12 text-center\" id=\"question\"></div>\n</div>\n<br/>\n<div class=\"row\">\n    <div class=\"col-md-12\" id=\"progress\"></div>\n</div>"),
+    template: _.template("<div class=\"row\">\n    <div class=\"col-md-12\" id=\"info\"></div>\n</div>\n<div class=\"row\" style=\"height:200px\">\n    <div class=\"col-md-12 text-center\" id=\"question\"></div>\n</div>\n<br/>\n<div class=\"row\">\n    <div class=\"col-md-12\" id=\"progress\"></div>\n</div>"),
     regions: {
       info: '#info',
       question: '#question',

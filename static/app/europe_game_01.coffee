@@ -113,15 +113,9 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             @model.off('change')
 
     QuestionItemView = Marionette.ItemView.extend
-        tagName: 'h1'
+        tagName: 'div'
         template: (serialized_model) ->
-            _.template("<%= display_question() %>")(serialized_model)
-        templateHelpers: ->
-            display_question: ->
-                if @image != null
-                    @image
-                else
-                    @question
+            _.template("<% if (image) {%><img height=\"150\" src=\"<%= image %>\" /><% } %><h1><%= question %></h1>")(serialized_model)
         initialize: (options) ->
             @model.on 'change', () =>
                 @render()
@@ -152,7 +146,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             <div class="row">
                 <div class="col-md-12" id="info"></div>
             </div>
-            <div class="row">
+            <div class="row" style="height:200px">
                 <div class="col-md-12 text-center" id="question"></div>
             </div>
             <br/>
