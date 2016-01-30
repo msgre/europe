@@ -10,7 +10,7 @@ from .models import Category, Question
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'title', 'time', 'penalty',)
+        fields = ('id', 'title', 'time_easy', 'penalty_easy', 'time_hard', 'penalty_hard', )
 
 
 class QuestionsSerializer(serializers.HyperlinkedModelSerializer):

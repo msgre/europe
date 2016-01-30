@@ -200,6 +200,13 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
     local_channel.on('choice', function(obj) {
       local_options['category'] = obj.get('id');
       local_options['title'] = obj.get('title');
+      if (local_options.difficulty === DIFFICULTY_EASY) {
+        local_options['time'] = obj.get('time_easy');
+        local_options['penalty'] = obj.get('penalty_easy');
+      } else {
+        local_options['time'] = obj.get('time_hard');
+        local_options['penalty'] = obj.get('penalty_hard');
+      }
       return layout.getRegion('choice').currentView.set_active();
     });
     local_channel.on('done', function(obj) {

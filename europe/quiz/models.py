@@ -11,10 +11,12 @@ class Category(models.Model):
     """
     Category of question.
     """
-    title   = models.CharField(_('Category'), max_length=128, unique=True)
-    order   = models.IntegerField(_('Order'), default=10)
-    time    = models.IntegerField(_('Time'), default=10, help_text=_('Time for answering one question, in seconds.'))
-    penalty = models.IntegerField(_('Penalty'), default=3, help_text=_('Penalty time which players get due to wrong answer, in seconds.'))
+    title        = models.CharField(_('Category'), max_length=128, unique=True)
+    order        = models.IntegerField(_('Order'), default=10)
+    time_easy    = models.IntegerField(_('Time (easy)'), default=10, help_text=_('Time for answering one question, in seconds. Easy difficulty.'))
+    penalty_easy = models.IntegerField(_('Penalty (easy)'), default=3, help_text=_('Penalty time which players get due to wrong answer, in seconds. Easy difficulty.'))
+    time_hard    = models.IntegerField(_('Time (hard)'), default=10, help_text=_('Time for answering one question, in seconds. Hard difficulty.'))
+    penalty_hard = models.IntegerField(_('Penalty (hard)'), default=3, help_text=_('Penalty time which players get due to wrong answer, in seconds. Hard difficulty.'))
 
     class Meta:
         ordering = ('order', )
