@@ -89,9 +89,23 @@ App.on 'start', (global_options) ->
     window.channel.comply 'score:start', (options) ->
         state_handler("Score", options)
 
-    window.channel.comply 'score:close', (options) ->
-        console.log 'presun na 7 obrazovku (vysledky)'
-        console.log options # tu se prenasi informace o tom jaky mod hry si vybral
+    window.channel.comply 'score:idle', (options) ->
+        window.channel.command('intro:start', global_options)
+
 
     # start!
     window.channel.command('intro:start', global_options)
+
+    # NOTE: pomucka pro debugovani
+    # debug_data =
+    #     answers: []
+    #     crossroad: 'game'
+    #     gamemode:
+    #         category: 1
+    #         difficulty: 'E'
+    #         penalty: 3
+    #         time: 30
+    #         title: 'Hlavní města'
+    #     time: 84
+    #     total_questions: 10
+    # window.channel.command('score:start', debug_data)

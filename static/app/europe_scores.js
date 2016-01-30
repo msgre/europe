@@ -19,7 +19,7 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
   Results = Backbone.Collection.extend({
     model: Result,
     initialize: function(models, options) {
-      return this.url = "/api/results/" + options.category + "?difficulty=" + options.difficulty;
+      return this.url = "/api/results/" + options.difficulty + "-" + options.category;
     },
     parse: function(response, options) {
       return response.results;
@@ -88,6 +88,7 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
   Mod.onStart = function(options) {
     console.log('scores');
     _options = options;
+    index = 0;
     layout = new ScoreLayout({
       el: make_content_wrapper()
     });

@@ -1,4 +1,4 @@
-# Screen #6, score
+# Screen #?, final score
 #
 
 App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
@@ -8,6 +8,10 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
     # --- constants & variables
 
     _options = undefined
+    IDLE_TIMEOUT = 4000
+    DIFFICULTY_EASY = 'E'
+    DIFFICULTY_HARD = 'H'
+    layout = undefined
 
     # --- models & collections
 
@@ -16,93 +20,68 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
             name: undefined
             time: undefined
             category: undefined
-        url: '/api/score'
 
     Results = Backbone.Collection.extend
         model: Result
-        initialize: (category) ->
-            if category
-                @url = "/api/results/#{ category }"
-            else
-                @url = "/api/results"
+        initialize: (models, options) ->
+            @url = "/api/results/#{ options.difficulty }-#{ options.category }"
         parse: (response, options) ->
             response.results
 
     # --- views
 
-    ResultItemView = Marionette.ItemView.extend
-        tagName: "tr"
+    TitleView = Marionette.ItemView.extend
+        tagName: "h3"
         template: (serialized_model) ->
-            _.template("""
-                <td class="text-right">?</td>
-                <td><%= name %></td>
-                <td><%= category %></td>
-                <td class="text-right"><%= show_time() %></td>""")(serialized_model)
-        templateHelpers: ->
-            show_time: ->
-                display_elapsed(@time)
+            _.template("<%= title %> / <%= difficulty %>")(serialized_model)
+
+        rerender: (model) ->
+            @model = model
+            @render()
 
     CategoryResultItemView = Marionette.ItemView.extend
         tagName: "tr"
         template: (serialized_model) ->
             _.template("""
-                <td class="text-right">?</td>
                 <td><%= name %></td>
                 <td class="text-right"><%= show_time() %></td>""")(serialized_model)
         templateHelpers: ->
             show_time: ->
                 display_elapsed(@time)
 
-    ResultView = Marionette.CollectionView.extend
-        childView: ResultItemView
-        tagName: 'table'
-        className: 'table'
-
-        initialize: (options) ->
-            @collection.on 'sync', () =>
-                console.log @collection
-                @render()
-
-        onDestroy: () ->
-            @collection.off('sync')
+    NoResultsView = Marionette.ItemView.extend
+        template: "<p>Nahrávám...</p>"
 
     CategoryResultView = Marionette.CollectionView.extend
         childView: CategoryResultItemView
         tagName: 'table'
         className: 'table'
+        emptyView: NoResultsView
 
-        initialize: (options) ->
-            @collection.on 'sync', () =>
-                @render()
-
-        onDestroy: () ->
-            @collection.off('sync')
-
-    ResultLayout = Marionette.LayoutView.extend
+    ScoreLayout = Marionette.LayoutView.extend
         template: _.template """
             <div class="row">
+                <div class="col-md-12">
+                    <h3 id="title"></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">&nbsp;</div>
                 <div class="col-md-6">
-                    <h3>Nejlepší celkové výsledky</h3>
-                    <div id="total-results">
-                    </div>
+                    <div id="results"></div>
                 </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-5">
-                    <h3>Nejlepší výsledky v kategorii XYZ</h3>
-                    <div id="category-results">
-                    </div>
-                </div>
+                <div class="col-md-3">&nbsp;</div>
             </div>
         """
 
         regions:
-            total: '#total-results'
-            category: '#category-results'
+            title:   '#title'
+            results: '#results'
 
     # --- timer handler
 
-    # handler = () ->
-    #     window.channel.command('gamemode:idle', _options)
+    handler = () ->
+        window.channel.command('score:idle', _options)
 
     # --- module
 
@@ -110,26 +89,50 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
         console.log 'score'
         console.log options
         _options = options
-        total_results = new Results()
-        category_results = new Results(options.gamemode.category)
-
-        result_view = new ResultView
-            collection: total_results
-        category_view = new CategoryResultView
-            collection: category_results
-
-        layout = new ResultLayout
+        layout = new ScoreLayout
             el: make_content_wrapper()
         layout.render()
 
-        layout.getRegion('total').show(result_view)
-        layout.getRegion('category').show(category_view)
+        # initialize collections of results
+        results = new Results null, 
+            category: options.gamemode.category
+            difficulty: options.gamemode.difficulty
 
-        total_results.fetch()
-        category_results.fetch()
+        # set views in regions
+        title = new Backbone.Model
+            title: options.gamemode.title
+            difficulty: if options.gamemode.difficulty == DIFFICULTY_EASY then "Jednoduchá obtížnost" else "Složitá obtížnost"
+        layout.getRegion('title').show new TitleView
+            model: title
+        layout.getRegion('results').show new CategoryResultView
+            collection: results
 
-        #set_delay(handler, IDLE_TIMEOUT)
+        # fetch collection results from server
+        results.fetch()
+
+        # set handler on buttons
+        window.channel.on 'key', (msg) ->
+            set_new_timeout = true
+
+            if msg == 'fire' or msg == 'up' or msg == 'down'
+                window.sfx.button2.play()
+                set_delay () ->
+                    window.channel.command('score:idle', _options)
+                , 100
+                set_new_timeout = false
+            else
+                set_new_timeout = false
+
+            if set_new_timeout
+                window.sfx.button.play()
+                set_delay(handler, IDLE_TIMEOUT)
+
+        # idle
+        set_delay(handler, IDLE_TIMEOUT)
+
 
     Mod.onStop = () ->
+        window.channel.off('key')
         clear_delay()
-        view.destroy()
+        layout.destroy()
+        layout = undefined

@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^api/questions/(?P<id>(E|H)-\d+)$', QuestionList.as_view()),
 
     url(r'^api/results$', MainResultList.as_view()),
-    url(r'^api/results/(?P<id>\d+)$', CategoryResultList.as_view()),
+    url(r'^api/results/(?P<id>(E|H)-\d+)$', CategoryResultList.as_view()),
     url(r'^api/results/(?P<id>\d+)/(?P<time>\d+)$', ResultRank.as_view()),
     url(r'^api/score$', CreateScoreRecord.as_view()),
 

@@ -220,6 +220,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 name: _name
                 time: _options.time
                 category: _options.gamemode.category
+                difficulty: _options.gamemode.difficulty
                 questions: questions
             score.save()
             score.on 'sync', () ->

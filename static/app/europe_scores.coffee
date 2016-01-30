@@ -30,7 +30,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
     Results = Backbone.Collection.extend
         model: Result
         initialize: (models, options) ->
-            @url = "/api/results/#{ options.category }?difficulty=#{ options.difficulty }"
+            @url = "/api/results/#{ options.difficulty }-#{ options.category }"
         parse: (response, options) ->
             response.results
 
@@ -120,6 +120,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
     Mod.onStart = (options) ->
         console.log 'scores'
         _options = options
+        index = 0
         layout = new ScoreLayout
             el: make_content_wrapper()
         layout.render()

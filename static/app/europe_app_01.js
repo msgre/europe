@@ -72,9 +72,8 @@ App.on('start', function(global_options) {
   window.channel.comply('score:start', function(options) {
     return state_handler("Score", options);
   });
-  window.channel.comply('score:close', function(options) {
-    console.log('presun na 7 obrazovku (vysledky)');
-    return console.log(options);
+  window.channel.comply('score:idle', function(options) {
+    return window.channel.command('intro:start', global_options);
   });
   return window.channel.command('intro:start', global_options);
 });

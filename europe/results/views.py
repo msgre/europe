@@ -31,16 +31,12 @@ class CategoryResultList(generics.ListAPIView):
     lookup_url_kwarg = 'id'
 
     def get_queryset(self):
+        (difficulty, pk) = self.kwargs[self.lookup_url_kwarg].split('-')
         try:
-            category = Category.objects.get(pk=self.kwargs[self.lookup_url_kwarg])
+            category = Category.objects.get(pk=int(pk))
         except:
             raise Http404
-        if 'difficulty' not in self.request.query_params:
-            raise ValidationError("Query parameter 'difficulty' is missing.")
-        valid_params = [Result.RESULT_DIFFICULTY_EASY, Result.RESULT_DIFFICULTY_HARD]
-        if self.request.query_params['difficulty'] not in valid_params:
-            raise ValidationError("Query parameter 'difficulty' set to unknown value. Valid values are: %s" % (valid_params ,))
-        results = Result.objects.filter(category=category, difficulty=self.request.query_params['difficulty'])
+        results = Result.objects.filter(category=category, difficulty=difficulty)
         count = Option.objects.get(key='POCET_OTAZEK')
         return results[:int(count.value)]
 
