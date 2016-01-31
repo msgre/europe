@@ -33,13 +33,10 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     defaults: {
       position: void 0,
       total: void 0,
-      top: void 0,
-      category_position: void 0,
-      category_total: void 0,
-      category_top: void 0
+      top: void 0
     },
-    initialize: function(category_id, time) {
-      return this.url = "/api/results/" + category_id + "/" + time;
+    initialize: function(attributes, options) {
+      return this.url = "/api/results/" + options.difficulty + "-" + options.category + "/" + options.time;
     }
   });
   Name = Backbone.Model.extend({
@@ -185,14 +182,18 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     time = new Time({
       time: options.time
     });
-    rank = new Rank(options.gamemode.category, options.time);
+    rank = new Rank(null, {
+      difficulty: options.gamemode.difficulty,
+      category: options.gamemode.category,
+      time: options.time
+    });
     name = new Name();
     layout = new ResultLayout({
       el: make_content_wrapper()
     });
     layout.render();
     rank.on('sync', function() {
-      if (rank.get('top') || rank.get('category_top')) {
+      if (rank.get('top')) {
         layout.getRegion('time').show(new GreatTimeView({
           model: time
         }));

@@ -32,5 +32,5 @@ class QuestionList(generics.ListAPIView):
             category = Category.objects.get(pk=int(pk))
         except:
             raise Http404
-        count = Option.objects.get(key='POCET_OTAZEK')
+        count = Option.objects.get(key='QUESTION_COUNT')
         return category.get_random_questions(difficulty, int(count.value))

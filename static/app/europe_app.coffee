@@ -129,4 +129,4 @@ App.on 'start', (global_options) ->
     #         title: 'Hlavní města'
     #     time: 84
     #     total_questions: 10
-    # window.channel.command('recap:start', debug_data)
+    # window.channel.command('result:start', debug_data)

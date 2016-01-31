@@ -46,9 +46,6 @@ class RankSerializer(serializers.Serializer):
     position = serializers.IntegerField()
     total = serializers.IntegerField()
     top = serializers.BooleanField()
-    category_position = serializers.IntegerField()
-    category_total = serializers.IntegerField()
-    category_top = serializers.BooleanField()
 
 
 class AnsweredQuestionSerializer(serializers.ModelSerializer):

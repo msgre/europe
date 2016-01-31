@@ -40,11 +40,8 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
             position: undefined
             total: undefined
             top: undefined
-            category_position: undefined
-            category_total: undefined
-            category_top: undefined
-        initialize: (category_id, time) ->
-            @url = "/api/results/#{ category_id }/#{ time }"
+        initialize: (attributes, options) ->
+            @url = "/api/results/#{ options.difficulty }-#{ options.category }/#{ options.time }"
 
     Name = Backbone.Model.extend
         defaults:
@@ -195,7 +192,10 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
 
         # put results data into models
         time = new Time({time: options.time})
-        rank = new Rank(options.gamemode.category, options.time)
+        rank = new Rank null, 
+            difficulty: options.gamemode.difficulty
+            category: options.gamemode.category
+            time: options.time
         name = new Name()
 
         # render basic layout
@@ -205,7 +205,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
 
         # get rank of player score from server
         rank.on 'sync', () ->
-            if rank.get('top') or rank.get('category_top')
+            if rank.get('top')
                 layout.getRegion('time').show(new GreatTimeView({model: time}))
                 layout.getRegion('typewriter').show(new TypewriterView({model: name}))
             else

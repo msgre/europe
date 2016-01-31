@@ -37,7 +37,7 @@ class CategoryResultList(generics.ListAPIView):
         except:
             raise Http404
         results = Result.objects.filter(category=category, difficulty=difficulty)
-        count = Option.objects.get(key='POCET_OTAZEK')
+        count = Option.objects.get(key='RESULT_COUNT')
         return results[:int(count.value)]
 
 
@@ -49,27 +49,22 @@ class ResultRank(generics.RetrieveAPIView):
     serializer_class = RankSerializer
 
     def get_object(self):
+        (difficulty, pk) = self.kwargs['id'].split('-')
         try:
-            category = Category.objects.get(pk=self.kwargs['id'])
+            category = Category.objects.get(pk=int(pk))
         except:
             raise Http404
         time = int(self.kwargs['time'])
-        count = Option.objects.get(key='POCET_OTAZEK')
+        count = Option.objects.get(key='RESULT_COUNT')
         count = int(count.value)
 
-        position = Result.objects.filter(time__lte=time).count()
-        total = Result.objects.all().count()
-
-        category_position = Result.objects.filter(category=category, time__lte=time).count()
-        category_total = Result.objects.filter(category=category).count()
+        position = Result.objects.filter(category=category, difficulty=difficulty, time__lte=time).count()
+        total = Result.objects.filter(category=category, difficulty=difficulty).count()
 
         return {
             'position': position,
             'total': total,
             'top': position <= count,
-            'category_position': category_position,
-            'category_total': category_total,
-            'category_top': category_position <= count,
         }
 
 
