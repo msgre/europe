@@ -125,11 +125,11 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
         letter = that.model.get('letter');
         index = LETTERS.indexOf(letter);
         _name = that.model.get('name');
-        if (msg === 'up' && index > 0) {
+        if (msg === 'left' && index > 0) {
           window.sfx.button.play();
           index -= 1;
           that.model.set('letter', LETTERS[index]);
-        } else if (msg === 'down' && index < (LETTERS.length - 1)) {
+        } else if (msg === 'right' && index < (LETTERS.length - 1)) {
           window.sfx.button.play();
           index += 1;
           that.model.set('letter', LETTERS[index]);

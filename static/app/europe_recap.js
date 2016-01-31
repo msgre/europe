@@ -92,7 +92,7 @@ App.module("Recap", function(Mod, App, Backbone, Marionette, $, _) {
     window.channel.on('key', function(msg) {
       var set_new_timeout;
       set_new_timeout = true;
-      if (msg === 'fire' || msg === 'up' || msg === 'down') {
+      if (msg === 'fire' || msg === 'left' || msg === 'right') {
         window.sfx.button2.play();
         set_delay(function() {
           return window.channel.command('recap:close', _options);

@@ -75,10 +75,10 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
                 set_new_timeout = true
                 change_collection = false
 
-                if msg == 'up' and @index > 0
+                if msg == 'left' and @index > 0
                     @index -= 1
                     change_collection = true
-                else if msg == 'down' and @index < @collection.length - 1
+                else if msg == 'right' and @index < @collection.length - 1
                     @index += 1
                     change_collection = true
                 else if msg == 'fire'

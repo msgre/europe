@@ -120,9 +120,9 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
         var new_category, new_easy_results, new_hard_results, old_index, set_new_timeout;
         old_index = index;
         set_new_timeout = true;
-        if (msg === 'up' && index > 0) {
+        if (msg === 'left' && index > 0) {
           index -= 1;
-        } else if (msg === 'down' && index < categories.length - 1) {
+        } else if (msg === 'right' && index < categories.length - 1) {
           index += 1;
         } else if (msg === 'fire') {
           window.sfx.button2.play();

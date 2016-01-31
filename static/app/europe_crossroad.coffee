@@ -62,9 +62,9 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
                 old_index = that.index
                 set_new_timeout = true
 
-                if msg == 'up' and that.index > 0
+                if msg == 'left' and that.index > 0
                     that.index -= 1
-                else if msg == 'down' and that.index < that.collection.length - 1
+                else if msg == 'right' and that.index < that.collection.length - 1
                     that.index += 1
                 else if msg == 'fire'
                     window.sfx.button2.play()

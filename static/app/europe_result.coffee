@@ -125,11 +125,11 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 index = LETTERS.indexOf(letter)
                 _name = that.model.get('name')
 
-                if msg == 'up' and index > 0
+                if msg == 'left' and index > 0
                     window.sfx.button.play()
                     index -= 1
                     that.model.set('letter', LETTERS[index])
-                else if msg == 'down' and index < (LETTERS.length - 1)
+                else if msg == 'right' and index < (LETTERS.length - 1)
                     window.sfx.button.play()
                     index += 1
                     that.model.set('letter', LETTERS[index])

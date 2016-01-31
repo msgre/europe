@@ -114,7 +114,7 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
         window.channel.on 'key', (msg) ->
             set_new_timeout = true
 
-            if msg == 'fire' or msg == 'up' or msg == 'down'
+            if msg == 'fire' or msg == 'left' or msg == 'right'
                 window.sfx.button2.play()
                 set_delay () ->
                     window.channel.command('score:idle', _options)

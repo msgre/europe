@@ -8,10 +8,10 @@ document['onkeypress'] = function(e) {
   evt = e || window.event;
   any_key = true;
   if (evt.keyCode === 113) {
-    window.channel.trigger('key', 'up');
-  } else if (evt.keyCode === 97) {
-    window.channel.trigger('key', 'down');
-  } else if (evt.keyCode === 32) {
+    window.channel.trigger('key', 'left');
+  } else if (evt.keyCode === 119) {
+    window.channel.trigger('key', 'right');
+  } else if (evt.keyCode === 112) {
     window.channel.trigger('key', 'fire');
   } else if (evt.keyCode === 49) {
     window.channel.trigger('debug:good');

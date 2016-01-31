@@ -154,9 +154,9 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
                 old_index = index
                 set_new_timeout = true
 
-                if msg == 'up' and index > 0
+                if msg == 'left' and index > 0
                     index -= 1
-                else if msg == 'down' and index < categories.length - 1
+                else if msg == 'right' and index < categories.length - 1
                     index += 1
                 else if msg == 'fire'
                     window.sfx.button2.play()

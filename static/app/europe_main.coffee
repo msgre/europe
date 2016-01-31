@@ -1,13 +1,3 @@
-# TempScore = Backbone.Model.extend
-#     defaults:
-#         name: undefined
-#         time: undefined
-#         category: undefined
-#         questions: undefined
-#     url: '/api/score'
-# 
-# window.temp_score = new TempScore()
-
 # --- main comunication channel ----------------------------------------------
 
 window.channel = Backbone.Radio.channel('main')
@@ -22,10 +12,10 @@ document['onkeypress'] = (e) ->
 
     # standard keys
     if evt.keyCode == 113       # Q
-        window.channel.trigger('key', 'up')
-    else if evt.keyCode == 97   # A
-        window.channel.trigger('key', 'down')
-    else if evt.keyCode == 32   # mezera
+        window.channel.trigger('key', 'left')
+    else if evt.keyCode == 119  # W
+        window.channel.trigger('key', 'right')
+    else if evt.keyCode == 112  # P
         window.channel.trigger('key', 'fire')
 
     # debug keys

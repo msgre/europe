@@ -77,10 +77,10 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
           old_index = _this.index;
           set_new_timeout = true;
           change_collection = false;
-          if (msg === 'up' && _this.index > 0) {
+          if (msg === 'left' && _this.index > 0) {
             _this.index -= 1;
             change_collection = true;
-          } else if (msg === 'down' && _this.index < _this.collection.length - 1) {
+          } else if (msg === 'right' && _this.index < _this.collection.length - 1) {
             _this.index += 1;
             change_collection = true;
           } else if (msg === 'fire') {
