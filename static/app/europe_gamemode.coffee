@@ -156,7 +156,8 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
-        console.log 'gamemode'
+        console.log 'Gamemode module'
+        console.log options
         _options = options
         local_channel = Backbone.Radio.channel('gamemode')
         layout = new GameModeLayout

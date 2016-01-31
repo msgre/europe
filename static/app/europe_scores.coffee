@@ -118,7 +118,8 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
-        console.log 'scores'
+        console.log 'Scores module'
+        console.log options
         _options = options
         index = 0
         layout = new ScoreLayout

@@ -173,6 +173,8 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
     }
   };
   Mod.onStart = function(options) {
+    console.log('Game module');
+    console.log(options);
     _options = options;
     PENALTY_TIME = options.gamemode.penalty;
     local_channel = Backbone.Radio.channel('game');

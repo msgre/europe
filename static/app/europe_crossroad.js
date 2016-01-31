@@ -97,7 +97,8 @@ App.module("Crossroad", function(Mod, App, Backbone, Marionette, $, _) {
   };
   Mod.onStart = function(options) {
     var items;
-    console.log('crossroad');
+    console.log('Crossroad module');
+    console.log(options);
     _options = options;
     items = new Items();
     items.add(new Item({

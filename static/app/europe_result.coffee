@@ -188,7 +188,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
-        console.log 'result'
+        console.log 'Result module'
         console.log options
         _options = options
         window.sfx.surprise.play()

@@ -81,7 +81,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
-        console.log 'recap'
+        console.log 'Recap module'
         console.log options
         _options = options
         layout = new RecapLayout

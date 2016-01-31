@@ -51,7 +51,7 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
-        console.log 'countdown'
+        console.log 'Countdown module'
         console.log options
         _options = options                  # store options (selected gamemode inside)
         model = new Countdown()

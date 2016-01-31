@@ -178,7 +178,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     return window.channel.command('result:save', _name);
   };
   Mod.onStart = function(options) {
-    console.log('result');
+    console.log('Result module');
     console.log(options);
     _options = options;
     window.sfx.surprise.play();

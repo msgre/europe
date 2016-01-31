@@ -51,7 +51,7 @@ App.module("Countdown", function(Mod, App, Backbone, Marionette, $, _) {
     }
   };
   Mod.onStart = function(options) {
-    console.log('countdown');
+    console.log('Countdown module');
     console.log(options);
     _options = options;
     model = new Countdown();

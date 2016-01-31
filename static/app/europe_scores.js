@@ -86,7 +86,8 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
     return window.channel.command('scores:idle', _options);
   };
   Mod.onStart = function(options) {
-    console.log('scores');
+    console.log('Scores module');
+    console.log(options);
     _options = options;
     index = 0;
     layout = new ScoreLayout({

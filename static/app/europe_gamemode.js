@@ -143,7 +143,8 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
   };
   Mod.onStart = function(options) {
     var local_options;
-    console.log('gamemode');
+    console.log('Gamemode module');
+    console.log(options);
     _options = options;
     local_channel = Backbone.Radio.channel('gamemode');
     layout = new GameModeLayout({

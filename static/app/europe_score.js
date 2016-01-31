@@ -67,7 +67,7 @@ App.module("Score", function(Mod, App, Backbone, Marionette, $, _) {
   };
   Mod.onStart = function(options) {
     var results, title;
-    console.log('score');
+    console.log('Score module');
     console.log(options);
     _options = options;
     layout = new ScoreLayout({

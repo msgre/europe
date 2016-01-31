@@ -40,11 +40,11 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
     return state++;
   };
   Mod.onStart = function(options) {
-    console.log('intro');
+    console.log('Intro module');
+    console.log(options);
     state = 0;
     view_list = [Intro01, Intro02, Intro03, Intro04];
     window.channel.on('keypress', function() {
-      console.log('intro keypress');
       window.sfx.button.play();
       return window.channel.command('intro:close', options);
     });

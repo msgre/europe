@@ -68,7 +68,7 @@ App.module("Recap", function(Mod, App, Backbone, Marionette, $, _) {
   };
   Mod.onStart = function(options) {
     var questions, title;
-    console.log('recap');
+    console.log('Recap module');
     console.log(options);
     _options = options;
     layout = new RecapLayout({

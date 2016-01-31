@@ -93,7 +93,8 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
-        console.log 'crossroad'
+        console.log 'Crossroad module'
+        console.log options
         _options = options
         items = new Items()
         items.add new Item

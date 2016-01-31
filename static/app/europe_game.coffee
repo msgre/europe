@@ -176,6 +176,8 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
     # --- module
 
     Mod.onStart = (options) ->
+        console.log 'Game module'
+        console.log options
         _options = options                  # store options (selected gamemode inside)
         PENALTY_TIME = options.gamemode.penalty
         local_channel = Backbone.Radio.channel('game')
