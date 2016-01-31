@@ -39,7 +39,6 @@ INSTALLED_APPS = (
 
     'geo',
     'quiz',
-    'scores',
     'options',
     'results',
 )
