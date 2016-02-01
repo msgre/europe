@@ -5,6 +5,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from quiz.views import CategoryList, QuestionList
 from geo.views import CountryList, CountryDetail
 from results.views import MainResultList, CategoryResultList, ResultRank, CreateScoreRecord
+from options.views import OptionList
 
 
 urlpatterns = [
@@ -19,6 +20,8 @@ urlpatterns = [
     url(r'^api/results/(?P<id>(E|H)-\d+)$', CategoryResultList.as_view()),
     url(r'^api/results/(?P<id>(E|H)-\d+)/(?P<time>\d+)$', ResultRank.as_view()),
     url(r'^api/score$', CreateScoreRecord.as_view()),
+
+    url(r'^api/options', OptionList.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

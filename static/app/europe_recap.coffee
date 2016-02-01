@@ -8,9 +8,6 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
     # --- constants & variables
 
     _options = undefined
-    IDLE_TIMEOUT = 4000
-    DIFFICULTY_EASY = 'E'
-    DIFFICULTY_HARD = 'H'
     layout = undefined
 
     # --- models & collections
@@ -95,7 +92,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
         # set views in regions
         title = new Backbone.Model
             title: options.gamemode.title
-            difficulty: if options.gamemode.difficulty == DIFFICULTY_EASY then "Jednoduchá obtížnost" else "Složitá obtížnost"
+            difficulty: if options.gamemode.difficulty == _options.constants.DIFFICULTY_EASY then "Jednoduchá obtížnost" else "Složitá obtížnost"
         layout.getRegion('title').show new TitleView
             model: title
         layout.getRegion('recap').show new RecapView
@@ -119,10 +116,10 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
 
             if set_new_timeout
                 window.sfx.button.play()
-                set_delay(handler, IDLE_TIMEOUT)
+                set_delay(handler, _options.options.IDLE_RECAP)
 
         # idle
-        set_delay(handler, IDLE_TIMEOUT)
+        set_delay(handler, _options.options.IDLE_RECAP)
 
 
     Mod.onStop = () ->

@@ -13,9 +13,6 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
 
     _options = undefined
     categories = undefined
-    DIFFICULTY_EASY = 'E'
-    DIFFICULTY_HARD = 'H'
-    IDLE_TIMEOUT = 4000
     layout = undefined
     index = 0
 
@@ -133,10 +130,10 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
             category = categories.at(index)
             easy_results = new Results null, 
                 category: category.get('id')
-                difficulty: DIFFICULTY_EASY
+                difficulty: _options.constants.DIFFICULTY_EASY
             hard_results = new Results null, 
                 category: category.get('id')
-                difficulty: DIFFICULTY_HARD
+                difficulty: _options.constants.DIFFICULTY_HARD
 
             # set views in regions
             layout.getRegion('title').show new TitleView
@@ -170,20 +167,20 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
 
                 if set_new_timeout
                     window.sfx.button.play()
-                    set_delay(handler, IDLE_TIMEOUT)
+                    set_delay(handler, _options.options.IDLE_SCORES)
 
                 if old_index != index
                     new_category = categories.at(index)
                     # fetch data for newly selected category
                     new_easy_results = new Results null, 
                         category: new_category.get('id')
-                        difficulty: DIFFICULTY_EASY
+                        difficulty: _options.constants.DIFFICULTY_EASY
                     new_easy_results.on 'sync', () ->
                         easy_results.reset(new_easy_results.toJSON())
                     new_easy_results.fetch()
                     new_hard_results = new Results null, 
                         category: new_category.get('id')
-                        difficulty: DIFFICULTY_HARD
+                        difficulty: _options.constants.DIFFICULTY_HARD
                     new_hard_results.on 'sync', () ->
                         hard_results.reset(new_hard_results.toJSON())
                     new_hard_results.fetch()
@@ -193,7 +190,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
                         model: new_category
 
             # idle
-            set_delay(handler, IDLE_TIMEOUT)
+            set_delay(handler, _options.options.IDLE_SCORES)
 
         categories.fetch()
 

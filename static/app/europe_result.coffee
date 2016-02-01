@@ -7,7 +7,6 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- constants & variables
 
-    IDLE_DELAY = 10000
     NAME_MAX_LENGTH = 16
     LETTERS = 'ABCDEFGHIJKLMNOPRSTUVWXYZ 0123456789-._*?!#:()←✔'
     LETTER_BACKSPACE = '←'
@@ -146,7 +145,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                             window.channel.command('result:save', _name)
                             return
 
-                set_delay(handler, IDLE_DELAY)
+                set_delay(handler, _options.options.IDLE_RESULT)
 
         onDestroy: () ->
             window.channel.off('key')
@@ -227,7 +226,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 window.channel.command('result:close', _options) # TODO: asi bych mel do _options jeste neco pridat
                 score.off('sync')
 
-        set_delay(handler, IDLE_DELAY)
+        set_delay(handler, _options.options.IDLE_RESULT)
 
         # run!
         rank.fetch()

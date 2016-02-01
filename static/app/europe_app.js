@@ -4,9 +4,10 @@ var App;
 App = new Marionette.Application();
 
 App.on('start', function(global_options) {
-  var active_module, state_handler, that;
+  var ServerOptions, active_module, final_global_options, server_options, state_handler, that;
   active_module = null;
   that = this;
+  final_global_options = void 0;
   state_handler = function(new_module_name, options) {
     if (active_module !== null) {
       active_module.stop();
@@ -79,7 +80,31 @@ App.on('start', function(global_options) {
     return state_handler("Score", options);
   });
   window.channel.comply('score:idle', function(options) {
-    return window.channel.command('intro:start', global_options);
+    return window.channel.command('intro:start', final_global_options);
   });
-  return window.channel.command('intro:start', global_options);
+  ServerOptions = Backbone.Collection.extend({
+    model: Backbone.Model,
+    url: '/api/options',
+    parse: function(response, options) {
+      return response.results;
+    }
+  });
+  server_options = new ServerOptions;
+  server_options.on('sync', function() {
+    var _global_options, _options;
+    _options = _.object(server_options.map(function(i) {
+      return [i.get('key'), parseInt(i.get('value'))];
+    }));
+    _global_options = _.extend({
+      options: _options
+    }, {
+      constants: {
+        DIFFICULTY_EASY: 'E',
+        DIFFICULTY_HARD: 'H'
+      }
+    });
+    final_global_options = _.extend(_global_options, global_options);
+    return window.channel.command('intro:start', final_global_options);
+  });
+  return server_options.fetch();
 });

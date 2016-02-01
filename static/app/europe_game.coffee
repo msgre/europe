@@ -184,17 +184,17 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
 
         # data for top/bottom of the screen
         info = new Info
-            total_questions: options.total_questions
-            category: options.gamemode.title
+            total_questions: _options.options.QUESTION_COUNT
+            category: _options.gamemode.title
 
         progress = new Progress
-            total: options.gamemode.time
+            total: _options.gamemode.time
             current: 0
 
         # data for questions
         questions = new Questions null, 
-            difficulty: options.gamemode.difficulty
-            category: options.gamemode.category
+            difficulty: _options.gamemode.difficulty
+            category: _options.gamemode.category
 
         questions.on 'sync', () ->
             # layout
@@ -226,7 +226,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
                 # move to the next question
                 question += 1
 
-                if question > options.total_questions
+                if question > options.options.QUESTION_COUNT
                     # end of the game is near...
                     clear_timer()
                     output = _.extend _options,

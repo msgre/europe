@@ -7,7 +7,6 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- constants & variables
 
-    TICK_TIMEOUT = 1100
     _options = undefined
     model = undefined
     view = undefined
@@ -59,7 +58,7 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
             model: model
             el: make_content_wrapper()
         view.render()
-        set_timer(handler, TICK_TIMEOUT)
+        set_timer(handler, _options.options.COUNTDOWN_TICK_TIMEOUT)
 
     Mod.onStop = () ->
         clear_timer()

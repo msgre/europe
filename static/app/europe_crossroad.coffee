@@ -7,7 +7,6 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- constants & variables
 
-    IDLE_TIMEOUT = 4000
     _options = undefined
     view = undefined
 
@@ -76,7 +75,7 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
 
                 if set_new_timeout
                     window.sfx.button.play()
-                    set_delay(handler, IDLE_TIMEOUT)
+                    set_delay(handler, _options.options.IDLE_CROSSROAD)
 
                 if old_index != that.index
                     that.collection.set_active(that.index)
@@ -113,7 +112,7 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
             collection: items
             el: make_content_wrapper()
         view.render()
-        set_delay(handler, IDLE_TIMEOUT)
+        set_delay(handler, _options.options.IDLE_CROSSROAD)
 
     Mod.onStop = () ->
         clear_delay()

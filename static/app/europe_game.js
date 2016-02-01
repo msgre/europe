@@ -179,16 +179,16 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
     PENALTY_TIME = options.gamemode.penalty;
     local_channel = Backbone.Radio.channel('game');
     info = new Info({
-      total_questions: options.total_questions,
-      category: options.gamemode.title
+      total_questions: _options.options.QUESTION_COUNT,
+      category: _options.gamemode.title
     });
     progress = new Progress({
-      total: options.gamemode.time,
+      total: _options.gamemode.time,
       current: 0
     });
     questions = new Questions(null, {
-      difficulty: options.gamemode.difficulty,
-      category: options.gamemode.category
+      difficulty: _options.gamemode.difficulty,
+      category: _options.gamemode.category
     });
     questions.on('sync', function() {
       var question_view;
@@ -217,7 +217,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
         old_q = questions.at(question - 1);
         old_q.set('answer', user_answer);
         question += 1;
-        if (question > options.total_questions) {
+        if (question > options.options.QUESTION_COUNT) {
           clear_timer();
           output = _.extend(_options, {
             questions: questions.toJSON(),

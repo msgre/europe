@@ -7,10 +7,10 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- constants & variables
 
-    TIME_PER_SCREEN = 3000
     view_list = undefined
     view = undefined
     state = undefined
+    _options = undefined
 
     # --- views
 
@@ -58,6 +58,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
     Mod.onStart = (options) ->
         console.log 'Intro module'
         console.log options
+        _options = options
         state = 0
         view_list = [
             Intro01
@@ -69,7 +70,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
             window.sfx.button.play()
             window.channel.command('intro:close', options)
         handler()
-        set_timer(handler, TIME_PER_SCREEN)
+        set_timer(handler, _options.options.INTRO_TIME_PER_SCREEN)
 
     Mod.onStop = () ->
         clear_timer()

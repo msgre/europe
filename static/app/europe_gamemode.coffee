@@ -7,9 +7,6 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- constants & variables
 
-    DIFFICULTY_EASY = 'E'
-    DIFFICULTY_HARD = 'H'
-    IDLE_TIMEOUT = 4000
     _options = undefined
     layout = undefined
     difficulties = undefined
@@ -92,7 +89,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
 
                 if set_new_timeout
                     window.sfx.button.play()
-                    set_delay(handler, IDLE_TIMEOUT)
+                    set_delay(handler, _options.options.IDLE_GAMEMODE)
 
                 if change_collection and old_index != @index
                     @collection.set_active(@index)
@@ -167,12 +164,12 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         # difficulties collection
         difficulties = new Items
         difficulties.add new Item
-            id: DIFFICULTY_EASY
+            id: _options.constants.DIFFICULTY_EASY
             title: 'Jednoduchá'
             active: false
             order: 1
         difficulties.add new Item
-            id: DIFFICULTY_HARD
+            id: _options.constants.DIFFICULTY_HARD
             title: 'Obtížná'
             active: false
             order: 2
@@ -216,7 +213,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         local_channel.on 'choice', (obj) ->
             local_options['category'] = obj.get('id')
             local_options['title'] = obj.get('title')
-            if local_options.difficulty == DIFFICULTY_EASY
+            if local_options.difficulty == _options.constants.DIFFICULTY_EASY
                 local_options['time'] = obj.get('time_easy')
                 local_options['penalty'] = obj.get('penalty_easy')
             else
@@ -237,7 +234,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
 
         layout.getRegion('difficulty').currentView.set_active()
 
-        set_delay(handler, IDLE_TIMEOUT)
+        set_delay(handler, _options.options.IDLE_GAMEMODE)
 
 
     Mod.onStop = () ->
