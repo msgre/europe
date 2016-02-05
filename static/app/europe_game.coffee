@@ -1,7 +1,5 @@
-# Screen #4, game
+# Screen #6, Game / Hra
 #
-# TODO:
-# - zpropagovat obtiznost do query na server
 
 App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
 

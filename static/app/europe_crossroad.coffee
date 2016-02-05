@@ -1,4 +1,4 @@
-# Screen #2, game mode selection
+# Screen #2, Crossroad / Volba hra-vysledky
 #
 
 App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->

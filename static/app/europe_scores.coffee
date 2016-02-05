@@ -1,9 +1,5 @@
-# Screen #?, browsable scores
+# Screen #3, Scores / Vysledky
 #
-# TODO:
-# - cachovani
-# - dlooouhy timeout, po kterem se vrati na zacatek
-# - mozna prehled kategorii a nad kterou je?
 
 App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
 

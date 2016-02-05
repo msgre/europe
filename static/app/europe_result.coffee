@@ -1,4 +1,4 @@
-# Screen #5, results
+# Screen #7, Result / Vysledek, Zadani jmena
 #
 
 App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->

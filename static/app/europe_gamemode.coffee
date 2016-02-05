@@ -1,4 +1,4 @@
-# Screen #2, game mode selection
+# Screen #4, Gamemode / Volba kategorie hry
 #
 
 App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->

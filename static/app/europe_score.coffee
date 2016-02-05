@@ -1,4 +1,4 @@
-# Screen #?, final score
+# Screen #9, Score / Finalni skore
 #
 
 App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->

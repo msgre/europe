@@ -1,4 +1,4 @@
-# Screen #3, countdown
+# Screen #5, Countdown / Odpocet
 #
 
 App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->

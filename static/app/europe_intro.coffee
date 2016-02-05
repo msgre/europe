@@ -1,4 +1,4 @@
-# Screen #1, intro
+# Screen #1, Intro / Uvodni stranka
 #
 
 App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->

@@ -1,4 +1,4 @@
-# Screen #?, recapitulation
+# Screen #8, Recap / Rekapitulace
 #
 
 App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
