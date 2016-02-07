@@ -9,13 +9,13 @@ Both components are dockerized and run behind Nginx proxy.
 
 **Content**:
 
-* Basics
-    * Build
-    * Run
-    * Watch
-* Details
-    * Database migrations
-    * Coffeescript compilation
+* [Basics](#basics)
+    * [Build](#build)
+    * [Run](#run)
+    * [Watch](#watch)
+* [Details](#details)
+    * [Database migrations](#database-migrations)
+    * [Coffeescript compilation](#coffeescript-compilation)
 
 # Basics
 
