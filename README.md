@@ -27,6 +27,21 @@ Both components are dockerized and run behind Nginx proxy.
 
 ## Run
 
+### Automatically with docker-compose
+
+    docker-compose up
+
+When you hit CTRL+C, containers will be stopped. Sometimes this is not true,
+so you must manually:
+
+    docker-compose kill
+
+If you want remove stopped containers, call:
+
+    docker-compose rm
+
+### Manualy, container by container
+
     # API backend based on Django application
     docker run --name europe-api --rm -ti -p 8080:8080 -v $PWD/europe:/src/api msgre/common:europe-api.latest
 

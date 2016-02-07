@@ -1,0 +1,31 @@
+---
+version: '2'
+services:
+  # django app
+  europe-api:
+    image: msgre/common:europe-api.latest
+    volumes:
+      - $PWD/europe:/src/api 
+    ports:
+      - "8080:8080"
+    command: --socket 0.0.0.0:8080 --master --processes 1 --max-requests 1 --env DJANGO_SETTINGS_MODULE=europe.settings --module europe.wsgi:application --chdir /src/api
+    stop_signal: SIGINT
+
+  # javascript application
+  europe-js:
+    image: msgre/common:europe-js.latest 
+    command: /bin/true
+    volumes:
+      - $PWD/static:/src/js 
+
+  # nginx proxy
+  nginx:
+    image: nginx
+    volumes:
+      - "$PWD/ansible/files/europe.nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+    ports:
+      - "8081:80"
+    volumes_from:
+      - europe-js
+    links:
+      - europe-api
