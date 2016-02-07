@@ -1,0 +1,336 @@
+FORMAT: 1A
+
+# Europe
+
+API for the Europe boardgame. Details on https://github.com/msgre/europe
+
+## Options List [/api/options]
+
+Configuration options for Javascript application.
+
+### List All Options [GET]
+
++ Response 200 (application/json)
+
+        {
+            "count": 10, 
+            "next": null, 
+            "previous": null, 
+            "results": [
+                {
+                    "key": "COUNTDOWN_TICK_TIMEOUT", 
+                    "value": "1100"
+                }, 
+                {
+                    "key": "IDLE_CROSSROAD", 
+                    "value": "4000"
+                }, 
+                {
+                    "key": "IDLE_GAMEMODE", 
+                    "value": "4000"
+                }, 
+                {
+                    "key": "IDLE_RECAP", 
+                    "value": "10000"
+                }, 
+                {
+                    "key": "IDLE_RESULT", 
+                    "value": "10000"
+                }, 
+                {
+                    "key": "IDLE_SCORE", 
+                    "value": "10000"
+                }, 
+                {
+                    "key": "IDLE_SCORES", 
+                    "value": "10000"
+                }, 
+                {
+                    "key": "INTRO_TIME_PER_SCREEN", 
+                    "value": "3000"
+                }, 
+                {
+                    "key": "QUESTION_COUNT", 
+                    "value": "10"
+                }, 
+                {
+                    "key": "RESULT_COUNT", 
+                    "value": "10"
+                }
+            ]
+        }
+
+
+## Countries List [/api/countries]
+
+Countries used in game.
+
+### List All Countries [GET]
+
++ Response 200 (application/json)
+
+        {
+            "count": 2, 
+            "next": "http://192.168.99.100:8081/api/countries?page=2", 
+            "previous": null, 
+            "results": [
+                {
+                    "id": 1, 
+                    "title": "Albánie", 
+                    "sensor": "1"
+                }, 
+                {
+                    "id": 2, 
+                    "title": "Andora", 
+                    "sensor": "2"
+                }
+            ]
+        }
+
+## Country Detail [/api/countries/{country_id}]
+
++ Parameters
+    + country_id (number) - ID of the Country
+
+### View Country Detail [GET]
+
++ Response 200 (application/json)
+
+        {
+            "id": 1, 
+            "title": "Albánie", 
+            "sensor": "1"
+        }
+
+
+## Categories List [/api/categories]
+
+Question categories used in game (each question belongs under one category).
+
+### List All Categories [GET]
+
++ Response 200 (application/json)
+
+        {
+            "count": 2, 
+            "next": null, 
+            "previous": null, 
+            "results": [
+                {
+                    "id": 1, 
+                    "title": "Hlavní města", 
+                    "time_easy": 30, 
+                    "penalty_easy": 3, 
+                    "time_hard": 10, 
+                    "penalty_hard": 3
+                }, 
+                {
+                    "id": 2, 
+                    "title": "Fotopohlednice", 
+                    "time_easy": 30, 
+                    "penalty_easy": 3, 
+                    "time_hard": 10, 
+                    "penalty_hard": 3
+                }
+            ]
+        }
+
+
+## Questions List [/api/questions/{difficulty}-{category_id}]
+
+Generate unique questions list for the new game.
+
++ Parameters
+    + difficulty (string) - ID of the difficulty: E=easy, H=hard
+    + category_id (number) - ID of the category
+
+### Get Questions For The New Game [GET]
+
++ Response 200 (application/json)
+
+        {
+            "count": 2, 
+            "next": null, 
+            "previous": null, 
+            "results": [
+                {
+                    "id": 118, 
+                    "question": "Ve které zemi se nachází město Astana?", 
+                    "difficulty": "E", 
+                    "image": "/riga.jpg", 
+                    "country": {
+                        "id": 20, 
+                        "title": "Kazachstán", 
+                        "sensor": "20"
+                    }, 
+                    "category": {
+                        "id": 1, 
+                        "title": "Hlavní města", 
+                        "time_easy": 30, 
+                        "penalty_easy": 3, 
+                        "time_hard": 10, 
+                        "penalty_hard": 3
+                    }
+                }, 
+                {
+                    "id": 120, 
+                    "question": "Ve které zemi se nachází město Vaduz?", 
+                    "difficulty": "E", 
+                    "image": "/riga.jpg", 
+                    "country": {
+                        "id": 22, 
+                        "title": "Lichtenštejnsko", 
+                        "sensor": "22"
+                    }, 
+                    "category": {
+                        "id": 1, 
+                        "title": "Hlavní města", 
+                        "time_easy": 30, 
+                        "penalty_easy": 3, 
+                        "time_hard": 10, 
+                        "penalty_hard": 3
+                    }
+                }
+            ]
+        }
+
+
+## Top Results [/api/results]
+
+Top results from **all** categories.
+
+### Get Top Results [GET]
+
++ Response 200 (application/json)
+
+        {
+            "count": 1, 
+            "next": null, 
+            "previous": null, 
+            "results": [
+                {
+                    "title": "Hlavní města", 
+                    "time": 77
+                }
+            ]
+        }
+
+## Top Category Results [/api/results/{difficulty}-{category_id}]
+
+Top results from given difficulty and category.
+
++ Parameters
+    + difficulty (string) - ID of the difficulty: E=easy, H=hard
+    + category_id (number) - ID of the category
+
+### Get Top Category Results [GET]
+
++ Response 200 (application/json)
+
+        {
+            "count": 2, 
+            "next": null, 
+            "previous": null, 
+            "results": [
+                {
+                    "id": 119, 
+                    "name": "CDE", 
+                    "time": 77, 
+                    "category": {
+                        "id": 1, 
+                        "title": "Hlavní města", 
+                        "time_easy": 30, 
+                        "penalty_easy": 3, 
+                        "time_hard": 10, 
+                        "penalty_hard": 3
+                    }, 
+                    "difficulty": "E", 
+                    "created": "2016-02-01T19:04:57.201024Z"
+                }, 
+                {
+                    "id": 116, 
+                    "name": null, 
+                    "time": 84, 
+                    "category": {
+                        "id": 1, 
+                        "title": "Hlavní města", 
+                        "time_easy": 30, 
+                        "penalty_easy": 3, 
+                        "time_hard": 10, 
+                        "penalty_hard": 3
+                    }, 
+                    "difficulty": "E", 
+                    "created": "2016-01-31T15:57:49.729388Z"
+                }
+            ]
+        }
+
+## Top Category Position [/api/results/{difficulty}-{category_id}/{time}]
+
+Once player finish his game, Javascript application need to know, if it should
+display just plain information about time or input box for typing name in case
+team get great time.
+
++ Parameters
+    + difficulty (string) - ID of the difficulty: E=easy, H=hard
+    + category_id (number) - ID of the category
+    + time (number) - Players time
+
+### Get Top Category Position [GET]
+
++ Response 200 (application/json)
+
+        {
+            "position": 6, 
+            "total": 28, 
+            "top": true
+        }
+
+
+##  Results [/api/score]
+
+Endpoint for storing high scores from game.
+
+### Store Top Score [POST]
+
++ Request (application/json)
+
+        {
+            "category": 1,
+            "difficulty": "E",
+            "name": "Players name",
+            "time": 260,
+            "questions": [
+                {"question": 146, "correct": true},
+                {"question": 103, "correct": true},
+                {"question": 100, "correct": true},
+                {"question": 125, "correct": false},
+                {"question": 147, "correct": true},
+                {"question": 138, "correct": true},
+                {"question": 128, "correct": false},
+                {"question": 145, "correct": true},
+                {"question": 121, "correct": true},
+                {"question": 122, "correct": true}
+            ]
+        }
+
++ Response 201 (application/json)
+
+        {
+            "category": 1,
+            "difficulty": "E",
+            "name": "Players name",
+            "time": 260,
+            "questions": [
+                {"question": "Ve které zemi se nachází město Andorra la Vella?"},
+                {"question": "Ve které zemi se nachází město Ankara?"},
+                {"question": "Ve které zemi se nachází město Bern?"},
+                {"question": "Ve které zemi se nachází město Brusel?"},
+                {"question": "Ve které zemi se nachází město Kyjev?"},
+                {"question": "Ve které zemi se nachází město Monaco-Ville?"},
+                {"question": "Ve které zemi se nachází město Riga?"},
+                {"question": "Ve které zemi se nachází město San Marino?"},
+                {"question": "Ve které zemi se nachází město Skopje?"},
+                {"question": "Ve které zemi se nachází město Vilnius?"}
+            ]
+        }
