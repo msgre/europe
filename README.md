@@ -7,19 +7,42 @@ Right now it consist of two main components:
 
 Both components are dockerized and run behind Nginx proxy.
 
-# Build
+**Content**:
+
+* Basics
+    * Build
+    * Run
+    * Watch
+* Details
+    * Database migrations
+    * Coffeescript compilation
+
+# Basics
+
+## Build
 
     docker build -f Dockerfile.api -t msgre/common:europe-api.latest .
     docker build -f Dockerfile.js -t msgre/common:europe-js.latest .
+    docker build -f Dockerfile.coffee -t msgre/common:coffee.latest .
 
-# Run
+## Run
 
+    # API backend based on Django application
     docker run --name europe-api --rm -ti -p 8080:8080 -v $PWD/europe:/src/api msgre/common:europe-api.latest
-    docker run --name europe-js --rm -ti -v $PWD/static:/src/js msgre/common:europe-js.latest tail -f /dev/null
-    docker create --name europe-js msgre/common:europe-js.latest
-    docker run -ti --rm -p 8081:80 --name nginx --volumes-from europe-js --link europe-api -v $PWD/europe.nginx.conf:/etc/nginx/conf.d/default.conf:ro nginx
 
-# Watch
+    # Static files mapped from local directory into container
+    docker run --name europe-js --rm -ti -v $PWD/static:/src/js msgre/common:europe-js.latest tail -f /dev/null
+
+    # Nginx in front of Django app and static files
+    docker run -ti --rm -p 8081:80 --name nginx --volumes-from europe-js --link europe-api -v $PWD/ansible/files/europe.nginx.conf:/etc/nginx/conf.d/default.conf:ro nginx
+
+
+NOTE: In production, I will use ready made Javascript container in similar way:
+
+    docker create --name europe-js -v $PWD/static:/src/js msgre/common:europe-js.latest # in production
+
+
+## Watch
 
 Open in **Chrome** browser URL http://192.168.99.100:8081/europe_01.html
 (warning, doesn't work in Firefox due to some problem with keyboard plugin).
@@ -27,9 +50,9 @@ Open in **Chrome** browser URL http://192.168.99.100:8081/europe_01.html
 For controling web app use following keys (they will be replaced in final 
 product to real physical keys):
 
-* `Q` is up
-* `A` is down
-* `space` is choice
+* `Q` is left
+* `W` is right
+* `P` is choice
 
 During questions phase, use:
 
@@ -37,13 +60,29 @@ During questions phase, use:
 * `1` as right answer
 
 
-# Database migrations
+# Details
 
-## Run container
+## Database migrations
+
+Run container:
 
     docker run --name europe-api --rm -ti -p 8080:8080 -v $PWD/europe:/src/api --entrypoint bash msgre/common:europe-api.latest
 
-## Make and apply migrations
+Or connect to already running europe-api container:
+
+    docker exec -ti europe-api bash
+
+Make and apply migrations:
 
     ./manage.py makemigrations
     ./manage.py migrate
+
+## Coffeescript compilation
+
+One-time compilation:
+
+    docker run -ti --rm -v $PWD/static/app:/src msgre/common:coffee.latest -bc /src
+
+Continuous compilation based on changes in watched directory:
+
+    fswatch --exclude="\.js$" -o $PWD/static/app | xargs -n1 -I{} docker run -i --rm -v $PWD/static/app:/src msgre/common:coffee.latest -bc /src
