@@ -52,6 +52,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
             name: undefined
             time: undefined
             category: undefined
+            difficulty: undefined
             questions: undefined
         url: '/api/score'
 
