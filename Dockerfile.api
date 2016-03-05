@@ -20,5 +20,6 @@ RUN pip install \
     django-extensions==1.5.0 \
     djangorestframework==3.0.5 \
     uwsgi==2.0 \
+    PyYAML==3.11 \
     ipdb \
     ipython
