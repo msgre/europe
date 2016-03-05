@@ -1,16 +1,16 @@
-HTML verze jednotlivých typových obrazovek. Funkční v Chrome 49.
+HTML versions of [screens](screens/). Functional in Chrome 49.
 
-# Kompilace Less
+# Less compilation
 
-1. Stáhnout Docker image
+1. Pull Docker image  
         docker pull ewoutp/lessc
-2. Přidat alias do `~/.bash_profile` přidat
+2. Add alias into `~/.bash_profile`  
         alias lessc='docker run -it –rm -v $(pwd):$(pwd) -w $(pwd) ewoutp/lessc '
-3. Vyzkoušet (v adresáři, kde je `styles.less`)
+3. Test it (in [css](css/) folder, next to `styles.less` file)  
         lessc styles.less styles.css
 
-# Automatická kompilace
+# Atomatic compilation
 
-Stáhnout `fswatch` a spustit v adresáři `css/`:
+Install `fswatch` into your OS and run following command in `css/` folder:
 
     fswatch -0 --include="\.less$" -o $PWD | xargs -0 -n 1 -I {} docker run -i --rm -v $PWD:$PWD -w $PWD ewoutp/lessc styles.less styles.css
