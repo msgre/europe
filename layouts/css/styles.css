@@ -1,0 +1,379 @@
+@import "reset.css";
+@import "fonts.css";
+.clear {
+  clear: both;
+}
+.text-right {
+  text-align: right;
+}
+img {
+  vertical-align: text-bottom;
+}
+body {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+.icon {
+  padding-left: 1.3em;
+}
+.icon-star {
+  background: transparent url(../svg/star.svg) no-repeat 0% 0%;
+}
+.icon-star-small {
+  background: transparent url(../svg/star-small.svg) no-repeat 0% 0%;
+}
+body {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+}
+body #main {
+  margin: auto;
+  width: 1638px;
+  height: 900px;
+  background: #fff;
+}
+#header {
+  height: 120px;
+  width: 100%;
+}
+#header h1 {
+  font-size: 3.5em;
+  font-weight: 400;
+  text-transform: uppercase;
+  float: left;
+  margin-top: .6em;
+  margin-left: .4em;
+}
+#header h2 {
+  font-size: 2em;
+  font-weight: 300;
+  text-transform: uppercase;
+  float: right;
+  margin-top: 1.4em;
+  margin-right: 1em;
+}
+.layout-a #header {
+  background-color: #222;
+  color: #fff;
+}
+.layout-b #header {
+  background-color: #fff;
+  color: #000;
+}
+.layout-b #header h1 {
+  margin-left: 0;
+}
+.layout-b #header .bar {
+  float: right;
+  background: #666666 url(../svg/bar.svg) 500px 0 no-repeat;
+  width: 1100px;
+  height: 60px;
+  margin-top: 30px;
+}
+.layout-b #header .bar p {
+  font-size: 2.6em;
+  color: #fff;
+  margin-top: .24em;
+}
+.layout-b #header .bar p:first-child {
+  float: left;
+  margin-left: .24em;
+}
+.layout-b #header .bar p:last-child {
+  float: right;
+  margin-right: .24em;
+}
+#body {
+  height: 780px;
+  width: 100%;
+  background-color: #fff;
+}
+#body h2 {
+  font-size: 1.6em;
+  text-transform: uppercase;
+}
+#body p {
+  font-size: 1.6em;
+}
+#body p.help {
+  margin-top: 2em;
+}
+#body .col {
+  margin-top: 20px;
+  width: 48%;
+}
+#body .col:nth-child(1) {
+  float: left;
+}
+#body .col:nth-child(2) {
+  float: right;
+}
+#body table.results {
+  border-bottom: 1px solid #000;
+  width: 100%;
+  font-size: 1.4em;
+  margin-top: 1em;
+}
+#body table.results tr {
+  border-top: 1px solid #000;
+}
+#body table.results tr td {
+  padding: .6em;
+  text-align: left;
+}
+#body table.results tr td:first-child {
+  border-right: 1px solid #000;
+}
+#body table.results tr td:last-child {
+  text-align: right;
+  width: 100%;
+}
+#body .recap {
+  width: 809px;
+  height: 175px;
+  margin-top: 20px;
+  float: left;
+  background-color: #222;
+  color: #fff;
+}
+#body .recap div.text {
+  width: 404.5px;
+  float: left;
+}
+#body .recap div.text p.question {
+  margin: 1em 0 0 1em;
+}
+#body .recap div.text p.answer {
+  color: yellow;
+  margin: .4em 0 0 1em;
+}
+#body .recap img {
+  height: 175px;
+  float: right;
+}
+#body .recap:nth-child(even) {
+  margin-left: 10px;
+}
+#body .recap:nth-child(odd) {
+  margin-right: 10px;
+}
+#body table.game {
+  width: 100%;
+  height: 100%;
+  background-color: #222;
+  color: #fff;
+  font-size: 3.4em;
+}
+#body table.game td {
+  text-align: center;
+  vertical-align: middle;
+}
+#body table.game td.text {
+  border-left: 10px solid #fff;
+  width: 100%;
+}
+#body table.gamemode {
+  width: 100%;
+  height: 100%;
+}
+#body table.gamemode td {
+  text-align: center;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+#body table.gamemode .button p {
+  margin: 1.8em 1em;
+  font-size: 2em;
+}
+#body table.gamemode tr.row-1 .button:last-child {
+  margin: 0;
+}
+#body table.gamemode tr.row-2 {
+  height: 100%;
+}
+#body table.gamemode tr.row-2 .button {
+  margin-bottom: 18px;
+}
+#body table.gamemode tr.row-2 .button:nth-child(4n) {
+  margin-right: 0;
+}
+#body table.gamemode tr.row-2 .button:nth-child(n+9) {
+  margin-bottom: 0;
+}
+#body table.gamemode tr.row-2 td {
+  text-align: left;
+}
+#body table.gamemode tr.row-3 .button:last-child {
+  margin: 0;
+}
+#body table.crossroad {
+  width: 100%;
+  height: 100%;
+}
+#body table.crossroad td {
+  text-align: left;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+#body table.crossroad .button p {
+  margin: 1.8em 1em;
+  font-size: 2em;
+}
+#body table.crossroad .button:last-child {
+  margin-right: 0;
+}
+#body table.crossroad .button:last-child p {
+  margin-left: 3.2em;
+}
+#body table.result {
+  width: 100%;
+  height: 100%;
+}
+#body table.result tr.row-1 {
+  height: 420px;
+  background: #222;
+  color: #fff;
+  border-top: 18px solid #ffffff;
+}
+#body table.result tr.row-1 td {
+  text-align: center;
+  vertical-align: middle;
+}
+#body table.result tr.row-1 td h1 {
+  color: #aaa;
+  font-size: 4em;
+  text-transform: uppercase;
+}
+#body table.result tr.row-1 td h2 {
+  color: #fff;
+  font-size: 8em;
+  font-weight: 700;
+  margin: .2em 0;
+}
+#body table.result td.typewriter {
+  vertical-align: middle;
+  text-align: center;
+  font-size: 4.2em;
+  color: #ccc;
+}
+#body table.result tr.row-3 {
+  font-size: 2em;
+}
+#body table.result td.help {
+  padding: 1em;
+  width: 300px;
+}
+#body table.result span.selected {
+  color: #fff;
+  background: #222;
+  padding: .2em;
+}
+.layout-c #body {
+  height: 900px;
+}
+.layout-c #body table.countdown {
+  width: 100%;
+  height: 100%;
+}
+.layout-c #body table.countdown td {
+  text-transform: uppercase;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  background: transparent url(../svg/circle.svg) no-repeat 50% 50%;
+}
+.layout-c #body table.ready td {
+  font-size: 6em;
+  background-color: red;
+}
+.layout-c #body table.numbers td {
+  font-size: 28em;
+  background-color: orange;
+}
+.layout-c #body table.go td {
+  font-size: 10em;
+  background-color: green;
+}
+.layout-c #body table.intro {
+  width: 100%;
+  height: 100%;
+  background-color: #222;
+}
+.layout-c #body table.intro td {
+  color: #fff;
+}
+.layout-c #body table.intro td.cell-a1 {
+  width: 1320px;
+  height: 600px;
+}
+.layout-c #body table.intro td.cell-a1,
+.layout-c #body table.intro td.cell-a2 {
+  border-bottom: 18px solid #ffffff;
+}
+.layout-c #body table.intro td.cell-a1,
+.layout-c #body table.intro td.cell-b1 {
+  border-right: 18px solid #ffffff;
+}
+.layout-c #body table.intro td.cell-a2 {
+  text-align: left;
+  vertical-align: top;
+}
+.layout-c #body table.intro td.cell-a2 div {
+  margin: 1.6em;
+}
+.layout-c #body table.intro td.cell-a2 div h2 {
+  font-size: 2.2em;
+}
+.layout-c #body table.intro td.cell-a2 div table {
+  width: 100%;
+  margin-top: 1em;
+  border-top: 1px solid #fff;
+}
+.layout-c #body table.intro td.cell-a2 div table tr {
+  border-bottom: 1px solid #fff;
+}
+.layout-c #body table.intro td.cell-a2 div table tr td {
+  padding: .4em 0;
+}
+.layout-c #body table.intro td.cell-a2 div table tr td:nth-child(2) {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.layout-c #body table.intro td.cell-b1 div {
+  padding: 2.8em 0 0 2em;
+}
+.layout-c #body table.intro td.cell-b1 div h1 {
+  font-size: 6.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.layout-c #body table.intro td.cell-b1 div h3 {
+  margin-top: .3em;
+  font-size: 4em;
+  font-weight: 400;
+}
+.layout-c #body table.intro td.cell-b2 {
+  text-align: center;
+  vertical-align: middle;
+}
+.button {
+  height: 150px;
+  float: left;
+  background-color: #222;
+  color: #fff;
+  margin: 0 18px 0 0;
+}
+.button-1-4 {
+  width: 396px;
+}
+.button-2-4 {
+  width: 810px;
+}
+.button-3-4 {
+  width: 1224px;
+}
+.button-4-4 {
+  width: 1638px;
+}

@@ -1,0 +1,419 @@
+#header {
+    height: @layout-header-height;
+    width: 100%;
+
+    h1 {
+        font-size: 3.5em;
+        font-weight: 400;
+        text-transform: uppercase;
+        float: left;
+        margin-top: .6em;
+        margin-left: .4em;
+    }
+    h2 {
+        font-size: 2em;
+        font-weight: 300;
+        text-transform: uppercase;
+        float: right;
+        margin-top: 1.4em;
+        margin-right: 1em;
+    }
+}
+// cerny titulek, kategorie, nekdy obtiznost
+.layout-a #header {
+    background-color: #222;
+    color: #fff;
+}
+// bily titulek, kategorie, teplomer
+.layout-b #header {
+    background-color: #fff;
+    color: #000;
+    h1 {
+        margin-left: 0;
+    }
+    .bar {
+        float: right;
+        background: #666 url(../svg/bar.svg) 500px 0 no-repeat; // NOTE: pozice ukazatele v teplomeru bude pres pozici SVG
+        width: @bar-width;
+        height: @bar-height;
+        margin-top: (@layout-header-height - @bar-height) / 2;
+
+        p {
+            font-size: 2.6em;
+            color: #fff;
+            margin-top: .24em;
+        }
+        p:first-child {
+            float:left;
+            margin-left: .24em;
+        }
+        p:last-child {
+            float:right;
+            margin-right: .24em;
+        }
+    }
+}
+
+#body {
+    height: @layout-body-height;
+    width: 100%;
+    background-color: #fff;
+
+    // obecne
+    h2 {
+        font-size: 1.6em;
+        text-transform: uppercase;
+    }
+    p {
+        font-size: 1.6em;
+    }
+    p.help {
+        margin-top: 2em;
+    }
+
+    // obrazovka s vysledkama v tabulkach
+    .col {
+        margin-top: 20px; // TODO: 
+        width:48%;
+    }
+    .col:nth-child(1) {
+        float: left;
+    }
+    .col:nth-child(2) {
+        float: right;
+    }
+    table.results {
+        border-bottom: 1px solid #000;
+        width: 100%;
+        font-size: 1.4em;
+        margin-top: 1em;
+
+        tr {
+            border-top: 1px solid #000;
+            td {
+                padding: .6em;
+                text-align: left;
+            }
+            td:first-child {
+                border-right: 1px solid #000;
+            }
+            td:last-child {
+                text-align: right;
+                width: 100%;
+            }
+        }
+    }
+
+    // rekapitulace hry
+    .recap {
+        width: @recap-width;
+        height: @recap-height;
+
+        margin-top: @recap-margin*2;
+
+        float:left;
+
+        background-color:#222;
+        color: #fff;
+
+        div.text {
+            width: @recap-width * 1/2;
+            float:left;
+            
+            p.question {
+                margin: 1em 0 0 1em;;
+            }
+            p.answer {
+                color:yellow;
+                margin: .4em 0 0 1em;;
+            }
+        }
+        img {
+            height: @recap-height;
+            float:right;
+        }
+    }
+    .recap:nth-child(even) {
+        margin-left: @recap-margin;
+    }
+    .recap:nth-child(odd) {
+        margin-right: @recap-margin;
+    }
+
+    // game
+    table.game {
+        width: 100%;
+        height: 100%;
+        background-color: #222;
+        color: #fff;
+        font-size: 3.4em;
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        td.text {
+            border-left: 10px solid #fff;
+            width: 100%;
+        }
+    }
+
+    // gamemode, volba typu hry
+    table.gamemode {
+        width: 100%;
+        height: 100%;
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
+
+        .button {
+            p {
+                margin: 1.8em 1em;
+                font-size: 2em;
+            }
+        }
+
+        // specifika pro jednotlive radky tabulky
+        tr.row-1 {
+            .button:last-child {
+                margin: 0;
+            }
+        }
+        tr.row-2 {
+            height: 100%;
+
+            .button {
+                margin-bottom: @block-margin;
+            }
+            .button:nth-child(4n) {
+                margin-right: 0;
+            }
+            .button:nth-child(n+9) {
+                margin-bottom: 0;
+            }
+
+            td {
+                text-align: left;
+            }
+        }
+        tr.row-3 {
+            .button:last-child {
+                margin: 0;
+            }
+        }
+    }
+
+    // crossroad, volba hra/vysledky
+    table.crossroad {
+        width: 100%;
+        height: 100%;
+
+        td {
+            text-align: left;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
+
+        .button {
+            p {
+                margin: 1.8em 1em;
+                font-size: 2em;
+            }
+        }
+
+        .button:last-child {
+            margin-right: 0;
+            p {
+                margin-left: 3.2em; // kdyby bylo treba centrovat napis, posune se margin
+            }
+        }
+    }
+
+    // novy rekord, zadani casu
+    table.result {
+        width: 100%;
+        height: 100%;
+
+        tr.row-1 {
+            height: 420px;
+            background: #222;
+            color: #fff;
+            border-top: @intro-margin solid #fff;
+
+            td {
+                text-align: center;
+                vertical-align: middle;
+
+                h1 {
+                    color: #aaa;
+                    font-size: 4em;
+                    text-transform: uppercase;
+                }
+                h2 {
+                    color: #fff;
+                    font-size: 8em;
+                    font-weight: 700;
+                    margin: .2em 0;
+                }
+            }
+        }
+        td.typewriter {
+            vertical-align: middle;
+            text-align: center;
+            font-size: 4.2em;
+            color: #ccc;
+        }
+        tr.row-3 {
+            font-size: 2em;
+        }
+
+        td.help {
+            padding: 1em;
+            width: 300px;
+        }
+        span.selected {
+            color: #fff;
+            background: #222;
+            padding: .2em;
+        }
+    }
+}
+
+// countdown, odpocet pred zacatkem hry 
+.layout-c #body {
+    height: @screen-height;
+
+    // odpocet
+    table.countdown {
+        width: 100%;
+        height: 100%;
+
+        td {
+            text-transform: uppercase;
+            font-weight: 700;
+            text-align: center;
+            vertical-align: middle;
+            background: transparent url(../svg/circle.svg) no-repeat 50% 50%;
+        }
+    }
+    table.ready {
+        td {
+            font-size: 6em;
+            background-color: red;
+        }
+    }
+    table.numbers {
+        td {
+            font-size: 28em;
+            background-color: orange;
+        }
+    }
+    table.go {
+        td {
+            font-size: 10em;
+            background-color: green;
+        }
+    }
+
+    // uvodni obrazovka
+    table.intro {
+        width: 100%;
+        height: 100%;
+        background-color: #222;
+
+        td {
+            color: #fff;
+        }
+
+        td.cell-a1 {
+            width: @intro-1st-width;
+            height: @intro-1st-height;
+        }
+        td.cell-a1, td.cell-a2 {
+            border-bottom: @intro-margin solid #fff;
+        }
+        td.cell-a1, td.cell-b1 {
+            border-right: @intro-margin solid #fff;
+        }
+
+        td.cell-a2 {
+            text-align: left;
+            vertical-align: top;
+            div {
+                margin: 1.6em;
+
+                h2 {
+                    font-size: 2.2em;
+                }
+
+                table {
+                    width: 100%;
+                    margin-top: 1em;
+                    border-top: 1px solid #fff;
+                    tr {
+                        border-bottom: 1px solid #fff;
+                        td {
+                            padding: .4em 0;
+                        }
+                        // tecky za dlouhyma jmenama
+                        // http://stackoverflow.com/a/11877033
+                        td:nth-child(2) {
+                            max-width: 90px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+        }
+        td.cell-b1 {
+            div {
+                padding: 2.8em 0 0 2em;
+
+                h1 {
+                    font-size: 6.8em;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                }
+                h3 {
+                    margin-top: .3em;
+                    font-size: 4em;
+                    font-weight: 400;
+                }
+            }
+        }
+        td.cell-b2 {
+            text-align: center;
+            vertical-align: middle;
+        }
+    }
+}
+
+
+
+// obecne tlacitko
+.button {
+    height: @block-height;
+    float: left;
+    background-color:#222;
+    color:#fff;
+    margin: 0 @block-margin 0 0;
+}
+
+// tlacitka 4 velikosti
+.button-1-4 {
+    width: @block-width;
+}
+.button-2-4 {
+    width: @block-width*2 + @block-margin;
+}
+.button-3-4 {
+    width: @block-width*3 + @block-margin*2;
+}
+.button-4-4 {
+    width: @block-width*4 + @block-margin*3;
+}
