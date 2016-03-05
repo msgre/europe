@@ -3,10 +3,14 @@ HTML versions of [screens](screens/). Functional in Chrome 49.
 # Less compilation
 
 1. Pull Docker image  
+
         docker pull ewoutp/lessc
+        
 2. Add alias into `~/.bash_profile`  
+        
         alias lessc='docker run -it –rm -v $(pwd):$(pwd) -w $(pwd) ewoutp/lessc '
 3. Test it (in [css](css/) folder, next to `styles.less` file)  
+
         lessc styles.less styles.css
 
 # Atomatic compilation
