@@ -3,6 +3,7 @@ version: '2'
 services:
   # django app
   europe-api:
+    container_name: api
     image: msgre/common:europe-api.latest
     volumes:
       - $PWD/europe:/src/api 
@@ -13,6 +14,7 @@ services:
 
   # javascript application
   europe-js:
+    container_name: js
     image: msgre/common:europe-js.latest 
     command: /bin/true
     volumes:
@@ -20,6 +22,7 @@ services:
 
   # nginx proxy
   nginx:
+    container_name: nginx
     image: nginx
     volumes:
       - "$PWD/ansible/files/europe.nginx.conf:/etc/nginx/conf.d/default.conf:ro"
