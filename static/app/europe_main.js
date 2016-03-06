@@ -27,7 +27,7 @@ document['onkeypress'] = function(e) {
 
 make_content_wrapper = function() {
   var el;
-  el = $('#content').append('<div></div>');
+  el = $('#main').append('<div></div>');
   return el.find('div');
 };
 

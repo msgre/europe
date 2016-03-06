@@ -39,7 +39,9 @@ document['onkeypress'] = (e) ->
 # --- helper functions -------------------------------------------------------
 
 make_content_wrapper = () ->
-    el = $('#content').append('<div></div>')
+    # el = $('#content').append('<div></div>')
+    # el.find('div')
+    el = $('#main').append('<div></div>')
     el.find('div')
 
 # http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss

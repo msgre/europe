@@ -8,7 +8,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
     # --- constants & variables
 
     NAME_MAX_LENGTH = 16
-    LETTERS = 'ABCDEFGHIJKLMNOPRSTUVWXYZ 0123456789-._*?!#:()←✔'
+    LETTERS = 'ABCDEFGHIJKLMNOPRSTUVWXYZ 0123456789←✔'
     LETTER_BACKSPACE = '←'
     LETTER_ENTER = '✔'
     _options = undefined
@@ -58,24 +58,24 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- views
 
-    GreatTimeView = Marionette.ItemView.extend
+    InfoView = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <h3>Nový rekord!</h3>
-                <h1><%= show_time() %></h1>
+                <h1><img src='<%= icon %>'><%= category %></h1>
+                <h2><%= difficulty %></h2>
             """)(serialized_model)
+
+    GreatTimeView = Marionette.ItemView.extend
+        template: (serialized_model) ->
+            _.template("<%= show_time() %>")(serialized_model)
         templateHelpers: ->
             show_time: ->
                 display_elapsed(@time)
 
+    # TODO: pro obrazovku se spatnym casem nemame obrazovku!
     BadTimeView = Marionette.ItemView.extend
         template: (serialized_model) ->
-            _.template("""
-                <h3>Váš čas</h3>
-                <h1><%= show_time() %></h1>
-                <br>
-                <p>Zmáčkni kterékoliv tlačítko pro pokračování.</p>
-            """)(serialized_model)
+            _.template("<%= show_time() %>")(serialized_model)
         templateHelpers: ->
             show_time: ->
                 display_elapsed(@time)
@@ -85,32 +85,26 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
         onDestroy: () ->
             window.channel.off('keypress')
 
-    TypewriterView = Marionette.ItemView.extend
+    TypewriterView1 = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <p>Tvůj čas se dostal do žebříčku! Zadej jméno svého týmu:</p>
-                <div class="row">
-                    <div class="col-md-3">&nbsp;</div>
-                    <div class="col-md-6 text-left">
-                        <h1><span><%= name %></span><span style="background:#000;color:#fff;padding-left:.1em;padding-right:.1em"><%= letter %></span><span style="color:#ccc"><%= show_empty() %></span></h1>
-                    </div>
-                    <div class="col-md-3">&nbsp;</div>
-                </div>
-                <p><%= show_alphabet() %></p>
-                <p><em>Tlačítky nahoru/dolů vybírej písmena, tlačítkem OK vyber konkrétní znak.<br/>Symbolem #{ LETTER_BACKSPACE } smažeš předchozí znak, symbolem #{ LETTER_ENTER } jméno uložíš.<br/>Délka jména maximálně #{ NAME_MAX_LENGTH } znaků.</em></p>
+                <%= show_name() %><span class="selected"><%= letter %></span><%= show_empty() %>
             """)(serialized_model)
         templateHelpers: ->
-            show_alphabet: ->
-                index = LETTERS.indexOf(@letter)
-                "#{ LETTERS.substring(0, index) }<span style=\"background:#000;color:#fff;\">#{@letter}</span>#{ LETTERS.substring(index+1) }"
+            show_name: ->
+                out = ""
+                for i in [0...@name.length]
+                    out += "<span class='chosen'>#{ @name.charAt(i) }</span>"
+                out
             show_empty: ->
                 rest = NAME_MAX_LENGTH - @name.length
                 out = ""
                 if rest > 1
                     for i in [1...rest]
-                        out += "␣"
+                        out += "<span class='empty'>␣</span>"
                 out
         initialize: () ->
+            console.log 'TypewriterView1'
             that = @
             @model.on 'change', () ->
                 that.render()
@@ -118,20 +112,11 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
             window.channel.on 'key', (msg) ->
                 clear_delay()
 
-                letter = that.model.get('letter')
-                index = LETTERS.indexOf(letter)
-                _name = that.model.get('name')
-
-                if msg == 'left' and index > 0
-                    window.sfx.button.play()
-                    index -= 1
-                    that.model.set('letter', LETTERS[index])
-                else if msg == 'right' and index < (LETTERS.length - 1)
-                    window.sfx.button.play()
-                    index += 1
-                    that.model.set('letter', LETTERS[index])
-                else if msg == 'fire'
+                if msg == 'fire'
                     window.sfx.button2.play()
+                    letter = that.model.get('letter')
+                    _name = that.model.get('name')
+
                     if letter == LETTER_BACKSPACE
                         if _name.length > 0
                             that.model.set('name', _name.substring(0, _name.length - 1))
@@ -153,26 +138,81 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
             @model.off('change')
 
 
-    ResultLayout = Marionette.LayoutView.extend
+    TypewriterView2 = Marionette.ItemView.extend
+        template: (serialized_model) ->
+            _.template("<%= show_alphabet() %>")(serialized_model)
+        templateHelpers: ->
+            show_alphabet: ->
+                index = LETTERS.indexOf(@letter)
+                "#{ LETTERS.substring(0, index) }<span class='selected'>#{@letter}</span>#{ LETTERS.substring(index+1) }"
+        initialize: () ->
+            console.log 'TypewriterView2'
+            that = @
+            @model.on 'change', () ->
+                that.render()
+
+            window.channel.on 'key', (msg) ->
+                clear_delay()
+
+                letter = that.model.get('letter')
+                index = LETTERS.indexOf(letter)
+
+                if msg == 'left' and index > 0
+                    window.sfx.button.play()
+                    index -= 1
+                    that.model.set('letter', LETTERS[index])
+                else if msg == 'right' and index < (LETTERS.length - 1)
+                    window.sfx.button.play()
+                    index += 1
+                    that.model.set('letter', LETTERS[index])
+
+                set_delay(handler, _options.options.IDLE_RESULT)
+
+        onDestroy: () ->
+            window.channel.off('key')
+            @model.off('change')
+
+
+    ScreenLayout = Marionette.LayoutView.extend
         template: _.template """
-            <div class="row">
-                <div class="col-md-12" id="time">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" id="typewriter">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" id="score">
-                </div>
+            <div id="header"></div>
+            <div id="body">
+                <table class="result">
+                    <tr class="row-1">
+                        <td colspan="2">
+                            <h1>Nový rekord!</h1>
+                            <h2></h2>
+                            <p>Tvůj čas se dostal do žebříčku. Zadej jméno svého týmu.</p>
+                        </td>
+                    </tr>
+                    <tr class="row-2">
+                        <td class="typewriter"></td>
+                        <td class="help" rowspan="2">
+                            <div>
+                                <p>Tlačítky nahoru/dolů vybírej písmena,
+                                tlačítkem OK vyber konkrétní znak.<br/>Symbolem
+                                #{ LETTER_BACKSPACE } smažeš předchozí znak,
+                                symbolem #{ LETTER_ENTER } jméno
+                                uložíš.<br/>Délka jména maximálně 
+                                #{ NAME_MAX_LENGTH } znaků.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="row-3">
+                        <td colspan="2"></td>
+                    </tr>
+                </table>
             </div>
         """
 
+        onRender: () ->
+            $('body').attr('class', 'layout-a');
+
         regions:
-            time: '#time'
-            typewriter: '#typewriter'
-            score: '#score'
+            info: '#header'
+            time: '#body .row-1 h2'
+            input: '.row-2 .typewriter'
+            alphabet: '.row-3 td'
 
     # --- timer handler
 
@@ -199,15 +239,17 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
         name = new Name()
 
         # render basic layout
-        layout = new ResultLayout
+        layout = new ScreenLayout
             el: make_content_wrapper()
         layout.render()
+        layout.getRegion('info').show(new InfoView({model: new Backbone.Model({'category': options.gamemode.title, 'icon': options.gamemode.category_icon, 'difficulty': options.gamemode.difficulty_title})}))
 
         # get rank of player score from server
         rank.on 'sync', () ->
             if rank.get('top')
                 layout.getRegion('time').show(new GreatTimeView({model: time}))
-                layout.getRegion('typewriter').show(new TypewriterView({model: name}))
+                layout.getRegion('input').show(new TypewriterView1({model: name}))
+                layout.getRegion('alphabet').show(new TypewriterView2({model: name}))
             else
                 layout.getRegion('time').show(new BadTimeView({model: time}))
 
@@ -224,7 +266,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 questions: questions
             score.save()
             score.on 'sync', () ->
-                window.channel.command('result:close', _options) # TODO: asi bych mel do _options jeste neco pridat
+                window.channel.command('result:close', _options)
                 score.off('sync')
 
         set_delay(handler, _options.options.IDLE_RESULT)

@@ -53,9 +53,10 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
 
     ItemView = Marionette.ItemView.extend
         tagName: "div"
-        className: "col-md-6"
+        className: ->
+            "button #{ @model.get('classes') } #{ if @model.get('active') then 'active' else '' }"
         template: (serialized_model) ->
-            _.template("<% if (active) {%><u><% } %><%= title %><% if (active) {%></u><% } %>")(serialized_model)
+            _.template("<p><%= title %></p>")(serialized_model)
 
     ItemsView = Marionette.CollectionView.extend
         childView: ItemView
@@ -116,39 +117,42 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
 
     CategoryItemView = Marionette.ItemView.extend
         tagName: "div"
-        className: "col-md-4 text-center well"
+        className: ->
+            "button button-1-4 #{ if @model.get('active') then 'active' else '' }"
         template: (serialized_model) ->
-            _.template("<% if (active) {%><u><% } %><%= title %><% if (active) {%></u><% } %>")(serialized_model)
+            _.template("<p<% if (disabled) {%> class='disabled'<% } %>><img src='<%= icon %>'/><%= title %></p>")(serialized_model)
 
-    GameModeLayout = Marionette.LayoutView.extend
+    ScreenLayout = Marionette.LayoutView.extend
         template: _.template """
-            <div class="row">
-                <div class="col-md-3">&nbsp;</div>
-                <div class="col-md-6" id="difficulty"></div>
-                <div class="col-md-3">&nbsp;</div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-12" id="category">
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-3">&nbsp;</div>
-                <div class="col-md-6" id="choice"></div>
-                <div class="col-md-3">&nbsp;</div>
+            <div id="body">
+                <table class="gamemode">
+                    <tr class="row-1">
+                        <td></td>
+                    </tr>
+                    <tr class="row-2">
+                        <td></td>
+                    </tr>
+                    <tr class="row-3">
+                        <td></td>
+                    </tr>
+                </table>
             </div>
         """
 
+        onRender: () ->
+            $('body').attr('class', 'layout-c');
+
         regions:
-            difficulty: '#difficulty'
-            category:  '#category'
-            choice:  '#choice'
+            difficulty: '.row-1 td'
+            category:  '.row-2 td'
+            choice:  '.row-3 td'
 
     # --- timer handler
 
     handler = () ->
-        window.channel.command('gamemode:idle', _options)
+        # window.channel.command('gamemode:idle', _options)
+        # TODO:
+        ''
 
     # --- module
 
@@ -157,7 +161,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         console.log options
         _options = options
         local_channel = Backbone.Radio.channel('gamemode')
-        layout = new GameModeLayout
+        layout = new ScreenLayout
             el: make_content_wrapper()
         layout.render()
 
@@ -165,13 +169,15 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         difficulties = new Items
         difficulties.add new Item
             id: _options.constants.DIFFICULTY_EASY
-            title: 'Jednoduchá'
+            title: 'Jednoduchá hra'
             active: false
+            classes: 'button-2-4'
             order: 1
         difficulties.add new Item
             id: _options.constants.DIFFICULTY_HARD
-            title: 'Obtížná'
+            title: 'Obtížná hra'
             active: false
+            classes: 'button-2-4'
             order: 2
 
         # choices collection
@@ -180,11 +186,13 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
             id: 'ok'
             title: 'Hrát'
             active: false
+            classes: 'button-3-4'
             order: 1
         choices.add new Item
             id: 'repeat'
             title: 'Vybrat znovu'
             active: false
+            classes: 'button-1-4'
             order: 2
 
 
@@ -208,10 +216,13 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         local_options = {}
         local_channel.on 'category', (obj) ->
             local_options['difficulty'] = obj.get('id')
+            local_options['difficulty_title'] = obj.get('title')
             layout.getRegion('category').currentView.set_active()
 
         local_channel.on 'choice', (obj) ->
+            console.log obj
             local_options['category'] = obj.get('id')
+            local_options['category_icon'] = obj.get('icon')
             local_options['title'] = obj.get('title')
             if local_options.difficulty == _options.constants.DIFFICULTY_EASY
                 local_options['time'] = obj.get('time_easy')

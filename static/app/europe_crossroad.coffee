@@ -8,7 +8,7 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
     # --- constants & variables
 
     _options = undefined
-    view = undefined
+    layout = undefined
 
     # --- models & collections
 
@@ -44,9 +44,9 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
         tagName: "div"
         attributes: () ->
             class: 
-                "col-md-6 " + @model.get('classes')
+                "button #{@model.get('classes')} #{if @model.get('active') then 'active' else ''}"
         template: (serialized_model) ->
-            _.template("<% if (active) {%><u><% } %><%= title %><% if (active) {%></u><% } %>")(serialized_model)
+            _.template("<p><img src='<%= icon %>' height='24' /><%= title %></p>")(serialized_model)
 
     ItemsView = Marionette.CollectionView.extend
         childView: ItemView
@@ -84,6 +84,23 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
             @collection.off('change')
             window.channel.off('key')
 
+    ScreenLayout = Marionette.LayoutView.extend
+        template: _.template """
+            <div id="body">
+                <table class="crossroad">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        """
+
+        onRender: () ->
+            $('body').attr('class', 'layout-c');
+
+        regions:
+            cell: '.crossroad td'
+
     # --- timer handler
 
     handler = () ->
@@ -99,21 +116,23 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
         items.add new Item
             id: "game"
             title: "Hra"
+            icon: "svg/star-small.svg"
             order: 10
             active: true
-            classes: "text-right"
+            classes: "button-3-4"
         items.add new Item
             id: "results"
             title: "Výsledky"
+            icon: "svg/star-small.svg"
             order: 20
             active: false
-            classes: "text-left"
-        view = new ItemsView
-            collection: items
-            el: make_content_wrapper()
-        view.render()
+            classes: "button-1-4"
+
+        layout = new ScreenLayout({el: make_content_wrapper()})
+        layout.render()
+        layout.getRegion('cell').show(new ItemsView({collection: items}))
         set_delay(handler, _options.options.IDLE_CROSSROAD)
 
     Mod.onStop = () ->
         clear_delay()
-        view.destroy()
+        layout.destroy()

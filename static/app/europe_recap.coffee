@@ -27,26 +27,29 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- views
 
-    TitleView = Marionette.ItemView.extend
-        tagName: "h3"
+    InfoView = Marionette.ItemView.extend
         template: (serialized_model) ->
-            _.template("<%= title %> / <%= difficulty %>")(serialized_model)
-
-        rerender: (model) ->
-            @model = model
-            @render()
+            _.template("""
+                <h1><img src='<%= icon %>'><%= category %></h1>
+                <h2><%= difficulty %></h2>
+            """)(serialized_model)
 
     RecapItemView = Marionette.ItemView.extend
         tagName: "div"
-        className: "col-md-4 text-center well"
-        attributes: (a, b, c) ->
+        className: ->
             if @model.get('answer')
-                {style: "color:green; height:120px"}
+                out = "good"
             else
-                {style: "color:red; height:120px"}
+                out = "bad"
+            "recap #{ out }"
         template: (serialized_model) ->
-            _.template("<%= question %><br>Odpověď: <%= country.title %><% if (image) {%><br><img height=\"20\" src=\"<%= image %>\" /><% } %>")(serialized_model)
-
+            _.template("""
+                <div class="text">
+                    <p class="question"><%= question %></p>
+                    <p class="answer"><%= country.title %></p>
+                </div>
+                <% if (image) {%><img src='<%= image %>' /><% } %>
+            """)(serialized_model)
 
     BlankView = Marionette.ItemView.extend
         template: "<p>Nahrávám...</p>"
@@ -55,20 +58,18 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
         childView: RecapItemView
         emptyView: BlankView
 
-    RecapLayout = Marionette.LayoutView.extend
+    ScreenLayout = Marionette.LayoutView.extend
         template: _.template """
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 id="title"></h3>
-                </div>
-            </div>
-            <div class="row" id="recap">
-            </div>
+            <div id="header"></div>
+            <div id="body"></div>
         """
 
+        onRender: () ->
+            $('body').attr('class', 'layout-a');
+
         regions:
-            title: '#title'
-            recap: '#recap'
+            info: '#header'
+            recap: '#body'
 
     # --- timer handler
 
@@ -81,7 +82,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
         console.log 'Recap module'
         console.log options
         _options = options
-        layout = new RecapLayout
+        layout = new ScreenLayout
             el: make_content_wrapper()
         layout.render()
 
@@ -90,11 +91,13 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
             difficulty: options.gamemode.difficulty
 
         # set views in regions
-        title = new Backbone.Model
-            title: options.gamemode.title
-            difficulty: if options.gamemode.difficulty == _options.constants.DIFFICULTY_EASY then "Jednoduchá obtížnost" else "Složitá obtížnost"
-        layout.getRegion('title').show new TitleView
-            model: title
+        info = new Backbone.Model
+            category: options.gamemode.title
+            icon: options.gamemode.category_icon
+            difficulty: options.gamemode.difficulty_title
+        layout.getRegion('info').show new InfoView
+            model: info
+
         layout.getRegion('recap').show new RecapView
             collection: questions
 

@@ -12,26 +12,10 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
     local_channel = undefined
     _options = undefined
     info = undefined
-    progress = undefined
     questions = undefined
-    q_layout = undefined
+    layout = undefined
 
     # --- models & collections
-
-    Progress = Backbone.Model.extend
-        defaults:
-            total: 0
-            current: 0
-        initialize: () ->
-            that = @
-            # progress penalty due to passing wrong tunnel
-            local_channel.on 'penalty', (count) ->
-                current = that.get('current')
-                total = that.get('total')
-                current += count
-                if current > total
-                    current = total
-                that.set('current', current)
 
     Info = Backbone.Model.extend
         defaults:
@@ -39,12 +23,23 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             total_questions: null
             category: null
             time: 0
+            total: 0
+            current: 0
         initialize: () ->
             that = @
-            # time penalty due to passing wrong tunnel
             local_channel.on 'penalty', (count) ->
+                # time penalty due to passing wrong tunnel
                 time = that.get('time')
-                that.set('time', time + count * 10) # time is stored seconds * 10, so count must be multiplied by same value
+
+                # progress penalty due to passing wrong tunnel
+                current = that.get('current')
+                total = that.get('total')
+                current += count
+                if current > total
+                    current = total
+                that.set
+                    time: time + count * 10 # time is stored seconds * 10, so count must be multiplied by same value
+                    current: current
 
     Question = Backbone.Model.extend
         idAttribute: 'id'
@@ -68,13 +63,9 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
     InfoItemView = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <div class="col-md-4 text-left">
-                    <p>Otázka č.<%= question %>/<%= total_questions %></p>
-                </div>
-                <div class="col-md-4 text-center">
-                    <p><%= category %></p>
-                </div>
-                <div class="col-md-4 text-right">
+                <h1><%= category %></h1>
+                <div class="bar" style="background-position:<%= (current/total)*1100 %>px 0px">
+                    <p><%= question %>/<%= total_questions %></p>
                     <p><%= show_time() %></p>
                 </div>
             """)(serialized_model)
@@ -87,33 +78,24 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         onDestroy: () ->
             @model.off('change')
 
-    ProgressItemView = Marionette.ItemView.extend
-        className: 'progress'
-        template: (serialized_model) ->
-            _.template("""
-                <div class="progress-bar"
-                     role="progressbar"
-                     aria-valuenow="<%= get_percent() %>"
-                     aria-valuemin="0"
-                     aria-valuemax="100"
-                     style="width: <%= get_percent() %>%;"></div>
-            """)(serialized_model)
-        templateHelpers: ->
-            get_percent: ->
-                if @current <= @total
-                    (@current / @total) * 100
-                else
-                    100
-        initialize: (options) ->
-            @model.on 'change', () =>
-                @render()
-        onDestroy: () ->
-            @model.off('change')
-
     QuestionItemView = Marionette.ItemView.extend
-        tagName: 'div'
+        tagName: 'tr'
         template: (serialized_model) ->
-            _.template("<% if (image) {%><img height=\"150\" src=\"<%= image %>\" /><% } %><h1><%= question %></h1>")(serialized_model)
+            if serialized_model.image and serialized_model.question
+                # TODO: velikost obrazku
+                tmpl = """
+                    <td><img src="<%= image %>" width="600px" height="780px" /></td>
+                    <td class="text"><%= question %></td>
+                """
+            else if serialized_model.image
+                tmpl = """
+                    <td><img src="<%= image %>" /></td>
+                """
+            else
+                tmpl = """
+                    <td><%= question %></td>
+                """
+            _.template(tmpl)(serialized_model)
         initialize: (options) ->
             @model.on 'change', () =>
                 @render()
@@ -139,24 +121,23 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             window.channel.off('tunnel')
             @model.off('change')
 
-    QuestionLayout = Marionette.LayoutView.extend
+    ScreenLayout = Marionette.LayoutView.extend
         template: _.template """
-            <div class="row">
-                <div class="col-md-12" id="info"></div>
+            <div id="header">
+                <h1></h1>
+                <div class="bar"></div>
             </div>
-            <div class="row" style="height:200px">
-                <div class="col-md-12 text-center" id="question"></div>
-            </div>
-            <br/>
-            <div class="row">
-                <div class="col-md-12" id="progress"></div>
+            <div id="body">
+                <table class="game"></table>
             </div>
         """
 
+        onRender: () ->
+            $('body').attr('class', 'layout-b')
+
         regions:
-            info: '#info'
-            question: '#question'
-            progress: '#progress'
+            info: '#header'
+            question: '#body .game'
 
     # --- timer handler
 
@@ -164,12 +145,12 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         time = info.get('time') + 1
         info.set('time', time)
 
-        current = progress.get('current')
-        total = progress.get('total')
+        current = info.get('current')
+        total = info.get('total')
         if current >= total
             local_channel.trigger('next', false)
         else
-            progress.set('current', current + .1)
+            info.set('current', current + .1)
 
     # --- module
 
@@ -184,8 +165,6 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         info = new Info
             total_questions: _options.options.QUESTION_COUNT
             category: _options.gamemode.title
-
-        progress = new Progress
             total: _options.gamemode.time
             current: 0
 
@@ -196,19 +175,16 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
 
         questions.on 'sync', () ->
             # layout
-            q_layout = new QuestionLayout({el: make_content_wrapper()})
-            q_layout.render()
+            layout = new ScreenLayout({el: make_content_wrapper()})
+            layout.render()
 
             # info radek nahore
-            q_layout.getRegion('info').show(new InfoItemView({model: info}))
+            layout.getRegion('info').show(new InfoItemView({model: info}))
 
             # otazka
             question_view = new QuestionItemView
                 model: questions.at(info.get('question') - 1)
-            q_layout.getRegion('question').show(question_view)
-
-            # progress bar
-            q_layout.getRegion('progress').show(new ProgressItemView({model: progress}))
+            layout.getRegion('question').show(question_view)
 
             local_channel.on 'next', (user_answer) ->
                 if user_answer
@@ -236,13 +212,13 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
                     window.channel.command('game:close', output)
                 else
                     info.set('question', question)
-                    progress.set('current', 0)
+                    info.set('current', 0)
                     question_view.destroy()
 
                     # set new question
                     question_view = new QuestionItemView
                         model: questions.at(question - 1)
-                    q_layout.getRegion('question').show(question_view)
+                    layout.getRegion('question').show(question_view)
 
             # start this screen
             set_timer(handler, TIMER_DELAY)
@@ -252,7 +228,6 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
     Mod.onStop = (options) ->
         clear_timer()
         info = undefined
-        progress = undefined
         questions = undefined
-        q_layout.destroy()
+        layout.destroy()
         local_channel.reset()

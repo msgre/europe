@@ -9,22 +9,25 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
 
     _options = undefined
     model = undefined
-    view = undefined
+    layout = undefined
 
     # --- models & collections
 
     Countdown = Backbone.Model.extend
         defaults:
-            number: 3
+            number: 4
 
     # --- views
 
     CountdownItemView = Marionette.ItemView.extend
         template: (serialized_model) ->
-            _.template("<h1><%= display_number() %></h1>")(serialized_model)
+            _.template("<%= display_number() %>")(serialized_model)
+
         templateHelpers: ->
             display_number: ->
-                if @number > 0
+                if @number == 4
+                    'Připrav se!'
+                else if @number > 0
                     @number
                 else
                     'Start!'
@@ -33,6 +36,32 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
                 @render()
         onDestroy: () ->
             @model.off('change')
+
+    ScreenLayout = Marionette.LayoutView.extend
+        template: _.template """
+            <div id="body">
+                <table class="countdown state-4">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        """
+
+        initialize: (options) ->
+            @model = options.model
+            @model.on 'change', () =>
+                # dynamic change of table CSS class according to state
+                @$el.find('.countdown').attr('class', "countdown state-#{ @model.get('number') }")
+
+        onDestroy: () ->
+            @model.off('change')
+
+        onRender: () ->
+            $('body').attr('class', 'layout-c');
+
+        regions:
+            cell: '.countdown td'
 
     # --- timer handler
 
@@ -54,13 +83,12 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
         console.log options
         _options = options                  # store options (selected gamemode inside)
         model = new Countdown()
-        view = new CountdownItemView
-            model: model
-            el: make_content_wrapper()
-        view.render()
+        layout = new ScreenLayout({el: make_content_wrapper(), model: model})
+        layout.render()
+        layout.getRegion('cell').show(new CountdownItemView({model: model}))
         set_timer(handler, _options.options.COUNTDOWN_TICK_TIMEOUT)
 
     Mod.onStop = () ->
         clear_timer()
-        view.destroy()
+        layout.destroy()
         model = undefined

@@ -23,23 +23,32 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
         initialize: (models, options) ->
             @url = "/api/results/#{ options.difficulty }-#{ options.category }"
         parse: (response, options) ->
-            response.results
+            out = []
+            last = null
+            i = 1
+            # add order and flag for showing order
+            for item in response.results
+                show = last is null or last.time != item.time
+                _.extend(item, {show: show, order: i})
+                out.push(item)
+                last = item
+                i += 1
+            out
 
     # --- views
 
-    TitleView = Marionette.ItemView.extend
-        tagName: "h3"
+    InfoView = Marionette.ItemView.extend
         template: (serialized_model) ->
-            _.template("<%= title %> / <%= difficulty %>")(serialized_model)
-
-        rerender: (model) ->
-            @model = model
-            @render()
+            _.template("""
+                <h1><img src='<%= icon %>'><%= category %></h1>
+                <h2><%= difficulty %></h2>
+            """)(serialized_model)
 
     CategoryResultItemView = Marionette.ItemView.extend
         tagName: "tr"
         template: (serialized_model) ->
             _.template("""
+                <td class="text-right"><% if (show) {%><%= order %><% } %></td>
                 <td><%= name %></td>
                 <td class="text-right"><%= show_time() %></td>""")(serialized_model)
         templateHelpers: ->
@@ -52,28 +61,21 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
     CategoryResultView = Marionette.CollectionView.extend
         childView: CategoryResultItemView
         tagName: 'table'
-        className: 'table'
+        className: 'results'
         emptyView: NoResultsView
 
-    ScoreLayout = Marionette.LayoutView.extend
+    ScreenLayout = Marionette.LayoutView.extend
         template: _.template """
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 id="title"></h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">&nbsp;</div>
-                <div class="col-md-6">
-                    <div id="results"></div>
-                </div>
-                <div class="col-md-3">&nbsp;</div>
-            </div>
+            <div id="header"></div>
+            <div id="body"></div>
         """
 
+        onRender: () ->
+            $('body').attr('class', 'layout-a');
+
         regions:
-            title:   '#title'
-            results: '#results'
+            info:   '#header'
+            results: '#body'
 
     # --- timer handler
 
@@ -86,7 +88,7 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
         console.log 'Score module'
         console.log options
         _options = options
-        layout = new ScoreLayout
+        layout = new ScreenLayout
             el: make_content_wrapper()
         layout.render()
 
@@ -96,11 +98,13 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
             difficulty: options.gamemode.difficulty
 
         # set views in regions
-        title = new Backbone.Model
-            title: options.gamemode.title
-            difficulty: if options.gamemode.difficulty == _options.constants.DIFFICULTY_EASY then "Jednoduchá obtížnost" else "Složitá obtížnost"
-        layout.getRegion('title').show new TitleView
-            model: title
+        info = new Backbone.Model
+            category: options.gamemode.title
+            icon: options.gamemode.category_icon
+            difficulty: options.gamemode.difficulty_title
+        layout.getRegion('info').show new InfoView
+            model: info
+
         layout.getRegion('results').show new CategoryResultView
             collection: results
 

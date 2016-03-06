@@ -8,7 +8,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
     # --- constants & variables
 
     view_list = undefined
-    view = undefined
+    layout = undefined
     state = undefined
     _options = undefined
 
@@ -17,40 +17,63 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
     Intro01 = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <h1 style="color:navy">Intro 01</h1>
-                <p>Chceš začít novou hru? Stiskni kterékoliv tlačítko na panelu a pojďme na to!</p>
+                <img src="img/brandenburg.jpg" width="1320" height="600">
             """)(serialized_model)
 
     Intro02 = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <h1 style="color:green">Intro 02</h1>
-                <p>Chceš začít novou hru? Stiskni kterékoliv tlačítko na panelu a pojďme na to!</p>
+                <img src="img/brusel.jpg" width="1320" height="600">
             """)(serialized_model)
 
     Intro03 = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <h1 style="color:yellow">Intro 03</h1>
-                <p>Chceš začít novou hru? Stiskni kterékoliv tlačítko na panelu a pojďme na to!</p>
+                <img src="img/london.jpg" width="1320" height="600">
             """)(serialized_model)
 
     Intro04 = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <h1 style="color:red">Intro 04</h1>
-                <p>Chceš začít novou hru? Stiskni kterékoliv tlačítko na panelu a pojďme na to!</p>
+                <img src="img/budapest.jpg" width="1320" height="600">
             """)(serialized_model)
+
+    ScreenLayout = Marionette.LayoutView.extend
+        template: _.template """
+            <div id="body">
+                <table class="intro">
+                    <tr class="row-1">
+                        <td class="cell-a1"></td>
+                        <td class="cell-a2"></td>
+                    </tr>
+                    <tr class="row-2">
+                        <td class="cell-b1">
+                            <div>
+                                <h1>Chceš začít novou hru?</h1>
+                                <h3>Stiskni kterékoliv tlačítko na panelu!</h3>
+                            </div>
+                        </td>
+                        <td class="cell-b2">
+                            <img src="../svg/circle.svg" width="200px">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        """
+
+        onRender: () ->
+            $('body').attr('class', 'layout-c');
+
+        regions:
+            slideshow: '.cell-a1'
+            top: '.cell-a2'
 
     # --- herr director
 
     handler = () ->
         if state >= view_list.length
             state = 0
-        if view != undefined
-            view.destroy()
-        view = new view_list[state]({el: make_content_wrapper()})
-        view.render()
+        layout.getRegion('slideshow').show(new view_list[state]())
         state++
 
     # --- module
@@ -66,6 +89,9 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
             Intro03
             Intro04
         ]
+        layout = new ScreenLayout({el: make_content_wrapper()})
+        layout.render()
+
         window.channel.on 'keypress', () ->
             window.sfx.button.play()
             window.channel.command('intro:close', options)
@@ -75,6 +101,6 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
     Mod.onStop = () ->
         clear_timer()
         window.channel.off('keypress')
-        view.destroy()
+        layout.destroy()
         view_list = undefined
         state = undefined
