@@ -12,7 +12,9 @@ class Category(models.Model):
     Category of question.
     """
     title        = models.CharField(_('Category'), max_length=128, unique=True)
+    icon         = models.CharField(_('Icon'), max_length=80, blank=True, null=True)
     order        = models.IntegerField(_('Order'), default=10)
+    disabled     = models.BooleanField(_('Disabled'), default=False)
     time_easy    = models.IntegerField(_('Time (easy)'), default=10, help_text=_('Time for answering one question, in seconds. Easy difficulty.'))
     penalty_easy = models.IntegerField(_('Penalty (easy)'), default=3, help_text=_('Penalty time which players get due to wrong answer, in seconds. Easy difficulty.'))
     time_hard    = models.IntegerField(_('Time (hard)'), default=10, help_text=_('Time for answering one question, in seconds. Hard difficulty.'))
