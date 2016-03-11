@@ -6,7 +6,7 @@ from struct import pack
 from struct import unpack
 from minimalmodbus import Instrument
 
-RESET_ADDRESS = 0x0001
+RESET_ADDRESS = 0x0002
 UNLOCK_ADDRESS = 0xFFFF
 UNLOCK_SECRET = [0xCA06, 0x93D8]
 BOOTLOADER_SLAVE_ADDRESS = 0x80

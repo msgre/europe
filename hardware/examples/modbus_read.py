@@ -19,4 +19,4 @@ if __name__ == "__main__":
 
     # Read both registers from slave.
     response = inst.read_registers(0x0000, 1)
-    print 'IR inputs: {:02X}'.format(response[0] >> 8)
+    print 'IR inputs: {:02X}'.format(response[0])

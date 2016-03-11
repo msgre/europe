@@ -26,7 +26,7 @@ if __name__ == "__main__":
     for i in range(READS):
         response = inst.read_registers(0x0000, REGISTERS)
         if response[0] != 0x0000:
-            print 'IR inputs: {:02X}'.format(response[0] >> 8)
+            print 'IR inputs: {:02X}'.format(response[0])
 
     end_time = time.time()
 

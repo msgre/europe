@@ -54,10 +54,11 @@ The bootloader slave address has MSB set -- for example `0x03 -> 0x83`.
 
 ## Modbus Registers
 
-Modbus register is 16 bit integer. The firmware has two registers on addresses:
+Modbus register is 16 bit integer. The firmware has three registers on addresses:
 
-- `0x0000` IR gates state since last Modbus reading or FW reset.
-- `0x0001` reset; any writes to this register will trigger FW reset in 500ms.
+- `0x0000` 0x00XX; IR gates state since last Modbus reading or FW reset.
+- `0x0001` 0xXYYY; firmware (Y) and hardware (X) version
+- `0x0002` reset; any writes to this register will trigger FW reset in 500ms.
 
 ## Python Examples
 
@@ -75,6 +76,10 @@ To update firmware in board with slave address 15 (0x0F), bootloader address is
 To read latest gate states from board with slave address 15 (0x0F):
 
     $ ./examples/modbus_read.py /dev/usbserial.XYZ 15
+
+Slave dicovery on bus can be done by:
+
+    $ ./examples/modbus_discover.py /dev/usbserial.XYZ
 
 ## Wires
 
