@@ -70,9 +70,7 @@ To update firmware in board with slave address 15 (0x0F), bootloader address is
 143 (0x8F):
 
     $ cd ./examples
-    $ ./modbus_reset.py /dev/usbserial.XYZ 15 && \
-    > sleep 1 && \
-    > ./modbus_update.py /dev/usbserial.XYZ 143 ./firmware.bin
+    $ ./modbus_update.py /dev/usbserial.XYZ 15 ./firmware.bin
 
 To read latest gate states from board with slave address 15 (0x0F):
 
