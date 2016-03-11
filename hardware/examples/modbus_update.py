@@ -49,13 +49,13 @@ class MBUpdater(object):
         return self.__check_response(resp), resp
 
     def __write_to_serial(self, data):
-        self.s.setDTR(False)  # RS485 output
-        time.sleep(0.002)
+        # self.s.setDTR(False)  # RS485 output
+        # time.sleep(0.002)
         for bt in data:
                 self.s.write(bt)
                 time.sleep(0.00010)
-        time.sleep(0.002)
-        self.s.setDTR(True)  # RS485 input
+        # time.sleep(0.002)
+        # self.s.setDTR(True)  # RS485 input
 
     def __check_response(self, data):
         '''

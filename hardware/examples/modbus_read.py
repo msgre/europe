@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # inst.debug = True
     # print inst
 
-    # Set default states for both LEDs.
+    # Read both registers from slave.
     response = inst.read_registers(0x0000, 2)
     print 'gates:reset'
     print ':'.join(['{:04X}'.format(b) for b in response])

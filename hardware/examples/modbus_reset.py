@@ -21,5 +21,5 @@ instrument.serial.timeout = 1
 
 instrument.write_registers(
     0x0001,    # Address
-    [0xFFFF],  # Data
+    [0xFFFF],  # Data, any value will do.
 )
