@@ -1,4 +1,4 @@
-= Hardware
+# Hardware
 
 Europe's hardware consists of two boards -- gate and IR.
 
@@ -99,16 +99,16 @@ types can be used.
 
 Prepare flat wire, connector housing and pins.
 
-[[https://github.com/msgre/europe/blob/master/hardware/imgs/wire-ir-01-components.jpg]]
+![IR wire components](https://github.com/msgre/europe/blob/master/hardware/imgs/wire-ir-01-components.jpg)
 
 Crimp pins to wire on both ends. Used crimping tool: Engineer PA-09.
 
-[[https://github.com/msgre/europe/blob/master/hardware/imgs/wire-ir-02-crimping.jpg]]
+![IR wire crimping tool](https://github.com/msgre/europe/blob/master/hardware/imgs/wire-ir-02-crimping.jpg)
 
 Correct pins orientation on wire.
 
-[[https://github.com/msgre/europe/blob/master/hardware/imgs/wire-ir-03-pins.jpg]]
+![IR wire with pins](https://github.com/msgre/europe/blob/master/hardware/imgs/wire-ir-03-pins.jpg)
 
 Finished wire.
 
-[[https://github.com/msgre/europe/blob/master/hardware/imgs/wire-ir-04-finished.jpg]]
+![Finished IR wire](https://github.com/msgre/europe/blob/master/hardware/imgs/wire-ir-04-finished.jpg)
