@@ -45,11 +45,24 @@ window.eu_session = session;
 
             console.log("Connected");
 
-            function on_gates (args) {
+            function on_gate (args) {
                var value = args[0];
-               console.log("on_gates() event received with value " + value);
+               console.log("on_gate() event received with value " + value);
             }
-            session.subscribe('com.europe.gate', on_gates).then(
+            session.subscribe('com.europe.gate', on_gate).then(
+               function (sub) {
+                  console.log('subscribed to topic');
+               },
+               function (err) {
+                  console.log('failed to subscribe to topic', err);
+               }
+            );
+
+            function on_keyboard (args) {
+               var value = args[0];
+               console.log("on_keyboard() event received with value " + value);
+            }
+            session.subscribe('com.europe.keyboard', on_keyboard).then(
                function (sub) {
                   console.log('subscribed to topic');
                },
