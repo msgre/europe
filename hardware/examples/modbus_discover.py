@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import sys
+import time
+
 from minimalmodbus import Instrument
 
 if __name__ == "__main__":
@@ -25,5 +27,6 @@ if __name__ == "__main__":
             fw_version = response[0] & 0x0FFF
             hw_version = response[0] >> 12
             print 'Slave {}: FW {:03X}, HW {:01X}'.format(i, fw_version, hw_version)
+        time.sleep(0.01)
 
     print 'Done.'
