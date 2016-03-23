@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+   <body>
+      <h1>Websockets demo for Europe project</h1>
+      <p>Open JavaScript console to watch output.</p>
+      <p>Events from keyboard gate is published by default. If you want see 
+      events from game gates, run 
+      <code>window.eu_session.publish('com.europe.start', [1]);</code> in Javscript console.</p>
+
+      <script>AUTOBAHN_DEBUG = true;</script>
+      <script src="autobahn.min.js"></script>
+
+      <script>
+         // the URL of the WAMP Router (Crossbar.io)
+         //
+         var wsuri;
+         if (document.location.origin == "file://") {
+            wsuri = "ws://127.0.0.1:8080/ws";
+
+         } else {
+            wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
+                        document.location.host + "/ws";
+         }
+
+
+         // the WAMP connection to the Router
+         //
+         var connection = new autobahn.Connection({
+            url: wsuri,
+            realm: "realm1"
+         });
+
+
+         // timers
+         //
+         var t1, t2;
+
+
+         // fired when connection is established and session attached
+         //
+         connection.onopen = function (session, details) {
+
+
+window.eu_session = session;
+
+            console.log("Connected");
+
+            function on_gates (args) {
+               var value = args[0];
+               console.log("on_gates() event received with value " + value);
+            }
+            session.subscribe('com.europe.gate', on_gates).then(
+               function (sub) {
+                  console.log('subscribed to topic');
+               },
+               function (err) {
+                  console.log('failed to subscribe to topic', err);
+               }
+            );
+
+         };
+
+
+         // fired when connection was lost (or could not be established)
+         //
+         connection.onclose = function (reason, details) {
+            console.log("Connection lost: " + reason);
+            if (t1) {
+               clearInterval(t1);
+               t1 = null;
+            }
+            if (t2) {
+               clearInterval(t2);
+               t2 = null;
+            }
+         }
+
+
+         // now actually open the connection
+         //
+         connection.open();
+
+      </script>
+   </body>
+</html>
