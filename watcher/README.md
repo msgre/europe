@@ -15,7 +15,7 @@ Then follow this steps:
 
 1) Build Docker image:
 
-        build -t msgre/common:eu-watcher .
+        docker build -t msgre/common:eu-watcher .
 
 2) Run Docker image:
 
