@@ -53,14 +53,22 @@ class Category(models.Model):
         # find countries which are **not** close together
         i_count = 0
         temp = [random_ids[i_count]]
-        while i_count < count:
+        random_ids = list(set(country_ids).difference(temp))
+        while i_count <= count - 2:
+            logger.debug('Selected country %i' % (temp[-1], ))
             if countries_lut[temp[-1]]:
-                logger.debug('Selected country %i, disqualifing countries %s' % (temp[-1], countries_lut[temp[-1]]))
+                logger.debug('Disqualifing countries %s' % (countries_lut[temp[-1]], ))
                 random_ids = list(set(random_ids).difference(countries_lut[temp[-1]] + [temp[-1]]))
+                if not random_ids:
+                    random_ids = list(set(country_ids).difference(temp))
+                    logger.debug('Wow. List of ideal countries is empty, lets start new iteration: %s' % (random_ids, ))
                 random.shuffle(random_ids)
-                logger.debug('Current set of possible countries: %s' % (random_ids, ))
+            else:
+                random_ids = list(set(random_ids).difference([temp[-1]]))
+            logger.debug('Current set of possible countries: %s' % (random_ids, ))
             i_count += 1
             temp.append(random_ids[i_count])
+            logger.debug('Current set of selected countries: %s' % (temp, ))
         random_ids = temp
 
         # get questions for random countries
