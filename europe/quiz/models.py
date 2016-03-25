@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import random
 import itertools
 
 from django.db import models
 from django.utils.translation import ugettext as _
+
+
+logger = logging.getLogger(__name__)
 
 
 class Category(models.Model):
@@ -34,11 +38,30 @@ class Category(models.Model):
         at max (but should be less). It is guaranteed that there will be no more
         than one question from same Country.
         """
-        # all countries for which we have questions in current category
+        # all countries
+        from geo.models import Country
+        countries = Country.objects.all().order_by('id').values('id', 'neighbours')
+        countries_lut = {k: [y['neighbours'] for y in g if y['neighbours'] != None] \
+                         for k, g in itertools.groupby(countries, lambda a: a['id'])}
+
+        # countries for which we have questions in current category
         country_ids = Question.objects.filter(category=self, difficulty=difficulty).values_list('country', flat=True)
         # get first random "count" countries
         random_ids = list(set(country_ids))
         random.shuffle(random_ids)
+
+        # find countries which are **not** close together
+        i_count = 0
+        temp = [random_ids[i_count]]
+        while i_count < count:
+            if countries_lut[temp[-1]]:
+                logger.debug('Selected country %i, disqualifing countries %s' % (temp[-1], countries_lut[temp[-1]]))
+                random_ids = list(set(random_ids).difference(countries_lut[temp[-1]] + [temp[-1]]))
+                random.shuffle(random_ids)
+                logger.debug('Current set of possible countries: %s' % (random_ids, ))
+            i_count += 1
+            temp.append(random_ids[i_count])
+        random_ids = temp
 
         # get questions for random countries
         # beware! there could be more than one question for given country

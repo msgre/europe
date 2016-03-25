@@ -10,6 +10,7 @@ class Country(models.Model):
     """
     title  = models.CharField(_('Name of the country'), max_length=256, unique=True)
     sensor = models.CharField(_('Sensor'), max_length=32)
+    neighbours = models.ManyToManyField('self')
 
     class Meta:
         ordering = ('title', )
