@@ -9,7 +9,8 @@ class Country(models.Model):
     European country.
     """
     title  = models.CharField(_('Name of the country'), max_length=256, unique=True)
-    sensor = models.CharField(_('Sensor'), max_length=32)
+    board = models.IntegerField(_('Board'))
+    gate = models.IntegerField(_('Gate'))
     neighbours = models.ManyToManyField('self')
 
     class Meta:
