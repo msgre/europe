@@ -84,7 +84,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
     template: function(serialized_model) {
       var tmpl;
       if (serialized_model.image && serialized_model.question) {
-        tmpl = "<td><img src=\"<%= image %>\" width=\"600px\" height=\"780px\" /></td>\n<td class=\"text\"><%= question %></td>";
+        tmpl = "<td><img src=\"<%= image %>\" height=\"781px\" /></td>\n<td class=\"text\"><%= question %></td>";
       } else if (serialized_model.image) {
         tmpl = "<td><img src=\"<%= image %>\" /></td>";
       } else {

@@ -17,6 +17,7 @@ class QuestionsSerializer(serializers.HyperlinkedModelSerializer):
     country = CountrySerializer(read_only=True)
     category = CategorySerializer(read_only=True)
     image = serializers.SerializerMethodField() # TODO: docasny hack
+    question = serializers.SerializerMethodField() # TODO: docasny hack
 
     class Meta:
         model = Question
@@ -24,7 +25,22 @@ class QuestionsSerializer(serializers.HyperlinkedModelSerializer):
 
     # TODO: docasny hack
     def get_image(self, obj):
-        if random.random() < .5:
-            return '/riga.jpg'
+        if self._get_variant(obj) == 'combined':
+            choices = ['/foto-1_1.jpg', '/foto-2_3.jpg', '/foto-3_4.jpg', '/foto-4_3.jpg', '/foto-9_16.jpg']
+            return random.choice(choices)
+        elif self._get_variant(obj) == 'img':
+            choices = ['/foto-16_9.jpg', '/vlajky.png']
+            return random.choice(choices)
         else:
             return None
+
+    # TODO: docasny hack
+    def get_question(self, obj):
+        if self._get_variant(obj) in ['text', 'combined']:
+            return obj.question
+        else:
+            return None
+
+    # TODO: docasny hack
+    def _get_variant(self, obj):
+        return ['img', 'text', 'combined'][obj.id % 3]

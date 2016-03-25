@@ -82,9 +82,8 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         tagName: 'tr'
         template: (serialized_model) ->
             if serialized_model.image and serialized_model.question
-                # TODO: velikost obrazku
                 tmpl = """
-                    <td><img src="<%= image %>" width="600px" height="780px" /></td>
+                    <td><img src="<%= image %>" height="781px" /></td>
                     <td class="text"><%= question %></td>
                 """
             else if serialized_model.image
