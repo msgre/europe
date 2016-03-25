@@ -28,15 +28,27 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         model: Item
         comparator: 'order'
 
+        initialize: (models, options) ->
+            @active_length = null
+            if _.isObject(options) and _.has(options, 'active')
+                @_active = options.active
+            else
+                @_active = false
+            @_active_map = null
+
+
         parse: (response, options) ->
             response.results
 
         set_active: (index) ->
-            if @length < 1
+            if @get_active_length() < 1
                 return
-            if not index or index < 0 or index >= @length
+            if not index or index < 0 or index >= @get_active_length()
                 index = 0
-            obj = @at(index)
+            if @_active
+                obj = @at(@get_active_map()[index])
+            else
+                obj = @at(index)
             if obj != undefined
                 @each (i) ->
                     if i.get('active')
@@ -44,6 +56,29 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
                 obj.set('active', true)
             @trigger('change')
             index
+
+        get_active_length: ->
+            if @_active
+                if @active_length == null
+                    x = @filter (i) ->
+                        not i.get('disabled')
+                    @active_length = x.length
+            else
+                @active_length = @length
+            @active_length
+
+        get_active_map: ->
+            if @_active_map != null
+                @_active_map
+            else
+                out = {}
+                if @_active
+                    y = 0
+                    @each (item, idx) ->
+                        if not item.get('disabled')
+                            out[y] = idx
+                            y = y + 1
+                @_active_map = out
         
         unset_active: ->
             @each (i) ->
@@ -76,7 +111,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
                 if msg == 'left' and @index > 0
                     @index -= 1
                     change_collection = true
-                else if msg == 'right' and @index < @collection.length - 1
+                else if msg == 'right' and @index < @collection.get_active_length() - 1
                     @index += 1
                     change_collection = true
                 else if msg == 'fire'
@@ -200,7 +235,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         layout.getRegion('difficulty').show new ItemsView
             collection: difficulties
             command: 'category'
-        categories = new Items()
+        categories = new Items(null, {active: true})
         categories.url = '/api/categories'
         layout.getRegion('category').show new ItemsView
             childView: CategoryItemView
@@ -220,7 +255,6 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
             layout.getRegion('category').currentView.set_active()
 
         local_channel.on 'choice', (obj) ->
-            console.log obj
             local_options['category'] = obj.get('id')
             local_options['category_icon'] = obj.get('icon')
             local_options['title'] = obj.get('title')

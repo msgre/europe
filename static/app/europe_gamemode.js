@@ -20,18 +20,31 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
   Items = Backbone.Collection.extend({
     model: Item,
     comparator: 'order',
+    initialize: function(models, options) {
+      this.active_length = null;
+      if (_.isObject(options) && _.has(options, 'active')) {
+        this._active = options.active;
+      } else {
+        this._active = false;
+      }
+      return this._active_map = null;
+    },
     parse: function(response, options) {
       return response.results;
     },
     set_active: function(index) {
       var obj;
-      if (this.length < 1) {
+      if (this.get_active_length() < 1) {
         return;
       }
-      if (!index || index < 0 || index >= this.length) {
+      if (!index || index < 0 || index >= this.get_active_length()) {
         index = 0;
       }
-      obj = this.at(index);
+      if (this._active) {
+        obj = this.at(this.get_active_map()[index]);
+      } else {
+        obj = this.at(index);
+      }
       if (obj !== void 0) {
         this.each(function(i) {
           if (i.get('active')) {
@@ -42,6 +55,38 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
       }
       this.trigger('change');
       return index;
+    },
+    get_active_length: function() {
+      var x;
+      if (this._active) {
+        if (this.active_length === null) {
+          x = this.filter(function(i) {
+            return !i.get('disabled');
+          });
+          this.active_length = x.length;
+        }
+      } else {
+        this.active_length = this.length;
+      }
+      return this.active_length;
+    },
+    get_active_map: function() {
+      var out, y;
+      if (this._active_map !== null) {
+        return this._active_map;
+      } else {
+        out = {};
+        if (this._active) {
+          y = 0;
+          this.each(function(item, idx) {
+            if (!item.get('disabled')) {
+              out[y] = idx;
+              return y = y + 1;
+            }
+          });
+        }
+        return this._active_map = out;
+      }
     },
     unset_active: function() {
       return this.each(function(i) {
@@ -79,7 +124,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
           if (msg === 'left' && _this.index > 0) {
             _this.index -= 1;
             change_collection = true;
-          } else if (msg === 'right' && _this.index < _this.collection.length - 1) {
+          } else if (msg === 'right' && _this.index < _this.collection.get_active_length() - 1) {
             _this.index += 1;
             change_collection = true;
           } else if (msg === 'fire') {
@@ -189,7 +234,9 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
       collection: difficulties,
       command: 'category'
     }));
-    categories = new Items();
+    categories = new Items(null, {
+      active: true
+    });
     categories.url = '/api/categories';
     layout.getRegion('category').show(new ItemsView({
       childView: CategoryItemView,
@@ -208,7 +255,6 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
       return layout.getRegion('category').currentView.set_active();
     });
     local_channel.on('choice', function(obj) {
-      console.log(obj);
       local_options['category'] = obj.get('id');
       local_options['category_icon'] = obj.get('icon');
       local_options['title'] = obj.get('title');
