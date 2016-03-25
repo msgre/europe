@@ -101,3 +101,9 @@ One-time compilation:
 Continuous compilation based on changes in watched directory:
 
     fswatch --exclude="\.js$" -o $PWD/static/app | xargs -n1 -I{} docker run -i --rm -v $PWD/static/app:/src msgre/common:coffee.latest -bc /src
+
+## LESS compilation
+
+One-time compilation:
+
+    docker run -i --rm -v $PWD/static/css:/src ewoutp/lessc:latest /src/styles.less > $PWD/static/css/styles.css
