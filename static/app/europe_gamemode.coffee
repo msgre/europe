@@ -30,25 +30,22 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
 
         initialize: (models, options) ->
             @active_length = null
-            if _.isObject(options) and _.has(options, 'active')
-                @_active = options.active
+            if _.isObject(options) and _.has(options, 'enabled')
+                @_enabled = options.enabled
             else
-                @_active = false
-            @_active_map = null
+                @_enabled = false
+            @_enabled_map = null
 
 
         parse: (response, options) ->
             response.results
 
         set_active: (index) ->
-            if @get_active_length() < 1
+            if @get_enabled_length() < 1
                 return
-            if not index or index < 0 or index >= @get_active_length()
+            if not index or index < 0 or index >= @get_enabled_length()
                 index = 0
-            if @_active
-                obj = @at(@get_active_map()[index])
-            else
-                obj = @at(index)
+            obj = @at_enabled(index)
             if obj != undefined
                 @each (i) ->
                     if i.get('active')
@@ -57,8 +54,8 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
             @trigger('change')
             index
 
-        get_active_length: ->
-            if @_active
+        get_enabled_length: ->
+            if @_enabled
                 if @active_length == null
                     x = @filter (i) ->
                         not i.get('disabled')
@@ -67,19 +64,26 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
                 @active_length = @length
             @active_length
 
-        get_active_map: ->
-            if @_active_map != null
-                @_active_map
+        get_enabled_map: ->
+            if @_enabled_map != null
+                @_enabled_map
             else
                 out = {}
-                if @_active
+                if @_enabled
                     y = 0
                     @each (item, idx) ->
                         if not item.get('disabled')
                             out[y] = idx
                             y = y + 1
-                @_active_map = out
+                @_enabled_map = out
         
+        at_enabled: (index) ->
+            if @_enabled
+                obj = @at(@get_enabled_map()[index])
+            else
+                obj = @at(index)
+            obj
+
         unset_active: ->
             @each (i) ->
                 i.set('active', false)
@@ -111,12 +115,12 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
                 if msg == 'left' and @index > 0
                     @index -= 1
                     change_collection = true
-                else if msg == 'right' and @index < @collection.get_active_length() - 1
+                else if msg == 'right' and @index < @collection.get_enabled_length() - 1
                     @index += 1
                     change_collection = true
                 else if msg == 'fire'
                     window.sfx.button2.play()
-                    obj = @collection.at(@index)
+                    obj = @collection.at_enabled(@index)
                     @disable_keys()
                     local_channel.trigger(@command, obj)
                     set_new_timeout = false
@@ -235,7 +239,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         layout.getRegion('difficulty').show new ItemsView
             collection: difficulties
             command: 'category'
-        categories = new Items(null, {active: true})
+        categories = new Items(null, {enabled: true})
         categories.url = '/api/categories'
         layout.getRegion('category').show new ItemsView
             childView: CategoryItemView

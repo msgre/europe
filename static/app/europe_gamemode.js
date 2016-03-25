@@ -22,29 +22,25 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
     comparator: 'order',
     initialize: function(models, options) {
       this.active_length = null;
-      if (_.isObject(options) && _.has(options, 'active')) {
-        this._active = options.active;
+      if (_.isObject(options) && _.has(options, 'enabled')) {
+        this._enabled = options.enabled;
       } else {
-        this._active = false;
+        this._enabled = false;
       }
-      return this._active_map = null;
+      return this._enabled_map = null;
     },
     parse: function(response, options) {
       return response.results;
     },
     set_active: function(index) {
       var obj;
-      if (this.get_active_length() < 1) {
+      if (this.get_enabled_length() < 1) {
         return;
       }
-      if (!index || index < 0 || index >= this.get_active_length()) {
+      if (!index || index < 0 || index >= this.get_enabled_length()) {
         index = 0;
       }
-      if (this._active) {
-        obj = this.at(this.get_active_map()[index]);
-      } else {
-        obj = this.at(index);
-      }
+      obj = this.at_enabled(index);
       if (obj !== void 0) {
         this.each(function(i) {
           if (i.get('active')) {
@@ -56,9 +52,9 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
       this.trigger('change');
       return index;
     },
-    get_active_length: function() {
+    get_enabled_length: function() {
       var x;
-      if (this._active) {
+      if (this._enabled) {
         if (this.active_length === null) {
           x = this.filter(function(i) {
             return !i.get('disabled');
@@ -70,13 +66,13 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
       }
       return this.active_length;
     },
-    get_active_map: function() {
+    get_enabled_map: function() {
       var out, y;
-      if (this._active_map !== null) {
-        return this._active_map;
+      if (this._enabled_map !== null) {
+        return this._enabled_map;
       } else {
         out = {};
-        if (this._active) {
+        if (this._enabled) {
           y = 0;
           this.each(function(item, idx) {
             if (!item.get('disabled')) {
@@ -85,8 +81,17 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
             }
           });
         }
-        return this._active_map = out;
+        return this._enabled_map = out;
       }
+    },
+    at_enabled: function(index) {
+      var obj;
+      if (this._enabled) {
+        obj = this.at(this.get_enabled_map()[index]);
+      } else {
+        obj = this.at(index);
+      }
+      return obj;
     },
     unset_active: function() {
       return this.each(function(i) {
@@ -124,12 +129,12 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
           if (msg === 'left' && _this.index > 0) {
             _this.index -= 1;
             change_collection = true;
-          } else if (msg === 'right' && _this.index < _this.collection.get_active_length() - 1) {
+          } else if (msg === 'right' && _this.index < _this.collection.get_enabled_length() - 1) {
             _this.index += 1;
             change_collection = true;
           } else if (msg === 'fire') {
             window.sfx.button2.play();
-            obj = _this.collection.at(_this.index);
+            obj = _this.collection.at_enabled(_this.index);
             _this.disable_keys();
             local_channel.trigger(_this.command, obj);
             set_new_timeout = false;
@@ -235,7 +240,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
       command: 'category'
     }));
     categories = new Items(null, {
-      active: true
+      enabled: true
     });
     categories.url = '/api/categories';
     layout.getRegion('category').show(new ItemsView({
