@@ -189,9 +189,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
     # --- timer handler
 
     handler = () ->
-        # window.channel.command('gamemode:idle', _options)
-        # TODO:
-        ''
+        window.channel.command('gamemode:idle', _options)
 
     # --- module
 
