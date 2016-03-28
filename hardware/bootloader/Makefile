@@ -12,15 +12,20 @@ VERSION=\"mb-`date +%d%m%y`\"
 # BOOTSTRING_START = 0x1f500
 # TEXT_START = 0x1e000
 
-DEVICE = atmega328p
-CLOCK = 16000000
-TEXT_START = 0x7c00
-FUSES = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
+# DEVICE = atmega328p
+# CLOCK = 16000000
+# TEXT_START = 0x7c00
+# FUSES = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
 
 # DEVICE = atmega168
 # CLOCK = 16000000
 # TEXT_START = 0x3c00
-# FUSES = -U lfuse:w:0xff:m -U hfuse:w:0xdf:m -U efuse:w:0xfa:m -B 10
+# FUSES = -U lfuse:w:0xff:m -U hfuse:w:0xdf:m -U efuse:w:0x02:m -B 10
+
+DEVICE = atmega88p
+CLOCK = 16000000
+TEXT_START = 0x1c00
+FUSES = -U lfuse:w:0xff:m -U hfuse:w:0xdf:m -U efuse:w:0x02:m -B 10
 
 #----------------------------
 # Programmer type and options
