@@ -40,7 +40,7 @@
  */
 #define MODBUS_ADDRESS_INIT() DDRD &= ~_BV(PD7); DDRB &= ~(_BV(PB0) | _BV(PB1) | _BV(PB2)); \
                               PORTD |= _BV(PD7); PORTB |= _BV(PB0) | _BV(PB1) | _BV(PB2)
-#define MODBUS_ADDRESS_READ() (((PIND & _BV(PD7)) >> 7) | ((PINB & (_BV(PB0) | _BV(PB1) | _BV(PB2)) << 1 )))
+#define MODBUS_ADDRESS_READ() ( ((PIND & _BV(PD7)) >> 7) | ((PINB & (_BV(PB0) | _BV(PB1) | _BV(PB2))) << 1) )
 
 #define MODBUS_WRITE_REGS 0x10
 #define MODBUS_READ_REGS  0x03

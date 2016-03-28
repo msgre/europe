@@ -60,7 +60,7 @@
 #include <avr/pgmspace.h>
 #if defined(__AVR_ATmega1284P__)
 #define pgm_read_byte_progmem(ptr) pgm_read_byte_far((FLASHEND&0xFFFF0000)|(uint16_t)(ptr))
-#elif defined(__AVR_ATmega328P__)
+#elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168P__) || defined(__AVR_ATmega88P__)
 #define pgm_read_byte_progmem(ptr) pgm_read_byte((uint16_t)(ptr))
 #endif
 

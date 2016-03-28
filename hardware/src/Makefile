@@ -7,12 +7,11 @@ TARGET = main
 # Hardware specific configuration
 #--------------------------------
 
-DEVICE = atmega328p
-CLOCK = 16000000
+# DEVICE = atmega328p
+# CLOCK = 16000000
 
-# 16MHz external crystal and SPIEN
-HFUSE = 0xD9
-LFUSE = 0xFF
+DEVICE = atmega88p
+CLOCK = 16000000
 
 #----------------------------
 # Programmer type and options
