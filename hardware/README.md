@@ -45,6 +45,38 @@ this:
 
     $ ./examples/modbus_update.py /dev/usbserial.XYZ addr ./src/main.bin
 
+## Neopixel Firmware
+
+Special firmware version for interfacing Neopxel (WS2812) through Modbus is
+in directory `neopixel`. This firmware can be compiled the same way as main
+firmware:
+
+    $ cd neopixel
+    $ make
+
+This special firmware has the same modbus registers as main firmware and
+aditional address space `0x1000`. One register in this space represents one
+Neopixel LED. The bit mapping is:
+
+    +-------------------------------+-------------------------------+
+    |         High byte             |            Low byte           |
+    +-------------------------------+-------------------------------+
+    | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+    +-------------------------------+-------------------------------+
+    | R | R | R | R | G | G | G | G | B | B | B | B | L | L | L | L |
+    +-------------------------------+-------------------------------+
+
+where `R` = red, `G` = green, `B` = blue, `L` = brightness. For example:
+
+    0x1F00 = red
+    0x10F0 = green
+    0x100F = blue
+    0x16F0 = yellow
+    0x06F0 = yellow, minimum brightness.
+    0xF6F0 = yellow, maximum brightness.
+
+Neopixels should be connected to the pin PWM0 (AVR pin PD6).
+
 ## Modbus Address
 
 The slave address is selected by solder jumpers SJ1-SJ4. Soldered jumper represent
@@ -80,6 +112,10 @@ To read latest gate states from board with slave address 15 (0x0F):
 Slave dicovery on bus can be done by:
 
     $ ./examples/modbus_discover.py /dev/usbserial.XYZ
+
+To use neopixel firmware on slave 13 (example expects 24 WS2812 LEDs):
+
+    $ ./examples/neopixel_rainbow.py /dev/usbserial.XYZ 13
 
 ## Wires
 
