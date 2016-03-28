@@ -19,6 +19,7 @@ firmware can be updated via Modbus.
 - `eagle`, `gerber` and `pdf` -- documentation for manufacturing this hardware.
 - `bootloader` -- source code of Modbus bootloader for ATMegaXX8P.
 - `src` -- main firmware for gate boards.
+- `neopixel` -- control Neopixel (WS2812) LEDs via Modbus.
 - `examples` -- simple Python examples, how to control and update gates over Modbus.
 
 ## Bootloader and Firmware
@@ -47,23 +48,23 @@ this:
 
 ## Neopixel Firmware
 
-Special firmware version for interfacing Neopxel (WS2812) through Modbus is
+Special firmware version for interfacing WS2812 LEDs through Modbus is
 in directory `neopixel`. This firmware can be compiled the same way as main
 firmware:
 
     $ cd neopixel
     $ make
 
-This special firmware has the same modbus registers as main firmware and
-aditional address space `0x1000`. One register in this space represents one
-Neopixel LED. The bit mapping is:
+This special firmware has the same modbus registers as main firmware (inputs,
+reset, HW&FW version) and aditional address space `0x1000`. One register in
+this space represents one Neopixel LED. The bit mapping is:
 
     +-------------------------------+-------------------------------+
     |         High byte             |            Low byte           |
     +-------------------------------+-------------------------------+
     | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
     +-------------------------------+-------------------------------+
-    | R | R | R | R | G | G | G | G | B | B | B | B | L | L | L | L |
+    | L | L | L | L | R | R | R | R | G | G | G | G | B | B | B | B |
     +-------------------------------+-------------------------------+
 
 where `R` = red, `G` = green, `B` = blue, `L` = brightness. For example:
