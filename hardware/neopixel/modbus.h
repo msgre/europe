@@ -47,6 +47,13 @@
 
 #define MODBUS_HEADER_SIZE  6
 
+typedef struct {
+    uint16_t start; // Start address.
+    uint16_t size;  // Size of this region.
+    uint16_t *registers;
+    uint8_t *change;
+} mb_registers_t;
+
 typedef enum {
     MODBUS_OK = 0,    // The message were sucessfully received.
     MODBUS_TIMEOUT,   // Timeout, no or incomplete message were received.
@@ -67,7 +74,7 @@ typedef struct {
 /**
  * Initialize modbus. Set slave address.
  */
-void modbus_init(uint8_t slave, uint16_t *regs, uint8_t *regs_changes, uint8_t regs_len);
+void modbus_init(uint8_t slave, mb_registers_t *regions, uint8_t regions_len);
 
 /**
  * Try to receive valid PDU for this slave.

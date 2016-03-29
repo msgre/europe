@@ -1,18 +1,16 @@
 #!/usr/bin/env python
-import serial
+
 import sys
 import time
 from struct import pack
 from struct import unpack
 from minimalmodbus import Instrument
 
-RESET_ADDRESS = 0x0002
+RESET_ADDRESS = 0x0001
 UNLOCK_ADDRESS = 0xFFFF
 UNLOCK_SECRET = [0xCA06, 0x93D8]
 BOOTLOADER_SLAVE_ADDRESS = 0x80
-
-PAYLOAD_SIZE = 64   # ATMega168, ATMega88
-#PAYLOAD_SIZE = 128  # ATMega328
+PAYLOAD_SIZE = 128
 
 
 def read_file_by_chunks(filename, chunksize=32):

@@ -26,7 +26,7 @@
  */
 #define MODBUS_ADDRESS_INIT() DDRD &= ~_BV(PD7); DDRB &= ~(_BV(PB0) | _BV(PB1) | _BV(PB2)); \
                               PORTD |= _BV(PD7); PORTB |= _BV(PB0) | _BV(PB1) | _BV(PB2)
-#define MODBUS_ADDRESS_READ() (((PIND & _BV(PD7)) >> 7) | ((PINB & (_BV(PB0) | _BV(PB1) | _BV(PB2)) << 1 )))
+#define MODBUS_ADDRESS_READ() ( ((PIND & _BV(PD7)) >> 7) | ((PINB & (_BV(PB0) | _BV(PB1) | _BV(PB2))) << 1) )
 /**
  * MCU status register. ATMega1284P:
  *   0x01 = Power-on reset
@@ -54,7 +54,8 @@ inline void start_app(void) {
     wdt_reset();
     wdt_disable();
     if(FLASH_CHECK_APP()) {
-        asm volatile("jmp 0");
+        // asm volatile("jmp 0");
+        ((void (*)())0x0)();
     } else {
         asm volatile("ijmp" :: "z" (NRWW_START/2));
     }
@@ -84,14 +85,6 @@ void download_fw(void) {
             // Word address to byte address.
             spm_address = (pdu.address * 2);
             write_page(spm_address, spm_buffer, SPM_PAGESIZE);
-
-            #ifdef DEBUG_MAIN
-            rs485_output();
-            rs485_putp(PSTR("SPM index="));
-            rs485_puthex4(spm_index);
-            rs485_putc('\n');
-            rs485_input();
-            #endif
 
             #ifdef DEBUG_MODBUS
             modbus_print_pdu(&pdu);

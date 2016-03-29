@@ -7,11 +7,11 @@ TARGET = main
 # Hardware specific configuration
 #--------------------------------
 
-# DEVICE = atmega328p
-# CLOCK = 16000000
-
-DEVICE = atmega88p
+DEVICE = atmega328p
 CLOCK = 16000000
+
+# DEVICE = atmega88p
+# CLOCK = 16000000
 
 #----------------------------
 # Programmer type and options
@@ -30,7 +30,7 @@ OBJDUMP = avr-objdump
 #------------------------------------------------------------------------------
 #----------------------------------------- no user serviceable parts inside ---
 .PHONY: all clean flash fuses
-OBJECTS    = $(TARGET).o rs485.o modbus.o timers.o gpio.o
+OBJECTS    = $(TARGET).o rs485.o modbus.o ws2812.o timers.o gpio.o
 INCLUDES = -I.
 
 PROGRAM = $(AVRDUDE) $(PROGRAMMER) -p $(DEVICE)
@@ -87,11 +87,11 @@ $(TARGET).elf: $(OBJECTS)
 
 $(TARGET).hex: $(TARGET).elf
 	rm -f $(TARGET).hex
-	$(OBJCOPY) -j .bootstring -j .text -O ihex $(TARGET).elf $(TARGET).hex
+	$(OBJCOPY) -O ihex $(TARGET).elf $(TARGET).hex
 
 $(TARGET).bin: $(TARGET).elf
 	rm -f $(TARGET).bin
-	$(OBJCOPY) -j .bootstring -j .text -O binary $(TARGET).elf $(TARGET).bin
+	$(OBJCOPY) -O binary $(TARGET).elf $(TARGET).bin
 
 size: $(TARGET).elf
 	@echo "    SIZES"

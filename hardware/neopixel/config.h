@@ -1,7 +1,7 @@
 #ifndef __IR_CONFIG_H__
 #define __IR_CONFIG_H__
 
-#define FW_VERSION 0x001UL
+#define FW_VERSION 0x010UL
 #define HW_VERSION 0x1UL
 
 /******************************************************************************/
@@ -24,11 +24,6 @@
 #define RS485_DIR_PIN  PD2
 
 /**
- * Minimum debounce time for reading state from IR gate.
- */
-#define IR_DEBOUNCE_TIME 100 //ms
-
-/**
  * RX buffer size for RS485 (UART).
  * In bytes.
  */
@@ -41,6 +36,21 @@
  * How many times should LED blink after the restart.
  */
 #define LED_RESTART_BLINK 3
+
+/**
+ * Number of WS2812 (Neopixel) LEDs.
+ */
+#define WS2812_NUM 24
+
+/**
+ * Data port where WS2812 are connected.
+ */
+#define WS2812_PORT D
+
+/**
+ * Pin number with WS2812.
+ */
+#define WS2812_PIN  6
 
 /******************************************************************************/
 /** Debug output **************************************************************/
