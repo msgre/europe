@@ -1,6 +1,8 @@
 import builtins
 import os
 import re
+import shlex
+import subprocess
 from time import sleep as time_sleep
 
 from twisted.internet.defer import inlineCallbacks
@@ -11,6 +13,9 @@ from autobahn.twisted.wamp import ApplicationSession
 
 from minimalmodbus import Instrument
 
+
+DEBUG = os.environ.get('DEBUG', False)
+DEBUG_PATH = '~/gates'
 
 CYCLE_SLEEP = 0.04          # during each cycle, all instruments are readed; this is sleep time between each round
 INSTRUMENT_SLEEP = 0.01     # sleep between ModBus read_registers calls; sleep time between individual gate reads
@@ -24,6 +29,7 @@ class AppSession(ApplicationSession):
     state = None
 
     def __init__(self, config):
+        self.init_debug()
         self.init(config.extra)
         self.init_instruments()
         ApplicationSession.__init__(self, config)
@@ -40,21 +46,60 @@ class AppSession(ApplicationSession):
 
     def init_instruments(self):
         for gate in self.gates:
-            self.instruments[gate] = Instrument(self.port, gate)
-            self.instruments[gate].serial.baudrate = 57600
-            self.instruments[gate].serial.timeout = 1
+            if DEBUG:
+                self.instruments[gate] = None
+            else:
+                self.instruments[gate] = Instrument(self.port, gate)
+                self.instruments[gate].serial.baudrate = 57600
+                self.instruments[gate].serial.timeout = 1
+
+    def init_debug(self):
+        if not DEBUG:
+            return
+        self.GATE_RE = re.compile(r'^.+\/\d+\/\d+$')
+
+        self.debug_path = os.path.expanduser(DEBUG_PATH)
+        self.log.info('we are in debug mode, watching directory {path}', path=self.debug_path)
+
+        if os.path.exists(self.debug_path) and os.path.isdir(self.debug_path):
+            return
+        os.makedirs(self.debug_path)
 
     def find_usb_device(self, regex):
+        if DEBUG:
+            return None
         m = re.compile(regex)
         out = [i for i in os.listdir('/dev') if m.match(i)]
         if len(out) < 1:
-            self.log.warning('usb device not found: regexp pattern {regexp}', regexp=regexp)
+            self.log.warn('usb device not found: regexp pattern {regexp}', regexp=regexp)
             assert False
         path = '/dev/' + out[0]
         self.log.info('usb device found: {path}', path=path)
         return path
 
-    def read_instruments(self):
+    def _read_fake_instruments(self):
+        # read directory structure and look for files like ~/gates/1/1
+        out = {}
+        files = [i.decode('ascii').split('/')[-2:] \
+                 for i in subprocess.check_output(['find', self.debug_path]).splitlines() \
+                 if self.GATE_RE.match(i.decode('ascii'))]
+        files = sorted(files, key=lambda a: a[0])
+
+        # construct fake instrument structure
+        for gate in self.instruments:
+            out[gate] = 0
+        for f in files:
+            out[int(f[0])] = int(f[1])
+            time_sleep(INSTRUMENT_SLEEP)
+
+        # remove files in ~/gates
+        for parts in files:
+            path = os.path.join(self.debug_path, *parts)
+            cmd = 'rm {path}'.format(path=path)
+            subprocess.call(shlex.split(cmd))
+        return out
+
+    def _read_real_instruments(self):
         out = {}
         for gate in self.instruments:
             try:
@@ -65,13 +110,21 @@ class AppSession(ApplicationSession):
             time_sleep(INSTRUMENT_SLEEP)
         return out
 
+    def read_instruments(self):
+        if DEBUG:
+            return self._read_fake_instruments()
+        else:
+            return self._read_real_instruments()
+
     def led_effect(self, mode):
         self.log.info("changing LED mode to {mode}", mode=mode)
         # self.instruments[self.led_gate].write_registers(LED_ADDRESS, mode) # TODO: neco jako; zatim to nemam implementovano
+        # TODO: mozna bude treba samotny zapis resit uvnitr hlavni smycky kvuli konfliktum na sbernici
 
     def led_switch(self, number, color):
         self.log.info("changing LED #{number} to {color} color", number=number, color=color)
         # self.instruments[self.led_gate].write_registers(LED_ADDRESS, state) # TODO: neco jako; zatim to nemam implementovano
+        # TODO: mozna bude treba samotny zapis resit uvnitr hlavni smycky kvuli konfliktum na sbernici
 
     def get_state_diff(self, old_state, new_state):
         if old_state is None:

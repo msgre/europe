@@ -24,6 +24,12 @@ Then follow this steps:
    You must provide access to physical ModBus adapter usualy mounted to 
    `/dev/ttyUSBX` and expose port 8080 to HTML demo page.
 
+   There is also DEBUG mode in case you have no access to physical devices:
+
+        docker run -ti --rm --name eu-watcher -e DEBUG=1 -v $PWD/gates:/root/gates -p 8080:8080 msgre/common:eu-watcher
+
+   For details about DEBUG mode see below.
+
 3) Open web browser
    Put there URL of NUC (in my case something like http://192.168.0.113:8080/).
    Open web developer javascript console and try press some button on keyboard
@@ -62,6 +68,30 @@ Messages for `watcher`:
 * `com.europe.stop`
   - stop watching of game gates
   - provide any value (it is ignored)
+
+# DEBUG mode
+
+For easier debugging of websockets communication, you could turn on DEBUG mode 
+on watcher script. In this mode, container will be watching directory ~/gates
+and looking for structure like:
+
+    ~/gates/<GATE_NUMBER>/<GATE_STATUS>
+
+Where:
+
+    <GATE_NUMBER> is directory in form of integer number, defining specific gate
+    <GATE_STATUS> is empty file which filename represent gate status
+
+For example file on path `~/gates/14/1` will be emited as ball passing gate
+`1` on board `14`.
+
+You could map directory `~/gates` into container from your host machine, and
+then simulate traffic on gameboard by invoking simple touch commands:
+
+    touch ~/gates/14/1
+
+After each read over `~/gate` directory, all founded files will be deleted.
+
 
 ## Gate mapping
 
