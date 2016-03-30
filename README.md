@@ -69,6 +69,12 @@ touching files in `watcher/gates` directory. For example:
 will simulate ball passing gate number 1 on board 14. Same way you could 
 simulate keyboard events.
 
+## Administration
+
+There is standard Django admin interface on http://192.168.99.100:8081/admin.
+You could modify there options, questions, and several other details about
+game.
+
 # Details
 
 ## Database migrations
