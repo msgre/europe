@@ -15,23 +15,23 @@ Then follow this steps:
 
 1) Build Docker image:
 
-        docker build -t msgre/common:eu-watcher .
+        docker build -t msgre/common:europe-watcher.latest .
 
 2) Run Docker image:
 
-        docker run -ti --rm --name eu-watcher --device /dev/ttyUSB0 -p 8080:8080 msgre/common:eu-watcher
+        docker run -ti --rm --name watcher --device /dev/ttyUSB0 -p 8082:8082 msgre/common:europe-watcher.latest
 
    You must provide access to physical ModBus adapter usualy mounted to 
-   `/dev/ttyUSBX` and expose port 8080 to HTML demo page.
+   `/dev/ttyUSBX` and expose port 8082 to HTML demo page.
 
    There is also DEBUG mode in case you have no access to physical devices:
 
-        docker run -ti --rm --name eu-watcher -e DEBUG=1 -v $PWD/gates:/root/gates -p 8080:8080 msgre/common:eu-watcher
+        docker run -ti --rm --name watcher -e DEBUG=1 -v $PWD/gates:/root/gates -p 8082:8082 msgre/common:europe-watcher.latest
 
    For details about DEBUG mode see below.
 
 3) Open web browser
-   Put there URL of NUC (in my case something like http://192.168.0.113:8080/).
+   Put there URL of NUC (in my case something like http://192.168.0.113:8082/).
    Open web developer javascript console and try press some button on keyboard
    gate (you should see published events from watcher). If you run
    `window.eu_session.publish('com.europe.start', [1]);` command in console
