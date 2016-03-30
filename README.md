@@ -1,11 +1,12 @@
-Demo of Europe application.
-
-Right now it consist of two main components:
+Demo of Europe application compounded from several components:
 
 * Django API backend
+* Django Admin backend
+* Python Watcher script, which read status from HW boards and send events
+  through websocket connection to browser
 * Frontend Javascript application build in Marionette framework
 
-Both components are dockerized and run behind Nginx proxy.
+All components are dockerized and run behind Nginx proxy.
 
 **Content**:
 
@@ -21,18 +22,21 @@ Both components are dockerized and run behind Nginx proxy.
 
 ## Build
 
-    docker build -f Dockerfile.api -t msgre/common:europe-api.latest .
-    docker build -f Dockerfile.js -t msgre/common:europe-js.latest .
+    docker build -f Dockerfile.base -t msgre/common:europe-base.latest .
     docker build -f Dockerfile.coffee -t msgre/common:coffee.latest .
+    docker-compose build
+    cd watcher/ && docker build -t msgre/common:europe-watcher.latest .
+
+`base` is general Django container, `coffee` is helper container for compiling 
+CoffeeScript files into Javascript, `watcher` take care about HW monitoring
+and publish events on websockets.
 
 ## Run
-
-### Automatically with docker-compose
 
     docker-compose up
 
 When you hit CTRL+C, containers will be stopped. Sometimes this is not true,
-so you must manually:
+so you must run manually:
 
     docker-compose kill
 
@@ -40,27 +44,10 @@ If you want remove stopped containers, call:
 
     docker-compose rm
 
-### Manualy, container by container
-
-    # API backend based on Django application
-    docker run --name europe-api --rm -ti -p 8080:8080 -v $PWD/europe:/src/api msgre/common:europe-api.latest
-
-    # Static files mapped from local directory into container
-    docker run --name europe-js --rm -ti -v $PWD/static:/src/js msgre/common:europe-js.latest tail -f /dev/null
-
-    # Nginx in front of Django app and static files
-    docker run -ti --rm -p 8081:80 --name nginx --volumes-from europe-js --link europe-api -v $PWD/ansible/files/europe.nginx.conf:/etc/nginx/conf.d/default.conf:ro nginx
-
-
-NOTE: In production, I will use ready made Javascript container in similar way:
-
-    docker create --name europe-js -v $PWD/static:/src/js msgre/common:europe-js.latest # in production
-
-
 ## Watch
 
-Open in **Chrome** browser URL http://192.168.99.100:8081/europe_01.html
-(warning, doesn't work in Firefox due to some problem with keyboard plugin).
+Open in **Chrome** browser URL http://192.168.99.100:8081/
+(warning, doesn't work in Firefox due to disfunctional keyboard plugin).
 
 For controling web app use following keys (they will be replaced in final 
 product to real physical keys):
@@ -74,23 +61,26 @@ During questions phase, use:
 * `0` as wrong answer
 * `1` as right answer
 
+If you run `watcher` container in debug mode, you could simulate HW events by
+touching files in `watcher/gates` directory. For example:
+
+    touch watcher/gates/14/1
+
+will simulate ball passing gate number 1 on board 14. Same way you could 
+simulate keyboard events.
 
 # Details
 
 ## Database migrations
 
-Run container:
+Connect to already running `api` container:
 
-    docker run --name europe-api --rm -ti -p 8080:8080 -v $PWD/europe:/src/api --entrypoint bash msgre/common:europe-api.latest
-
-Or connect to already running europe-api container:
-
-    docker exec -ti europe-api bash
+    docker exec -ti api bash
 
 Make and apply migrations:
 
-    ./manage.py makemigrations
-    ./manage.py migrate
+    ./manage.py makemigrations --settings europe.settings_api
+    ./manage.py migrate --settings europe.settings_api
 
 ## Coffeescript compilation
 

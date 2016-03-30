@@ -1,4 +1,6 @@
 FROM msgre/common:europe-base.latest
 
-EXPOSE 8080
+EXPOSE 8084
+RUN pip install whitenoise
+
 ADD europe /src/app

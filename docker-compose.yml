@@ -1,28 +1,51 @@
 ---
 version: '2'
 services:
-  # django app
-  europe-api:
+  # REST API
+  api:
     container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     image: msgre/common:europe-api.latest
     volumes:
-      - $PWD/europe:/src/api 
+      - $PWD/europe:/src/app
     ports:
       - "8080:8080"
-    command: --socket 0.0.0.0:8080 --master --processes 1 --max-requests 1 --env DJANGO_SETTINGS_MODULE=europe.settings --module europe.wsgi:application --chdir /src/api
+    command: --socket 0.0.0.0:8080 --master --processes 1 --max-requests 1 --env DJANGO_SETTINGS_MODULE=europe.settings_api --module europe.wsgi_api:application --chdir /src/app
+    stop_signal: SIGINT
+
+  # admin interface
+  admin:
+    container_name: admin
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+    image: msgre/common:europe-admin.latest
+    volumes:
+      - $PWD/europe:/src/app 
+    ports:
+      - "8084:8084"
+    command: --socket 0.0.0.0:8084 --master --processes 1 --max-requests 1 --env DJANGO_SETTINGS_MODULE=europe.settings_admin --module europe.wsgi_admin:application --chdir /src/app
     stop_signal: SIGINT
 
   # javascript application
-  europe-js:
+  js:
     container_name: js
+    build:
+      context: .
+      dockerfile: Dockerfile.js
     image: msgre/common:europe-js.latest 
     command: /bin/true
     volumes:
       - $PWD/static:/src/js 
 
   # watcher application (websocket bridge between browser and HW)
-  europe-watcher:
+  watcher:
     container_name: watcher
+    # build:
+    #   context: ./watcher/
+    #   dockerfile: ./watcher/Dockerfile
     image: msgre/common:europe-watcher.latest 
     volumes:
       - $PWD/watcher/gates:/root/gates 
@@ -41,10 +64,12 @@ services:
     ports:
       - "8081:80"
     volumes_from:
-      - europe-js
+      - js
     links:
-      - europe-api
-      - europe-watcher
+      - api
+      - admin
+      - watcher
     depends_on:
-      - europe-api
-      - europe-watcher
+      - api
+      - admin
+      - watcher
