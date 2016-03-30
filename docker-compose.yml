@@ -45,3 +45,6 @@ services:
     links:
       - europe-api
       - europe-watcher
+    depends_on:
+      - europe-api
+      - europe-watcher
