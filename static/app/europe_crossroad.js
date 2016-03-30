@@ -70,7 +70,7 @@ App.module("Crossroad", function(Mod, App, Backbone, Marionette, $, _) {
         } else if (msg === 'fire') {
           window.sfx.button2.play();
           obj = that.collection.at(that.index);
-          window.channel.command('crossroad:close', _.extend(_options, {
+          window.channel.trigger('crossroad:close', _.extend(_options, {
             crossroad: obj.get('id')
           }));
           set_new_timeout = false;
@@ -101,7 +101,7 @@ App.module("Crossroad", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   handler = function() {
-    return window.channel.command('crossroad:idle', _options);
+    return window.channel.trigger('crossroad:idle', _options);
   };
   Mod.onStart = function(options) {
     var items;

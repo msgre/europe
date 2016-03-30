@@ -23,10 +23,6 @@ document['onkeypress'] = (e) ->
         window.channel.trigger('debug:good', )
     else if evt.keyCode == 48   # 0
         window.channel.trigger('debug:bad')
-
-    # NOT YET IMPLEMENTED
-    # window.channel.trigger('tunnel', number)
-
     else
         any_key = false
 

@@ -64,7 +64,7 @@ App.module("Countdown", function(Mod, App, Backbone, Marionette, $, _) {
     model.set('number', number - 1);
     if (number === 0) {
       clear_timer();
-      return window.channel.command('countdown:close', _options);
+      return window.channel.trigger('countdown:close', _options);
     } else if (number === 1) {
       return window.sfx.honk.play();
     } else {

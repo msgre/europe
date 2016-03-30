@@ -70,7 +70,7 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
         model.set('number', number - 1)
         if number == 0
             clear_timer()
-            window.channel.command('countdown:close', _options)
+            window.channel.trigger('countdown:close', _options)
         else if number == 1
             window.sfx.honk.play()
         else

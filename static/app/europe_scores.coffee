@@ -120,7 +120,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
     # --- timer handler
 
     handler = () ->
-        #window.channel.command('scores:idle', _options)
+        #window.channel.trigger('scores:idle', _options)
         #TODO
         console.log 'scores:idle'
 
@@ -172,7 +172,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
                 else if msg == 'fire'
                     window.sfx.button2.play()
                     set_delay () ->
-                        window.channel.command('scores:idle', _options)
+                        window.channel.trigger('scores:idle', _options)
                     , 100
                     set_new_timeout = false
                 else

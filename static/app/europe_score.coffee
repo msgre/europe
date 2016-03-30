@@ -80,7 +80,7 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
     # --- timer handler
 
     handler = () ->
-        window.channel.command('score:idle', _options)
+        window.channel.trigger('score:idle', _options)
 
     # --- module
 
@@ -118,7 +118,7 @@ App.module "Score", (Mod, App, Backbone, Marionette, $, _) ->
             if msg == 'fire' or msg == 'left' or msg == 'right'
                 window.sfx.button2.play()
                 set_delay () ->
-                    window.channel.command('score:idle', _options)
+                    window.channel.trigger('score:idle', _options)
                 , 100
                 set_new_timeout = false
             else

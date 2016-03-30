@@ -4,7 +4,7 @@ var App;
 App = new Marionette.Application();
 
 App.on('start', function(global_options) {
-  var ServerOptions, active_module, final_global_options, server_options, state_handler, that;
+  var ServerOptions, active_module, connection, final_global_options, server_options, state_handler, that, wsuri;
   active_module = null;
   that = this;
   final_global_options = void 0;
@@ -15,72 +15,123 @@ App.on('start', function(global_options) {
     active_module = that.module(new_module_name);
     return active_module.start(options);
   };
-  window.channel.comply('intro:start', function(options) {
+  wsuri = "ws://" + document.location.hostname + ":8082/ws";
+  connection = new autobahn.Connection({
+    url: wsuri,
+    realm: "realm1"
+  });
+  connection.onopen = function(session, details) {
+    var on_gate, on_keyboard;
+    console.log("Connected to server through websockets...");
+    window.eu_session = session;
+    on_gate = function(args) {
+      var value;
+      value = args[0];
+      console.log("gate passing");
+      console.log(value);
+      return window.channel.trigger('tunnel', value);
+    };
+    session.subscribe('com.europe.gate', on_gate).then(function(sub) {
+      return console.log("subscribed to topic 'com.europe.gate'");
+    }, function(err) {
+      return console.log("failed to subscribe to topic 'com.europe.gate'", err);
+    });
+    on_keyboard = function(args) {
+      var value;
+      value = args[0];
+      console.log("on_keyboard() event received");
+      console.log(value);
+      if (value & 1) {
+        window.channel.trigger('key', 'left');
+      } else if (value & 2) {
+        window.channel.trigger('key', 'right');
+      } else if (value & 4) {
+        window.channel.trigger('key', 'fire');
+      }
+      return window.channel.trigger('keypress');
+    };
+    session.subscribe('com.europe.keyboard', on_keyboard).then(function(sub) {
+      return console.log("subscribed to topic 'com.europe.keyboard'");
+    }, function(err) {
+      return console.log("failed to subscribe to topic 'com.europe.keyboard'", err);
+    });
+    window.channel.on('game:start', function(options) {
+      return session.publish('com.europe.start', [1]);
+    });
+    return window.channel.on('game:close', function(options) {
+      return session.publish('com.europe.stop', [1]);
+    });
+  };
+  connection.onclose = function(reason, details) {
+    return console.log("Websocket connection to backend lost: " + reason);
+  };
+  connection.open();
+  window.channel.on('intro:start', function(options) {
     return state_handler("Intro", options);
   });
-  window.channel.comply('intro:close', function(options) {
-    return window.channel.command('crossroad:start', options);
+  window.channel.on('intro:close', function(options) {
+    return window.channel.trigger('crossroad:start', options);
   });
-  window.channel.comply('crossroad:start', function(options) {
+  window.channel.on('crossroad:start', function(options) {
     return state_handler("Crossroad", options);
   });
-  window.channel.comply('crossroad:idle', function(options) {
-    return window.channel.command('intro:start', options);
+  window.channel.on('crossroad:idle', function(options) {
+    return window.channel.trigger('intro:start', options);
   });
-  window.channel.comply('crossroad:close', function(options) {
+  window.channel.on('crossroad:close', function(options) {
     if (options.crossroad === 'game') {
-      return window.channel.command('gamemode:start', options);
+      return window.channel.trigger('gamemode:start', options);
     } else {
-      return window.channel.command('scores:start', options);
+      return window.channel.trigger('scores:start', options);
     }
   });
-  window.channel.comply('scores:start', function(options) {
+  window.channel.on('scores:start', function(options) {
     return state_handler("Scores", options);
   });
-  window.channel.comply('scores:idle', function(options) {
-    return window.channel.command('intro:start', options);
+  window.channel.on('scores:idle', function(options) {
+    return window.channel.trigger('intro:start', options);
   });
-  window.channel.comply('scores:close', function(options) {
-    return window.channel.command('crossroad:start', options);
+  window.channel.on('scores:close', function(options) {
+    return window.channel.trigger('crossroad:start', options);
   });
-  window.channel.comply('gamemode:start', function(options) {
+  window.channel.on('gamemode:start', function(options) {
     return state_handler("GameMode", options);
   });
-  window.channel.comply('gamemode:idle', function(options) {
-    return window.channel.command('intro:start', options);
+  window.channel.on('gamemode:idle', function(options) {
+    return window.channel.trigger('intro:start', options);
   });
-  window.channel.comply('gamemode:close', function(options) {
-    return window.channel.command('countdown:start', options);
+  window.channel.on('gamemode:close', function(options) {
+    return window.channel.trigger('countdown:start', options);
   });
-  window.channel.comply('countdown:start', function(options) {
+  window.channel.on('countdown:start', function(options) {
     return state_handler("Countdown", options);
   });
-  window.channel.comply('countdown:close', function(options) {
-    return window.channel.command('game:start', options);
+  window.channel.on('countdown:close', function(options) {
+    return window.channel.trigger('game:start', options);
   });
-  window.channel.comply('game:start', function(options) {
+  window.channel.on('game:start', function(options) {
     return state_handler("Game", options);
   });
-  window.channel.comply('game:close', function(options) {
-    return window.channel.command('result:start', options);
+  window.channel.on('game:close', function(options) {
+    return window.channel.trigger('result:start', options);
   });
-  window.channel.comply('result:start', function(options) {
+  window.channel.on('result:start', function(options) {
     return state_handler("Result", options);
   });
-  window.channel.comply('result:close', function(options) {
-    return window.channel.command('recap:start', options);
+  window.channel.on('result:close', function(options) {
+    return window.channel.trigger('recap:start', options);
   });
-  window.channel.comply('recap:start', function(options) {
+  window.channel.on('recap:start', function(options) {
     return state_handler("Recap", options);
   });
-  window.channel.comply('recap:close', function(options) {
-    return window.channel.command('score:start', options);
+  window.channel.on('recap:close', function(options) {
+    return window.channel.trigger('score:start', options);
   });
-  window.channel.comply('score:start', function(options) {
+  window.channel.on('score:start', function(options) {
     return state_handler("Score", options);
   });
-  window.channel.comply('score:idle', function(options) {
-    return window.channel.command('intro:start', final_global_options);
+  window.channel.on('score:idle', function(options) {
+    return window.channel.trigger('intro:start', final_global_options);
   });
   ServerOptions = Backbone.Collection.extend({
     model: Backbone.Model,
@@ -104,7 +155,7 @@ App.on('start', function(global_options) {
       }
     });
     final_global_options = _.extend(_global_options, global_options);
-    return window.channel.command('intro:start', final_global_options);
+    return window.channel.trigger('intro:start', final_global_options);
   });
   return server_options.fetch();
 });

@@ -189,7 +189,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
     # --- timer handler
 
     handler = () ->
-        window.channel.command('gamemode:idle', _options)
+        window.channel.trigger('gamemode:idle', _options)
 
     # --- module
 
@@ -270,7 +270,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
 
         local_channel.on 'done', (obj) ->
             if obj.get('id') == 'ok'
-                window.channel.command('gamemode:close', _.extend(_options, {gamemode: local_options}))
+                window.channel.trigger('gamemode:close', _.extend(_options, {gamemode: local_options}))
             else
                 local_options = {}
                 layout.getRegion('difficulty').currentView.reset()

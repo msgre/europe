@@ -84,7 +84,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     },
     initialize: function() {
       return window.channel.on('keypress', function(msg) {
-        return window.channel.command('result:save', null);
+        return window.channel.trigger('result:save', null);
       });
     },
     onDestroy: function() {
@@ -138,14 +138,14 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
             }
           } else if (letter === LETTER_ENTER) {
             if (_name.length > 0) {
-              window.channel.command('result:save', _name);
+              window.channel.trigger('result:save', _name);
               return;
             }
           } else if (_name.length < NAME_MAX_LENGTH) {
             that.model.set('name', "" + _name + letter);
             _name = that.model.get('name');
             if (_name.length === NAME_MAX_LENGTH) {
-              window.channel.command('result:save', _name);
+              window.channel.trigger('result:save', _name);
               return;
             }
           }
@@ -218,7 +218,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     if (_name.length < 1) {
       _name = null;
     }
-    return window.channel.command('result:save', _name);
+    return window.channel.trigger('result:save', _name);
   };
   Mod.onStart = function(options) {
     console.log('Result module');
@@ -262,7 +262,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
         }));
       }
     });
-    window.channel.comply('result:save', function(_name) {
+    window.channel.on('result:save', function(_name) {
       var questions, score;
       clear_delay();
       questions = _.map(_options.answers, function(i) {
@@ -280,7 +280,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
       });
       score.save();
       return score.on('sync', function() {
-        window.channel.command('result:close', _options);
+        window.channel.trigger('result:close', _options);
         return score.off('sync');
       });
     });

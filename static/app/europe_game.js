@@ -100,10 +100,10 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
         };
       })(this));
       that = this;
-      window.channel.on('tunnel', function(number) {
+      window.channel.on('tunnel', function(event) {
         var country;
         country = that.model.get('country');
-        if (("" + number) === ("" + country.sensor)) {
+        if (("" + country.board) in event && event["" + country.board] & country.gate) {
           return local_channel.trigger('next', true);
         } else {
           return local_channel.trigger('penalty', PENALTY_TIME);
@@ -197,7 +197,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
             }),
             time: info.get('time')
           });
-          return window.channel.command('game:close', output);
+          return window.channel.trigger('game:close', output);
         } else {
           info.set('question', question);
           info.set('current', 0);

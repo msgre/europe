@@ -68,7 +68,7 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
                 else if msg == 'fire'
                     window.sfx.button2.play()
                     obj = that.collection.at(that.index)
-                    window.channel.command('crossroad:close', _.extend(_options, {crossroad: obj.get('id')}))
+                    window.channel.trigger('crossroad:close', _.extend(_options, {crossroad: obj.get('id')}))
                     set_new_timeout = false
                 else
                     set_new_timeout = false
@@ -104,7 +104,7 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
     # --- timer handler
 
     handler = () ->
-        window.channel.command('crossroad:idle', _options)
+        window.channel.trigger('crossroad:idle', _options)
 
     # --- module
 

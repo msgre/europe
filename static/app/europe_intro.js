@@ -55,7 +55,7 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
     layout.render();
     window.channel.on('keypress', function() {
       window.sfx.button.play();
-      return window.channel.command('intro:close', options);
+      return window.channel.trigger('intro:close', options);
     });
     handler();
     return set_timer(handler, _options.options.INTRO_TIME_PER_SCREEN);

@@ -193,7 +193,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   handler = function() {
-    return window.channel.command('gamemode:idle', _options);
+    return window.channel.trigger('gamemode:idle', _options);
   };
   Mod.onStart = function(options) {
     var local_options;
@@ -274,7 +274,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
     });
     local_channel.on('done', function(obj) {
       if (obj.get('id') === 'ok') {
-        return window.channel.command('gamemode:close', _.extend(_options, {
+        return window.channel.trigger('gamemode:close', _.extend(_options, {
           gamemode: local_options
         }));
       } else {

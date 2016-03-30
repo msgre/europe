@@ -81,7 +81,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 display_elapsed(@time)
         initialize: () ->
             window.channel.on 'keypress', (msg) ->
-                window.channel.command('result:save', null)
+                window.channel.trigger('result:save', null)
         onDestroy: () ->
             window.channel.off('keypress')
 
@@ -122,13 +122,13 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                             that.model.set('name', _name.substring(0, _name.length - 1))
                     else if letter == LETTER_ENTER
                         if _name.length > 0
-                            window.channel.command('result:save', _name)
+                            window.channel.trigger('result:save', _name)
                             return
                     else if _name.length < NAME_MAX_LENGTH
                         that.model.set('name', "#{ _name }#{ letter }")
                         _name = that.model.get('name')
                         if _name.length == NAME_MAX_LENGTH
-                            window.channel.command('result:save', _name)
+                            window.channel.trigger('result:save', _name)
                             return
 
                 set_delay(handler, _options.options.IDLE_RESULT)
@@ -220,7 +220,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
         _name = name.get('name')
         if _name.length < 1
             _name = null
-        window.channel.command('result:save', _name)
+        window.channel.trigger('result:save', _name)
 
     # --- module
 
@@ -254,7 +254,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 layout.getRegion('time').show(new BadTimeView({model: time}))
 
         # save results to server
-        window.channel.comply 'result:save', (_name) ->
+        window.channel.on 'result:save', (_name) ->
             clear_delay()
             questions = _.map _options.answers, (i) ->
                 {question: i.id, correct: i.answer}
@@ -266,7 +266,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 questions: questions
             score.save()
             score.on 'sync', () ->
-                window.channel.command('result:close', _options)
+                window.channel.trigger('result:close', _options)
                 score.off('sync')
 
         set_delay(handler, _options.options.IDLE_RESULT)

@@ -74,7 +74,7 @@ App.module("Score", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   handler = function() {
-    return window.channel.command('score:idle', _options);
+    return window.channel.trigger('score:idle', _options);
   };
   Mod.onStart = function(options) {
     var info, results;
@@ -107,7 +107,7 @@ App.module("Score", function(Mod, App, Backbone, Marionette, $, _) {
       if (msg === 'fire' || msg === 'left' || msg === 'right') {
         window.sfx.button2.play();
         set_delay(function() {
-          return window.channel.command('score:idle', _options);
+          return window.channel.trigger('score:idle', _options);
         }, 100);
         set_new_timeout = false;
       } else {

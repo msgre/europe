@@ -101,9 +101,9 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
 
             that = @
             # event about tunnel crossing
-            window.channel.on 'tunnel', (number) ->
+            window.channel.on 'tunnel', (event) ->
                 country = that.model.get('country')
-                if "#{number}" == "#{country.sensor}"
+                if "#{country.board}" of event and event["#{country.board}"] & country.gate
                     local_channel.trigger('next', true)
                 else
                     local_channel.trigger('penalty', PENALTY_TIME)
@@ -208,7 +208,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
                             id: i.get('id')
                             answer: i.get('answer')
                         time: info.get('time')
-                    window.channel.command('game:close', output)
+                    window.channel.trigger('game:close', output)
                 else
                     info.set('question', question)
                     info.set('current', 0)

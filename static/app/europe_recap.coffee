@@ -74,7 +74,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
     # --- timer handler
 
     handler = () ->
-        window.channel.command('recap:close', _options)
+        window.channel.trigger('recap:close', _options)
 
     # --- module
 
@@ -111,7 +111,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
             if msg == 'fire' or msg == 'left' or msg == 'right'
                 window.sfx.button2.play()
                 set_delay () ->
-                    window.channel.command('recap:close', _options)
+                    window.channel.trigger('recap:close', _options)
                 , 100
                 set_new_timeout = false
             else
