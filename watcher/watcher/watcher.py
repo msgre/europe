@@ -38,9 +38,12 @@ class AppSession(ApplicationSession):
         # hardware configuration
         self.port = self.find_usb_device(extra['usb_regex'])
         self.gates = extra['gates']
+        self.log.info('list of gates: {gates}', gates=self.gates)
         self.instruments = {}
         self.led_gate = extra['led_gate']
+        self.log.info('led gate: {gate}', gate=self.led_gate)
         self.keyboard_gate = extra['keyboard_gate']
+        self.log.info('keyboard gate: {gate}', gate=self.keyboard_gate)
         # state
         self.watch_gates = False
 
