@@ -13,11 +13,10 @@ class CountryAdmin(admin.ModelAdmin):
     list_filter = ('board', 'gate')
     search_fields = ['title', 'neighbours__title']
     fieldsets = (
-            (None, {
-                'fields': ('title', 'neighbours', )
-            }),
-            (_('Hardware'), {
-                'fields': (('board', 'gate'), )
-            }),
-        )
-
+        (None, {
+            'fields': ('title', 'neighbours', )
+        }),
+        (_('Hardware'), {
+            'fields': (('board', 'gate'), )
+        }),
+    )

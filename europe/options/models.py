@@ -8,8 +8,8 @@ class Option(models.Model):
     """
     Game option.
     """
-    key         = models.CharField(_('Key'), max_length=64, unique=True)
-    description = models.TextField(_('Description'), blank=True, null=True)
+    key         = models.CharField(_('Key'), max_length=64, unique=True, help_text=_('System name of option, name it with upper case A-Z letters with no whitechars (use _ instead).'))
+    description = models.TextField(_('Description'), blank=True, null=True, help_text=_('Human readable description of option. It is showed exclusively in administration only.'))
     value       = models.CharField(_('Value'), max_length=32)
 
     class Meta:
