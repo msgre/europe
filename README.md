@@ -18,7 +18,7 @@ All components are dockerized and run behind Nginx proxy.
     * [Database migrations](#database-migrations)
     * [Coffeescript compilation](#coffeescript-compilation)
     * [LESS compilation](#less-compilation)
-    * Debug mode for Javascript application
+    * [Debug mode for Javascript application](#debug-mode-for-javascript-application)
 
 # Basics
 
