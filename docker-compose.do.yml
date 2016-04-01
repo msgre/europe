@@ -1,0 +1,21 @@
+---
+version: '2'
+services:
+  # REST API
+  api:
+    volumes:
+      - /root/europe/.secret_key:/src/app/europe/.secret_key
+      - /root/europe/local_settings.py:/src/app/europe/settings_credentials.py
+      - /root/europe/db.sqlite3:/src/app/db.sqlite3
+
+  # admin interface
+  admin:
+    volumes:
+      - /root/europe/.secret_key:/src/app/europe/.secret_key
+      - /root/europe/local_settings.py:/src/app/europe/settings_credentials.py
+      - /root/europe/db.sqlite3:/src/app/db.sqlite3
+
+  # nginx proxy
+  nginx:
+    ports:
+      - "80:80"
