@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import math
+import datetime
 
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.utils.dateformat import time_format
 
 
 class Result(models.Model):
@@ -18,7 +20,7 @@ class Result(models.Model):
     )
 
     name       = models.CharField(_('Players Name'), max_length=32, blank=True, null=True)
-    time       = models.IntegerField(_('Time'))
+    time       = models.IntegerField(_('Time'), help_text=_(u'Time in seconds ⨉10'))
     category   = models.ForeignKey('quiz.Category')
     difficulty = models.CharField(_('Difficulty'), max_length=1, choices=RESULT_DIFFICULTY, default=RESULT_DIFFICULTY_EASY)
     questions  = models.ManyToManyField('quiz.Question', through='AnsweredQuestion')
@@ -33,12 +35,11 @@ class Result(models.Model):
         return '%s (%s)' % (self.format_time(), self.name)
 
     def format_time(self):
-        tenth = self.time % 10
-        sec_num = round(self.time / 10.0)
-        hours   = math.floor(sec_num / 3600.0)
-        minutes = math.floor((sec_num - (hours * 3600.0)) / 60.0)
-        seconds = sec_num - (hours * 3600) - (minutes * 60)
-        return "%02i:%02i.%i" % (minutes, sec_num, tenth)
+        dt = datetime.datetime(2016,1,1) + datetime.timedelta(seconds=self.time / 10.0)
+        out = time_format(dt, 'i:s.u')
+        return out[:out.rfind('.')+2]
+    format_time.short_description = _('Formated time')
+    format_time.admin_order_field = 'time'
 
 
 class AnsweredQuestion(models.Model):
