@@ -18,6 +18,9 @@ class Country(models.Model):
         ordering = ('title', )
         verbose_name = _('Country')
         verbose_name_plural = _('Countries')
+        # TODO: az poresim datovou migraci, nastavit constrains:
+        # unique_together = (("board", "gate"),)
+        # unique=True na led pole
 
     def __unicode__(self):
         return self.title
