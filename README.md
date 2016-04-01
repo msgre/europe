@@ -17,6 +17,8 @@ All components are dockerized and run behind Nginx proxy.
 * [Details](#details)
     * [Database migrations](#database-migrations)
     * [Coffeescript compilation](#coffeescript-compilation)
+    * [LESS compilation](#less-compilation)
+    * Debug mode for Javascript application
 
 # Basics
 
@@ -103,3 +105,16 @@ Continuous compilation based on changes in watched directory:
 One-time compilation:
 
     docker run -i --rm -v $PWD/static/css:/src ewoutp/lessc:latest /src/styles.less > $PWD/static/css/styles.css
+
+## Debug mode for Javascript application
+
+For debugging purposes you could add special URL parameters to directly enter
+one of the Javascript application screens. In this case timeouts (part of code
+that return you to initial `intro` page) will be set to very high value, so
+you stay on given page for very long time (and you could debug HTML/CSS/JS 
+things with peace in mind).
+
+Enter URLs like `http://192.168.99.100:8081/?intro`. Last part after `?` 
+character tells in which page you are interested. Enter one of this values:
+`intro`, `crossroad`, `scores`, `gamemode`, `countdown`, `game`, `result`, 
+`recap`, `score`.
