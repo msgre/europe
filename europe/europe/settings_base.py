@@ -83,5 +83,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = '/uploads/'
 
 from .settings_credentials import *

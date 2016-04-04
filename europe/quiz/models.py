@@ -6,6 +6,7 @@ import itertools
 
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.utils.text import slugify
 
 
 logger = logging.getLogger(__name__)
@@ -84,6 +85,9 @@ class Category(models.Model):
         return out
 
 
+def upload_fn(instance, filename):
+    return '%s/%s' % (slugify(instance.category.title), filename.lower())
+
 class Question(models.Model):
     """
     Quiz question.
@@ -97,7 +101,7 @@ class Question(models.Model):
 
     difficulty = models.CharField(_('Difficulty'), max_length=1, choices=QUESTION_DIFFICULTY, default=QUESTION_DIFFICULTY_EASY)
     question   = models.TextField(_('Question'), blank=True, null=True)
-    image      = models.ImageField(_('Image'), upload_to=None, max_length=256)
+    image      = models.FileField(_('Image'), upload_to=upload_fn, max_length=256, help_text=_('Could be bitmap (PNG/JPG/GIF) or vector (SVG). MUST be in correct size, maximum width=1638, height=791.'))
     country    = models.ForeignKey('geo.Country')
     category   = models.ForeignKey('Category')
     created    = models.DateTimeField(_('Created'), auto_now_add=True)
@@ -109,4 +113,4 @@ class Question(models.Model):
         verbose_name_plural = _('Questions')
 
     def __unicode__(self):
-        return self.question or self.image
+        return self.question or self.image.path
