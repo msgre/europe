@@ -1,4 +1,6 @@
 FROM msgre/common:europe-base.latest
 
 EXPOSE 8080
+ENV DJANGO_SETTINGS_MODULE=europe.settings_api
+
 ADD europe /src/app
