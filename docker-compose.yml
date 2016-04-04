@@ -1,6 +1,11 @@
 ---
 version: '2'
+volumes:
+  data:
+    driver: local
+
 services:
+
   # REST API
   api:
     container_name: api
@@ -10,6 +15,7 @@ services:
     image: msgre/common:europe-api.latest
     volumes:
       - $PWD/europe:/src/app
+      - data:/uploads
     ports:
       - "8080:8080"
     command: --socket 0.0.0.0:8080 --master --processes 1 --max-requests 1 --env DJANGO_SETTINGS_MODULE=europe.settings_api --module europe.wsgi_api:application --chdir /src/app
@@ -24,6 +30,7 @@ services:
     image: msgre/common:europe-admin.latest
     volumes:
       - $PWD/europe:/src/app 
+      - data:/uploads
     ports:
       - "8084:8084"
     command: --socket 0.0.0.0:8084 --master --processes 1 --max-requests 1 --env DJANGO_SETTINGS_MODULE=europe.settings_admin --module europe.wsgi_admin:application --chdir /src/app
@@ -59,10 +66,11 @@ services:
   nginx:
     container_name: nginx
     image: nginx
-    volumes:
-      - "$PWD/ansible/files/europe.nginx.conf:/etc/nginx/conf.d/default.conf:ro"
     ports:
       - "8081:80"
+    volumes:
+      - data:/uploads
+      - "$PWD/ansible/files/europe.nginx.conf:/etc/nginx/conf.d/default.conf:ro"
     volumes_from:
       - js
     links:
