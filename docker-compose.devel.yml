@@ -1,0 +1,7 @@
+---
+version: '2'
+services:
+  # watcher application (websocket bridge between browser and HW)
+  watcher:
+    environment:
+      DEBUG: 1
