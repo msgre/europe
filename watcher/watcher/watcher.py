@@ -13,15 +13,16 @@ from autobahn.twisted.wamp import ApplicationSession
 
 from minimalmodbus import Instrument
 
+from .neopixels import NeopixelsBlink, NeopixelsFlash
+
 
 DEBUG = os.environ.get('DEBUG', False)
 DEBUG_PATH = '~/gates'
 
+# TODO: try lower to 0.02 value, we have now 2 separate ModBus instrutions in main loop
 CYCLE_SLEEP = 0.04          # during each cycle, all instruments are readed; this is sleep time between each round
 INSTRUMENT_SLEEP = 0.01     # sleep between ModBus read_registers calls; sleep time between individual gate reads
 
-LED_ADDRESS = 0x0000
-GATE_ADDRESS = 0x0000
 
 class AppSession(ApplicationSession):
 
@@ -37,15 +38,17 @@ class AppSession(ApplicationSession):
     def init(self, extra):
         # hardware configuration
         self.port = self.find_usb_device(extra['usb_regex'])
-        self.gates = extra['gates']
-        self.log.info('list of gates: {gates}', gates=self.gates)
         self.instruments = {}
         self.led_gate = extra['led_gate']
         self.log.info('led gate: {gate}', gate=self.led_gate)
         self.keyboard_gate = extra['keyboard_gate']
         self.log.info('keyboard gate: {gate}', gate=self.keyboard_gate)
+        self.gates = extra['gates'] + [self.keyboard_gate]
+        self.log.info('list of gates: {gates}', gates=self.gates)
         # state
         self.watch_gates = False
+        # neopixel's LED
+        self.neopixel = None
 
     def init_instruments(self):
         for gate in self.gates:
@@ -55,6 +58,12 @@ class AppSession(ApplicationSession):
                 self.instruments[gate] = Instrument(self.port, gate)
                 self.instruments[gate].serial.baudrate = 57600
                 self.instruments[gate].serial.timeout = 1
+        if DEBUG:
+            self.led_instrument = None
+        else:
+            self.led_instrument = Instrument(self.port, self.led_gate)
+            self.led_instrument.serial.baudrate = 57600
+            self.led_instrument.serial.timeout = 1
 
     def init_debug(self):
         if not DEBUG:
@@ -119,16 +128,6 @@ class AppSession(ApplicationSession):
         else:
             return self._read_real_instruments()
 
-    def led_effect(self, mode):
-        self.log.info("changing LED mode to {mode}", mode=mode)
-        # self.instruments[self.led_gate].write_registers(LED_ADDRESS, mode) # TODO: neco jako; zatim to nemam implementovano
-        # TODO: mozna bude treba samotny zapis resit uvnitr hlavni smycky kvuli konfliktum na sbernici
-
-    def led_switch(self, number, color):
-        self.log.info("changing LED #{number} to {color} color", number=number, color=color)
-        # self.instruments[self.led_gate].write_registers(LED_ADDRESS, state) # TODO: neco jako; zatim to nemam implementovano
-        # TODO: mozna bude treba samotny zapis resit uvnitr hlavni smycky kvuli konfliktum na sbernici
-
     def get_state_diff(self, old_state, new_state):
         if old_state is None:
             return new_state
@@ -138,27 +137,34 @@ class AppSession(ApplicationSession):
                 out[k] = new_state[k]
         return out
 
+    def register_neopixel(self, klass, **kwargs):
+        if self.neopixel:
+            self.neopixel.stop()
+            time_sleep(CYCLE_SLEEP)
+        self.neopixel = klass(self.led_instrument, **kwargs)
+        self.neopixel.start()
+
     @inlineCallbacks
     def onJoin(self, details):
 
-        # events from javascript application
-        def effect(mode):
-            self.log.info("event for 'effect' received, mode '{mode}'", mode=mode)
-            self.led_effect(mode)
+        # neopixels effects
+        def flash():
+            self.log.info("event for 'flash' received")
+            self.register_neopixel(NeopixelsFlash)
 
-        yield self.subscribe(effect, 'com.europe.effect')
-        self.log.info("subscribed to topic 'effect'")
+        yield self.subscribe(flash, 'com.europe.flash')
+        self.log.info("subscribed to topic 'flash'")
 
-        def light(number, color):
-            self.log.info("event for 'light' received: LED number={number}, color={color}", number=number, color=color)
-            self.led_switch(number, color)
+        def blink(leds, color):
+            self.log.info("event for 'blink' received: LEDs={leds}, color={color}", leds=leds, color=color)
+            self.register_neopixel(NeopixelsBlink, leds=leds, color=color)
 
-        yield self.subscribe(light, 'com.europe.light')
-        self.log.info("subscribed to topic 'light'")
+        yield self.subscribe(blink, 'com.europe.blink')
+        self.log.info("subscribed to topic 'blink'")
 
+        # game logic
         def start(msg):
             self.log.info("event for 'start' received")
-            self.led_effect(4)
             self.watch_gates = True
             self.log.info("watching of gates started")
 
@@ -177,6 +183,7 @@ class AppSession(ApplicationSession):
         # main cycle fow watching gates
         old_value = self.read_instruments()
         while True:
+            # read state from gate boards
             value = self.read_instruments()
             diff = self.get_state_diff(old_value, value)
             if old_value != value:
@@ -188,4 +195,9 @@ class AppSession(ApplicationSession):
                     yield self.publish('com.europe.gate', diff)
                     self.log.info("gate passing detected {diff}, event 'com.europe.gate' published", diff=diff)
                 old_value = value
+            yield sleep(CYCLE_SLEEP)
+
+            # control neopixels
+            if self.neopixel and self.neopixel.is_running:
+                self.neopixel.step()
             yield sleep(CYCLE_SLEEP)
