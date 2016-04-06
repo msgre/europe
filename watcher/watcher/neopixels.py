@@ -1,7 +1,7 @@
 import random
 
 NEOPIXELS_ADDR = 0x1000
-NEOPIXELS_COUNT = 18   # TODO: debug; in production it will be set to 50
+NEOPIXELS_COUNT = 12   # TODO: debug; in production it will be set to 50
 
 class NeopixelsBase(object):
     """
@@ -47,11 +47,17 @@ class NeopixelsBase(object):
         return (brightness << 12) | (r << 8) | (g << 4) | b
 
     def get_rand_rgb(self):
-        r = random.randint(11, 15)
-        g = random.randint(11, 15)
-        b = random.randint(11, 15)
-        out = [r,g,b]
-        out[random.randint(0,2)] = 0
+        c1 = random.randint(0, 15)
+        if c1 < 11:
+            c2 = random.randint(11, 15)
+        else:
+            c2 = random.randint(0, 10)
+        if c1 + c2 > 15:
+            c3 = random.randint(0, 7)
+        else:
+            c3 = random.randint(0, 15)
+        out = [c1, c2, c3]
+        random.shuffle(out)
         return out
 
     def set_color(self, led, color):
@@ -127,13 +133,14 @@ class NeopixelsBlink(NeopixelsBase):
         np.set_black()
     """
 
-    STATE_CYCLES = 3        # how many cycles through process() will LED keeps on/off state (during blinking phase)
+    STATE_CYCLES = 2        # how many cycles through process() will LED keeps on/off state (during blinking phase)
     NUMBER_OF_BLINKS = 5    # number of blinks
 
     def config(self):
         self.state_duration = 3
         self.blink_counter = 0
         self.old_color = None
+        self.led_buffer = [0] * NEOPIXELS_COUNT
 
     def process(self):
         if self.blink_counter < self.NUMBER_OF_BLINKS * 2 + 1:
@@ -142,11 +149,13 @@ class NeopixelsBlink(NeopixelsBase):
             else:
                 _color = 0
             for led in self.leds:
-                self.set_color(led, _color)
+                self.led_buffer[led - 1] = _color
+            self.set_colors(self.led_buffer)
             if self.old_color != _color:
                 self.old_color = _color
                 self.blink_counter = self.blink_counter + 1
         else:
             for led in self.leds:
-                self.set_color(led, self.color)
+                self.led_buffer[led - 1] = self.color
+                self.set_colors(self.led_buffer)
             self.stop()

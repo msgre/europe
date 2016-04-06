@@ -60,7 +60,7 @@
                 {
                     "type": "class",
                     "extra": {
-                        "gates": [14],
+                        "gates": [3,14,3,14,3,14,3,14,3,14],
                         "led_gate": 13,
                         "keyboard_gate": 15,
                         "usb_regex": "^ttyUSB\\d+$"

@@ -13,15 +13,17 @@ from autobahn.twisted.wamp import ApplicationSession
 
 from minimalmodbus import Instrument
 
-from .neopixels import NeopixelsBlink, NeopixelsFlash
+from neopixels import NeopixelsBlink, NeopixelsFlash
 
 
 DEBUG = os.environ.get('DEBUG', False)
 DEBUG_PATH = '~/gates'
 
 # TODO: try lower to 0.02 value, we have now 2 separate ModBus instrutions in main loop
-CYCLE_SLEEP = 0.04          # during each cycle, all instruments are readed; this is sleep time between each round
-INSTRUMENT_SLEEP = 0.01     # sleep between ModBus read_registers calls; sleep time between individual gate reads
+CYCLE_SLEEP = 0.005          # during each cycle, all instruments are readed; this is sleep time between each round
+INSTRUMENT_SLEEP = 0.005     # sleep between ModBus read_registers calls; sleep time between individual gate reads
+
+GATE_ADDRESS = 0x0000
 
 
 class AppSession(ApplicationSession):
