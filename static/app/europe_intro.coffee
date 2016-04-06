@@ -82,6 +82,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
         console.log 'Intro module'
         console.log options
         _options = options
+        window.channel.trigger('intro:rainbow')
         state = 0
         view_list = [
             Intro01
@@ -99,6 +100,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
         set_timer(handler, _options.options.INTRO_TIME_PER_SCREEN)
 
     Mod.onStop = () ->
+        window.channel.trigger('intro:blank')
         clear_timer()
         window.channel.off('keypress')
         layout.destroy()

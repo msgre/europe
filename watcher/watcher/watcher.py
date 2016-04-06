@@ -13,10 +13,11 @@ from autobahn.twisted.wamp import ApplicationSession
 
 from minimalmodbus import Instrument
 
-from neopixels import NeopixelsBlink, NeopixelsFlash
+import neopixels
 
 
 DEBUG = os.environ.get('DEBUG', False)
+LED_OFF = os.environ.get('LED_OFF', False)
 DEBUG_PATH = '~/gates'
 
 # TODO: try lower to 0.02 value, we have now 2 separate ModBus instrutions in main loop
@@ -140,6 +141,8 @@ class AppSession(ApplicationSession):
         return out
 
     def register_neopixel(self, klass, **kwargs):
+        if LED_OFF:
+            return
         if self.neopixel:
             self.neopixel.stop()
             time_sleep(CYCLE_SLEEP)
@@ -148,21 +151,43 @@ class AppSession(ApplicationSession):
 
     @inlineCallbacks
     def onJoin(self, details):
+        self.register_neopixel(neopixels.NeopixelsBlank)
 
         # neopixels effects
         def flash(msg):
             self.log.info("event for 'flash' received")
-            self.register_neopixel(NeopixelsFlash)
+            self.register_neopixel(neopixels.NeopixelsFlash)
 
         yield self.subscribe(flash, 'com.europe.flash')
         self.log.info("subscribed to topic 'flash'")
 
         def blink(leds, color):
             self.log.info("event for 'blink' received: LEDs={leds}, color={color}", leds=leds, color=color)
-            self.register_neopixel(NeopixelsBlink, leds=leds, color=color)
+            self.register_neopixel(neopixels.NeopixelsBlink, leds=leds, color=color)
 
         yield self.subscribe(blink, 'com.europe.blink')
         self.log.info("subscribed to topic 'blink'")
+
+        def noise(msg):
+            self.log.info("event for 'noise' received")
+            self.register_neopixel(neopixels.NeopixelsNoise)
+
+        yield self.subscribe(noise, 'com.europe.noise')
+        self.log.info("subscribed to topic 'noise'")
+
+        def blank(msg):
+            self.log.info("event for 'blank' received")
+            self.register_neopixel(neopixels.NeopixelsBlank)
+
+        yield self.subscribe(blank, 'com.europe.blank')
+        self.log.info("subscribed to topic 'blank'")
+
+        def rainbow(msg):
+            self.log.info("event for 'rainbow' received")
+            self.register_neopixel(neopixels.NeopixelsRainbow)
+
+        yield self.subscribe(rainbow, 'com.europe.rainbow')
+        self.log.info("subscribed to topic 'rainbow'")
 
         # game logic
         def start(msg):
@@ -200,6 +225,6 @@ class AppSession(ApplicationSession):
             yield sleep(CYCLE_SLEEP)
 
             # control neopixels
-            if self.neopixel and self.neopixel.is_running:
+            if not LED_OFF and self.neopixel and self.neopixel.is_running:
                 self.neopixel.step()
             yield sleep(CYCLE_SLEEP)

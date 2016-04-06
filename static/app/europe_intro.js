@@ -47,6 +47,7 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
     console.log('Intro module');
     console.log(options);
     _options = options;
+    window.channel.trigger('intro:rainbow');
     state = 0;
     view_list = [Intro01, Intro02, Intro03, Intro04];
     layout = new ScreenLayout({
@@ -61,6 +62,7 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
     return set_timer(handler, _options.options.INTRO_TIME_PER_SCREEN);
   };
   return Mod.onStop = function() {
+    window.channel.trigger('intro:blank');
     clear_timer();
     window.channel.off('keypress');
     layout.destroy();

@@ -7,3 +7,5 @@ services:
       - "/dev/ttyUSB0"
     volumes:
       - $PWD/watcher/watcher:/src
+    # environment:
+    #   LED_OFF: 1

@@ -22,6 +22,8 @@ App.on 'start', (global_options) ->
         console.log("Connected to server through websockets...")
         window.eu_session = session # TODO:
 
+        session.publish('com.europe.blank', [1])
+
         on_gate = (args) ->
             value = args[0]
             console.log("gate passing")
@@ -64,6 +66,18 @@ App.on 'start', (global_options) ->
 
         window.channel.on 'countdown:flash', (options) ->
             session.publish('com.europe.flash', [1])
+
+        window.channel.on 'countdown:noise', (options) ->
+            session.publish('com.europe.noise', [1])
+
+        window.channel.on 'countdown:blank', (options) ->
+            session.publish('com.europe.blank', [1])
+
+        window.channel.on 'intro:rainbow', (options) ->
+            session.publish('com.europe.rainbow', [1])
+
+        window.channel.on 'intro:blank', (options) ->
+            session.publish('com.europe.blank', [1])
 
     connection.onclose = (reason, details) ->
         # TODO: tohle by mohlo byt osetrene nejak specialne
@@ -261,5 +275,10 @@ App.on 'start', (global_options) ->
             console.log "Normal game launch (no debug)"
             window.channel.trigger('intro:start', final_global_options)
 
+        # initiate delayed rainbow on start, due to slow websocket initiation
+        # (without this code event 'intro.rainbow' is launched before websocket links is created)
+        handler = () ->
+            window.channel.trigger('intro:rainbow')
+        set_delay(handler, 1500)
 
     server_options.fetch()

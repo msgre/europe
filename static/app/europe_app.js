@@ -24,6 +24,7 @@ App.on('start', function(global_options) {
     var on_gate, on_keyboard;
     console.log("Connected to server through websockets...");
     window.eu_session = session;
+    session.publish('com.europe.blank', [1]);
     on_gate = function(args) {
       var value;
       value = args[0];
@@ -61,8 +62,20 @@ App.on('start', function(global_options) {
     window.channel.on('game:close', function(options) {
       return session.publish('com.europe.stop', [1]);
     });
-    return window.channel.on('countdown:flash', function(options) {
+    window.channel.on('countdown:flash', function(options) {
       return session.publish('com.europe.flash', [1]);
+    });
+    window.channel.on('countdown:noise', function(options) {
+      return session.publish('com.europe.noise', [1]);
+    });
+    window.channel.on('countdown:blank', function(options) {
+      return session.publish('com.europe.blank', [1]);
+    });
+    window.channel.on('intro:rainbow', function(options) {
+      return session.publish('com.europe.rainbow', [1]);
+    });
+    return window.channel.on('intro:blank', function(options) {
+      return session.publish('com.europe.blank', [1]);
     });
   };
   connection.onclose = function(reason, details) {
@@ -145,7 +158,7 @@ App.on('start', function(global_options) {
   });
   server_options = new ServerOptions;
   server_options.on('sync', function() {
-    var _global_options, _infinity, _options, debug, debug_data, initials, key, questions, state, states;
+    var _global_options, _infinity, _options, debug, debug_data, handler, initials, key, questions, state, states;
     _options = _.object(server_options.map(function(i) {
       return [i.get('key'), parseInt(i.get('value'))];
     }));
@@ -421,8 +434,12 @@ App.on('start', function(global_options) {
     }
     if (!debug) {
       console.log("Normal game launch (no debug)");
-      return window.channel.trigger('intro:start', final_global_options);
+      window.channel.trigger('intro:start', final_global_options);
     }
+    handler = function() {
+      return window.channel.trigger('intro:rainbow');
+    };
+    return set_delay(handler, 1500);
   });
   return server_options.fetch();
 });

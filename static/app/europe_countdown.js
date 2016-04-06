@@ -30,7 +30,13 @@ App.module("Countdown", function(Mod, App, Backbone, Marionette, $, _) {
     initialize: function(options) {
       return this.model.on('change', (function(_this) {
         return function() {
-          window.channel.trigger('countdown:flash');
+          var number;
+          number = _this.model.get('number');
+          if (number > 0) {
+            window.channel.trigger('countdown:flash');
+          } else if (number === 0) {
+            window.channel.trigger('countdown:noise');
+          }
           return _this.render();
         };
       })(this));
@@ -65,6 +71,7 @@ App.module("Countdown", function(Mod, App, Backbone, Marionette, $, _) {
     model.set('number', number - 1);
     if (number === 0) {
       clear_timer();
+      window.channel.trigger('countdown:blank');
       return window.channel.trigger('countdown:close', _options);
     } else if (number === 1) {
       return window.sfx.honk.play();

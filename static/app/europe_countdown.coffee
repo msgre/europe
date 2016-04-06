@@ -33,7 +33,11 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
                     'Start!'
         initialize: (options) ->
             @model.on 'change', () =>
-                window.channel.trigger('countdown:flash')
+                number = @model.get('number')
+                if number > 0
+                    window.channel.trigger('countdown:flash')
+                else if number == 0
+                    window.channel.trigger('countdown:noise')
                 @render()
         onDestroy: () ->
             @model.off('change')
@@ -71,6 +75,7 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
         model.set('number', number - 1)
         if number == 0
             clear_timer()
+            window.channel.trigger('countdown:blank')
             window.channel.trigger('countdown:close', _options)
         else if number == 1
             window.sfx.honk.play()

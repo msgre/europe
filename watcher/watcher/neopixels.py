@@ -3,6 +3,7 @@ import random
 NEOPIXELS_ADDR = 0x1000
 NEOPIXELS_COUNT = 12   # TODO: debug; in production it will be set to 50
 
+
 class NeopixelsBase(object):
     """
     Base helper class.
@@ -76,15 +77,6 @@ class NeopixelsFlash(NeopixelsBase):
     brightness, fade out to black during < 1s period.
 
     Used in countdown phase.
-
-    Example:
-
-        np = NeopixelsFlash(instrument)
-        np.start()
-        while np.is_running:
-            np.step()
-            time.sleep(0.04)
-        np.set_black()
     """
 
     INITIAL_BRIGHTNESS = 10     # initial brightness value of all LEDs
@@ -110,27 +102,6 @@ class NeopixelsBlink(NeopixelsBase):
 
     Used during game for signalizing correct passing of tunnels (green color).
     In recap phase same effect is used for signalizing wrong tunnels (red color).
-
-    Example:
-
-        # green blinking of one selected LED
-        green = NeopixelsBlink.get_color(0, 15, 0, 5)
-        np = NeopixelsBlink(instrument, leds=[1], color=green) # LED number 1
-        np.start()
-        while np.is_running:
-            np.step()
-            time.sleep(0.04)
-
-        # red blinking of two LEDs
-        red = color=NeopixelsBlink.get_color(15, 0, 0, 5)
-        np = NeopixelsBlink(instrument, leds=[3, 10], color=red) # LEDs 3 and 10
-        np.start()
-        while np.is_running:
-            np.step()
-            time.sleep(0.04)
-
-        # turn all LEDS off
-        np.set_black()
     """
 
     STATE_CYCLES = 2        # how many cycles through process() will LED keeps on/off state (during blinking phase)
@@ -159,3 +130,150 @@ class NeopixelsBlink(NeopixelsBase):
                 self.led_buffer[led - 1] = self.color
                 self.set_colors(self.led_buffer)
             self.stop()
+
+
+class NeopixelsNoise(NeopixelsBase):
+    """
+    Make color noise (each Neopixel's LED is turn on randomly chosen color).
+    Beware! There is no natural end of effect, it must be interrupted from
+    outside.
+
+    Used in countdown phase of game.
+    """
+
+    STATE_CYCLES = 2
+
+    def config(self):
+        self.led_buffer = []
+        for i in range(NEOPIXELS_COUNT):
+            color = self.get_color(*self.get_rand_rgb(), brightness=random.randint(0,7))
+            self.led_buffer.append(color)
+
+    def process(self):
+        if self.counter % self.STATE_CYCLES == 0:
+            random.shuffle(self.led_buffer)
+        self.set_colors(self.led_buffer)
+
+
+class NeopixelsBlank(NeopixelsBase):
+    """
+    Turn off all LED's.
+    """
+    def config(self):
+        self.set_colors([0] * NEOPIXELS_COUNT)
+
+    def process(self):
+        self.stop()
+
+
+class NeopixelsRainbow(NeopixelsBase):
+    """
+    Make rainbow effect (animated color transition).
+
+    Used on intro page.
+    """
+    COLORLENGTH = NEOPIXELS_COUNT / 4
+    FADE = 2
+
+    def config(self):
+        self.rainbow = [
+            # [R,   G,   B],
+            [0x8, 0x8, 0x8],  # white
+            [0xF, 0x0, 0x0],  # red
+            [0xF, 0x6, 0x0],  # orange
+            [0x6, 0xF, 0x0],  # yellow
+            [0x0, 0xF, 0x0],  # green
+            [0x0, 0x6, 0xF],  # light blue
+            [0x0, 0x0, 0xF],  # blue
+            [0x6, 0x0, 0xF],  # violet
+        ]
+        self.led_buffer = [[0, 0, 0] for x in range(NEOPIXELS_COUNT)]
+        self.j = 1
+        self.k = 1
+
+    def process(self):
+        # Shift all values by one led.
+        self.led_buffer.insert(0, list(self.led_buffer[0]))
+        self.led_buffer = self.led_buffer[:-1]
+
+        # Change color when colour length is reached.
+        if self.k > self.COLORLENGTH:
+            self.j += 1
+            if self.j >= len(self.rainbow):
+                self.j = 0
+            self.k = 0
+        self.k += 1
+
+        # Fade first LED.
+        if self.led_buffer[0][0] < (self.rainbow[self.j][0] - self.FADE):
+            self.led_buffer[0][0] += self.FADE
+        if self.led_buffer[0][0] > (self.rainbow[self.j][0] + self.FADE):
+            self.led_buffer[0][0] -= self.FADE
+        if self.led_buffer[0][1] < (self.rainbow[self.j][1] - self.FADE):
+            self.led_buffer[0][1] += self.FADE
+        if self.led_buffer[0][1] > (self.rainbow[self.j][1] + self.FADE):
+            self.led_buffer[0][1] -= self.FADE
+        if self.led_buffer[0][2] < (self.rainbow[self.j][2] - self.FADE):
+            self.led_buffer[0][2] += self.FADE
+        if self.led_buffer[0][2] > (self.rainbow[self.j][2] + self.FADE):
+            self.led_buffer[0][2] -= self.FADE
+
+        _buffer = [self.get_color(*i, brightness=4) for i in self.led_buffer]
+        self.set_colors(_buffer)
+
+
+if __name__ == '__main__':
+    import sys
+    import signal
+    import time
+    from minimalmodbus import Instrument
+
+    if len(sys.argv) < 3:
+        print('Usage: {} [EFFECT] [COM] [SLAVE] <baudrate=57600>'.format(sys.argv[0]))
+        exit(1)
+
+    effect = sys.argv[1]
+    port = sys.argv[2]
+    slave = int(sys.argv[3])
+    try:
+        baudrate = int(sys.argv[4])
+    except Exception:
+        baudrate = 57600
+
+    instrument = Instrument(port, slave)
+    instrument.serial.baudrate = baudrate
+    instrument.serial.timeout = 1
+
+    def signal_handler(signal, frame):
+        print('Turning all LEDs off.')
+        instrument.write_registers(0x1000, [0x0000] * NEOPIXEL_SIZE)
+        sys.exit(0)
+    signal.signal(signal.SIGINT, signal_handler)
+
+
+    kwargs = {}
+    if effect == 'flash':
+        klass = NeopixelsFlash
+    elif effect == 'blink':
+        klass = NeopixelsBlink
+        kwargs = {'leds': [1], 'color': 12345}
+    elif effect == 'noise':
+        klass = NeopixelsNoise
+    elif effect == 'rainbow':
+        klass = NeopixelsRainbow
+    elif effect == 'blank':
+        klass = NeopixelsBlank
+    else:
+        print('Unknown effect.')
+        sys.exit(1)
+
+    i = 0
+    np = klass(instrument, **kwargs)
+    np.start()
+    while np.is_running:
+        np.step()
+        time.sleep(0.04)
+        if i > 50:
+            break
+        i += 1
+    np.set_black()

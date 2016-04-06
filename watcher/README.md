@@ -92,7 +92,6 @@ then simulate traffic on gameboard by invoking simple touch commands:
 
 After each read over `~/gate` directory, all founded files will be deleted.
 
-
 ## Gate mapping
 
 Each gate is capable of watching 6 gates. If you look on board from above,
@@ -106,6 +105,18 @@ you will get value 32.
 Board could give you combined value, for example if 2 mentioned gates are crossed 
 in nearly same time, you will get value 33 (it is nonsense from game perspective,
 but technically it is possible).
+
+# Behaviour of Neopixel's LED
+
+In normal mode, Neopixel's LEDs are controlled during the game (effects on
+intro page, countdown, during the game, etc).
+
+Neopixels have noticeable current consumption, which leads time to time to
+unstability of clustered boards. There is "emergency" environment variable
+for situations like this.
+
+Run container with variable LED_OFF=1 and all Neopixels effects will be disabled.
+
 
 # Issues
 
