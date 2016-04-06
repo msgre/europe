@@ -252,6 +252,7 @@ if __name__ == '__main__':
 
 
     kwargs = {}
+    effects = ['flash', 'blink', 'noise', 'rainbow', 'blank']
     if effect == 'flash':
         klass = NeopixelsFlash
     elif effect == 'blink':
@@ -264,7 +265,7 @@ if __name__ == '__main__':
     elif effect == 'blank':
         klass = NeopixelsBlank
     else:
-        print('Unknown effect.')
+        print('Unknown effect, choose value from "{}"'.format(', '.join(effects)))
         sys.exit(1)
 
     i = 0

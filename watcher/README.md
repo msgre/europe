@@ -117,6 +117,23 @@ for situations like this.
 
 Run container with variable LED_OFF=1 and all Neopixels effects will be disabled.
 
+## Demos
+
+For debugging purposes, all Neopixels effects are available through neopixels.py
+library. Just run:
+
+    python neopixels.py <EFFECT> <COM> <SLAVE>
+
+where:
+
+    <EFFECT> is name of Neopixels effect you want to see
+    <COM> is path to USB ModBus device
+    <SLAVE> is number of gate controlling neopixels
+
+For example:
+
+    python neopixels.py rainbow /dev/ttyUSB0 13
+
 
 # Issues
 
