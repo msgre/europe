@@ -58,8 +58,11 @@ App.on('start', function(global_options) {
     window.channel.on('game:start', function(options) {
       return session.publish('com.europe.start', [1]);
     });
-    return window.channel.on('game:close', function(options) {
+    window.channel.on('game:close', function(options) {
       return session.publish('com.europe.stop', [1]);
+    });
+    return window.channel.on('countdown:flash', function(options) {
+      return session.publish('com.europe.flash', [1]);
     });
   };
   connection.onclose = function(reason, details) {

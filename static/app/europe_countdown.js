@@ -30,6 +30,7 @@ App.module("Countdown", function(Mod, App, Backbone, Marionette, $, _) {
     initialize: function(options) {
       return this.model.on('change', (function(_this) {
         return function() {
+          window.channel.trigger('countdown:flash');
           return _this.render();
         };
       })(this));

@@ -150,7 +150,7 @@ class AppSession(ApplicationSession):
     def onJoin(self, details):
 
         # neopixels effects
-        def flash():
+        def flash(msg):
             self.log.info("event for 'flash' received")
             self.register_neopixel(NeopixelsFlash)
 

@@ -62,6 +62,9 @@ App.on 'start', (global_options) ->
         window.channel.on 'game:close', (options) ->
             session.publish('com.europe.stop', [1])
 
+        window.channel.on 'countdown:flash', (options) ->
+            session.publish('com.europe.flash', [1])
+
     connection.onclose = (reason, details) ->
         # TODO: tohle by mohlo byt osetrene nejak specialne
         # napr. nejakym error overlayem, timeoutem a refreshem stranky

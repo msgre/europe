@@ -33,6 +33,7 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
                     'Start!'
         initialize: (options) ->
             @model.on 'change', () =>
+                window.channel.trigger('countdown:flash')
                 @render()
         onDestroy: () ->
             @model.off('change')
