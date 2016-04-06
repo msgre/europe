@@ -5,3 +5,5 @@ services:
   watcher:
     devices:
       - "/dev/ttyUSB0"
+    volumes:
+      - $PWD/watcher/watcher:/src
