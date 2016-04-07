@@ -22,8 +22,6 @@ App.on 'start', (global_options) ->
         console.log("Connected to server through websockets...")
         window.eu_session = session # TODO:
 
-        session.publish('com.europe.blank', [1])
-
         on_gate = (args) ->
             value = args[0]
             console.log("gate passing")
@@ -63,6 +61,15 @@ App.on 'start', (global_options) ->
 
         window.channel.on 'game:close', (options) ->
             session.publish('com.europe.stop', [1])
+
+        window.channel.on 'game:goodblink', (leds, blink) ->
+            if blink
+                session.publish('com.europe.blink', [_.initial(leds), 28912, [_.last(leds)], 28912])
+            else
+                session.publish('com.europe.blink', [leds, 28912, [], 28912])
+
+        window.channel.on 'game:badblink', (good_leds, bad_leds) ->
+            session.publish('com.europe.blink', [good_leds, 28912, bad_leds, 32512])
 
         window.channel.on 'countdown:flash', (options) ->
             session.publish('com.europe.flash', [1])

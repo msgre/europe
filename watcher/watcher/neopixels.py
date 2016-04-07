@@ -102,6 +102,12 @@ class NeopixelsBlink(NeopixelsBase):
 
     Used during game for signalizing correct passing of tunnels (green color).
     In recap phase same effect is used for signalizing wrong tunnels (red color).
+
+    Mandatory arguments:
+        stale_leds -- array of LED numbers which may be switch on
+        stale_color -- color of stale LEDs
+        blinking_leds -- array of LED numbers which may blink
+        blinking_color -- color of blinking LEDs
     """
 
     STATE_CYCLES = 2        # how many cycles through process() will LED keeps on/off state (during blinking phase)
@@ -112,22 +118,24 @@ class NeopixelsBlink(NeopixelsBase):
         self.blink_counter = 0
         self.old_color = None
         self.led_buffer = [0] * NEOPIXELS_COUNT
+        for led in self.stale_leds:
+            self.led_buffer[led - 1] = self.stale_color
 
     def process(self):
         if self.blink_counter < self.NUMBER_OF_BLINKS * 2 + 1:
             if (self.counter / self.STATE_CYCLES) % 2 == 0:
-                _color = self.color
+                _color = self.blinking_color
             else:
                 _color = 0
-            for led in self.leds:
+            for led in self.blinking_leds:
                 self.led_buffer[led - 1] = _color
             self.set_colors(self.led_buffer)
             if self.old_color != _color:
                 self.old_color = _color
                 self.blink_counter = self.blink_counter + 1
         else:
-            for led in self.leds:
-                self.led_buffer[led - 1] = self.color
+            for led in self.blinking_leds:
+                self.led_buffer[led - 1] = self.blinking_color
                 self.set_colors(self.led_buffer)
             self.stop()
 
@@ -257,7 +265,7 @@ if __name__ == '__main__':
         klass = NeopixelsFlash
     elif effect == 'blink':
         klass = NeopixelsBlink
-        kwargs = {'leds': [1], 'color': 12345}
+        kwargs = {'stale_leds': [1,5], 'stale_color': 12345, 'blinking_leds': [2,3], 'blinking_color': 54321}
     elif effect == 'noise':
         klass = NeopixelsNoise
     elif effect == 'rainbow':

@@ -84,15 +84,15 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             if serialized_model.image and serialized_model.question
                 tmpl = """
                     <td><img src="<%= image %>" height="781px" /></td>
-                    <td class="text"><%= question %></td>
+                    <td class="text"><%= question %><br><small><%= country.board  %>/<%= country.gate  %></small></td>
                 """
             else if serialized_model.image
                 tmpl = """
-                    <td><img src="<%= image %>" /></td>
+                    <td><img src="<%= image %>" /><br><small><%= country.board  %>/<%= country.gate  %></small></td>
                 """
             else
                 tmpl = """
-                    <td><%= question %></td>
+                    <td><%= question %><br><small><%= country.board  %>/<%= country.gate  %></small></td>
                 """
             _.template(tmpl)(serialized_model)
         initialize: (options) ->
@@ -198,8 +198,20 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
 
                 # move to the next question
                 question += 1
+                correct_answers = questions.filter (i) ->
+                    i.get('answer') == true
 
                 if question > options.options.QUESTION_COUNT
+                    # blink LED
+                    bad_answers = questions.filter (i) ->
+                        i.get('answer') == false
+                    good_leds = _.map(correct_answers, (i) -> i.get('country').led)
+                    bad_leds = _.map(bad_answers, (i) -> i.get('country').led)
+                    if bad_leds.length > 0
+                        window.channel.trigger('game:badblink', good_leds, bad_leds)
+                    else
+                        window.channel.trigger('game:goodblink', good_leds, questions.at(question-2).get('answer') == true)
+
                     # end of the game is near...
                     clear_timer()
                     output = _.extend _options,
@@ -210,6 +222,10 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
                         time: info.get('time')
                     window.channel.trigger('game:close', output)
                 else
+                    # blink LED
+                    leds = _.map(correct_answers, (i) -> i.get('country').led)
+                    window.channel.trigger('game:goodblink', leds, questions.at(question-2).get('answer') == true)
+
                     info.set('question', question)
                     info.set('current', 0)
                     question_view.destroy()

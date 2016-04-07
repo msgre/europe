@@ -84,11 +84,11 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
     template: function(serialized_model) {
       var tmpl;
       if (serialized_model.image && serialized_model.question) {
-        tmpl = "<td><img src=\"<%= image %>\" height=\"781px\" /></td>\n<td class=\"text\"><%= question %></td>";
+        tmpl = "<td><img src=\"<%= image %>\" height=\"781px\" /></td>\n<td class=\"text\"><%= question %><br><small><%= country.board  %>/<%= country.gate  %></small></td>";
       } else if (serialized_model.image) {
-        tmpl = "<td><img src=\"<%= image %>\" /></td>";
+        tmpl = "<td><img src=\"<%= image %>\" /><br><small><%= country.board  %>/<%= country.gate  %></small></td>";
       } else {
-        tmpl = "<td><%= question %></td>";
+        tmpl = "<td><%= question %><br><small><%= country.board  %>/<%= country.gate  %></small></td>";
       }
       return _.template(tmpl)(serialized_model);
     },
@@ -175,7 +175,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       });
       layout.getRegion('question').show(question_view);
       local_channel.on('next', function(user_answer) {
-        var old_q, output, question;
+        var bad_answers, bad_leds, correct_answers, good_leds, leds, old_q, output, question;
         if (user_answer) {
           window.sfx.yes.play();
         } else {
@@ -185,7 +185,24 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
         old_q = questions.at(question - 1);
         old_q.set('answer', user_answer);
         question += 1;
+        correct_answers = questions.filter(function(i) {
+          return i.get('answer') === true;
+        });
         if (question > options.options.QUESTION_COUNT) {
+          bad_answers = questions.filter(function(i) {
+            return i.get('answer') === false;
+          });
+          good_leds = _.map(correct_answers, function(i) {
+            return i.get('country').led;
+          });
+          bad_leds = _.map(bad_answers, function(i) {
+            return i.get('country').led;
+          });
+          if (bad_leds.length > 0) {
+            window.channel.trigger('game:badblink', good_leds, bad_leds);
+          } else {
+            window.channel.trigger('game:goodblink', good_leds, questions.at(question - 2).get('answer') === true);
+          }
           clear_timer();
           output = _.extend(_options, {
             questions: questions.toJSON(),
@@ -199,6 +216,10 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
           });
           return window.channel.trigger('game:close', output);
         } else {
+          leds = _.map(correct_answers, function(i) {
+            return i.get('country').led;
+          });
+          window.channel.trigger('game:goodblink', leds, questions.at(question - 2).get('answer') === true);
           info.set('question', question);
           info.set('current', 0);
           question_view.destroy();

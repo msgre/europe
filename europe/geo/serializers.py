@@ -7,5 +7,5 @@ from rest_framework import serializers
 class CountrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Country
-        fields = ('id', 'title', 'board', 'gate', )
+        fields = ('id', 'title', 'board', 'gate', 'led', )
         lookup_field = 'id'

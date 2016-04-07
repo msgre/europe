@@ -24,7 +24,6 @@ App.on('start', function(global_options) {
     var on_gate, on_keyboard;
     console.log("Connected to server through websockets...");
     window.eu_session = session;
-    session.publish('com.europe.blank', [1]);
     on_gate = function(args) {
       var value;
       value = args[0];
@@ -61,6 +60,16 @@ App.on('start', function(global_options) {
     });
     window.channel.on('game:close', function(options) {
       return session.publish('com.europe.stop', [1]);
+    });
+    window.channel.on('game:goodblink', function(leds, blink) {
+      if (blink) {
+        return session.publish('com.europe.blink', [_.initial(leds), 28912, [_.last(leds)], 28912]);
+      } else {
+        return session.publish('com.europe.blink', [leds, 28912, [], 28912]);
+      }
+    });
+    window.channel.on('game:badblink', function(good_leds, bad_leds) {
+      return session.publish('com.europe.blink', [good_leds, 28912, bad_leds, 32512]);
     });
     window.channel.on('countdown:flash', function(options) {
       return session.publish('com.europe.flash', [1]);

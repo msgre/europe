@@ -161,9 +161,9 @@ class AppSession(ApplicationSession):
         yield self.subscribe(flash, 'com.europe.flash')
         self.log.info("subscribed to topic 'flash'")
 
-        def blink(leds, color):
-            self.log.info("event for 'blink' received: LEDs={leds}, color={color}", leds=leds, color=color)
-            self.register_neopixel(neopixels.NeopixelsBlink, leds=leds, color=color)
+        def blink(stale_leds, stale_color, blinking_leds, blinking_color):
+            self.log.info("event for 'blink' received: stale LEDs={stale_leds}, stale color={color}, blinking LEDs={blinking_leds}, blinking color={blinking_color}", stale_leds=stale_leds, stale_color=stale_color, blinking_leds=blinking_leds, blinking_color=blinking_color)
+            self.register_neopixel(neopixels.NeopixelsBlink, stale_leds=stale_leds, stale_color=stale_color, blinking_leds=blinking_leds, blinking_color=blinking_color)
 
         yield self.subscribe(blink, 'com.europe.blink')
         self.log.info("subscribed to topic 'blink'")
