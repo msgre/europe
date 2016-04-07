@@ -162,7 +162,7 @@ class AppSession(ApplicationSession):
         self.log.info("subscribed to topic 'flash'")
 
         def blink(stale_leds, stale_color, blinking_leds, blinking_color):
-            self.log.info("event for 'blink' received: stale LEDs={stale_leds}, stale color={color}, blinking LEDs={blinking_leds}, blinking color={blinking_color}", stale_leds=stale_leds, stale_color=stale_color, blinking_leds=blinking_leds, blinking_color=blinking_color)
+            self.log.info("event for 'blink' received: stale LEDs={stale_leds}, stale color={stale_color}, blinking LEDs={blinking_leds}, blinking color={blinking_color}", stale_leds=stale_leds, stale_color=stale_color, blinking_leds=blinking_leds, blinking_color=blinking_color)
             self.register_neopixel(neopixels.NeopixelsBlink, stale_leds=stale_leds, stale_color=stale_color, blinking_leds=blinking_leds, blinking_color=blinking_color)
 
         yield self.subscribe(blink, 'com.europe.blink')
