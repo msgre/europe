@@ -26,7 +26,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('question_display', 'country', 'difficulty', )
     list_filter = ('difficulty', 'category', 'country', )
     search_fields = ['question', 'country__title']
-    fields = ('country', 'difficulty', 'category', 'question', 'image', )
+    fields = ('country', 'difficulty', 'category', 'question', 'image', 'note', )
 
     def question_display(self, obj):
         if obj.question:

@@ -104,6 +104,7 @@ class Question(models.Model):
     image      = models.FileField(_('Image'), upload_to=upload_fn, max_length=256, help_text=_('Could be bitmap (PNG/JPG/GIF) or vector (SVG). MUST be in correct size, maximum width=1638, height=791.'))
     country    = models.ForeignKey('geo.Country')
     category   = models.ForeignKey('Category')
+    note       = models.TextField(_('Note'), blank=True, null=True)
     created    = models.DateTimeField(_('Created'), auto_now_add=True)
     updated    = models.DateTimeField(_('Updated'), auto_now=True)
 
