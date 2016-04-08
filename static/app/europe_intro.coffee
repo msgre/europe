@@ -12,7 +12,38 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
     state = undefined
     _options = undefined
 
+    # --- models & collections
+
+    Result = Backbone.Model.extend
+        defaults:
+            time: undefined
+            title: undefined
+
+    Results = Backbone.Collection.extend
+        model: Result
+        url: "/api/results"
+            
+        parse: (response, options) ->
+            response.results
+
     # --- views
+
+    HighScoreItemView = Marionette.ItemView.extend
+        tagName: "tr"
+        template: (serialized_model) ->
+            _.template("""<td><%= title %></td>
+                <td class="text-right"><%= show_time() %></td>""")(serialized_model)
+        templateHelpers: ->
+            show_time: ->
+                display_elapsed(@time)
+
+    NoResultsView = Marionette.ItemView.extend
+        template: "<p>Nahrávám...</p>"
+
+    HighScoreView = Marionette.CollectionView.extend
+        childView: HighScoreItemView
+        tagName: 'tbody'
+        emptyView: NoResultsView
 
     Intro01 = Marionette.ItemView.extend
         template: (serialized_model) ->
@@ -44,7 +75,12 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
                 <table class="intro">
                     <tr class="row-1">
                         <td class="cell-a1"></td>
-                        <td class="cell-a2"></td>
+                        <td class="cell-a2">
+                            <div>
+                                <h2>Nejlepší časy</h2>
+                                <table></table>
+                            </div>
+                        </td>
                     </tr>
                     <tr class="row-2">
                         <td class="cell-b1">
@@ -66,7 +102,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
 
         regions:
             slideshow: '.cell-a1'
-            top: '.cell-a2'
+            top: '.cell-a2 div table'
 
     # --- herr director
 
@@ -92,6 +128,11 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
         ]
         layout = new ScreenLayout({el: make_content_wrapper()})
         layout.render()
+
+        results = new Results
+        layout.getRegion('top').show new HighScoreView
+            collection: results
+        results.fetch()
 
         window.channel.on 'keypress', () ->
             window.sfx.button.play()
