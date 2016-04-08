@@ -124,12 +124,9 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                         if _name.length > 0
                             window.channel.trigger('result:save', _name)
                             return
-                    else if _name.length < NAME_MAX_LENGTH
+                    else if _name.length < NAME_MAX_LENGTH - 1
                         that.model.set('name', "#{ _name }#{ letter }")
                         _name = that.model.get('name')
-                        if _name.length == NAME_MAX_LENGTH
-                            window.channel.trigger('result:save', _name)
-                            return
 
                 set_delay(handler, _options.options.IDLE_RESULT)
 

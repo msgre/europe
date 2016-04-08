@@ -141,13 +141,9 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
               window.channel.trigger('result:save', _name);
               return;
             }
-          } else if (_name.length < NAME_MAX_LENGTH) {
+          } else if (_name.length < NAME_MAX_LENGTH - 1) {
             that.model.set('name', "" + _name + letter);
             _name = that.model.get('name');
-            if (_name.length === NAME_MAX_LENGTH) {
-              window.channel.trigger('result:save', _name);
-              return;
-            }
           }
         }
         return set_delay(handler, _options.options.IDLE_RESULT);
