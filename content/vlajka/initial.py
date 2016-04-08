@@ -48,7 +48,7 @@ CODES_HARD = [
 def load_flags(codes, difficulty, stdout, stderr):
     path = os.path.join(os.path.dirname(__file__), 'svg')
     category = Category.objects.get(title='Vlajka')
-    category.disabled = False
+    category.enabled = True
     category.save()
 
     for code in codes:

@@ -57,7 +57,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
       if (this._enabled) {
         if (this.active_length === null) {
           x = this.filter(function(i) {
-            return !i.get('disabled');
+            return i.get('enabled');
           });
           this.active_length = x.length;
         }
@@ -75,7 +75,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
         if (this._enabled) {
           y = 0;
           this.each(function(item, idx) {
-            if (!item.get('disabled')) {
+            if (item.get('enabled')) {
               out[y] = idx;
               return y = y + 1;
             }
@@ -177,7 +177,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
       return "button button-1-4 " + (this.model.get('active') ? 'active' : '');
     },
     template: function(serialized_model) {
-      return _.template("<p<% if (disabled) {%> class='disabled'<% } %>><img src='<%= icon %>'/><%= title %></p>")(serialized_model);
+      return _.template("<p<% if (!enabled) {%> class='disabled'<% } %>><img src='<%= icon %>'/><%= title %></p>")(serialized_model);
     }
   });
   ScreenLayout = Marionette.LayoutView.extend({

@@ -58,7 +58,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
             if @_enabled
                 if @active_length == null
                     x = @filter (i) ->
-                        not i.get('disabled')
+                        i.get('enabled')
                     @active_length = x.length
             else
                 @active_length = @length
@@ -72,7 +72,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
                 if @_enabled
                     y = 0
                     @each (item, idx) ->
-                        if not item.get('disabled')
+                        if item.get('enabled')
                             out[y] = idx
                             y = y + 1
                 @_enabled_map = out
@@ -157,7 +157,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         className: ->
             "button button-1-4 #{ if @model.get('active') then 'active' else '' }"
         template: (serialized_model) ->
-            _.template("<p<% if (disabled) {%> class='disabled'<% } %>><img src='<%= icon %>'/><%= title %></p>")(serialized_model)
+            _.template("<p<% if (!enabled) {%> class='disabled'<% } %>><img src='<%= icon %>'/><%= title %></p>")(serialized_model)
 
     ScreenLayout = Marionette.LayoutView.extend
         template: _.template """

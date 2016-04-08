@@ -131,7 +131,7 @@ CODES_HARD = [
 
 def load_cities(codes, difficulty, stdout, stderr):
     category = Category.objects.get(title=u'Hlavní města')
-    category.disabled = False
+    category.enabled = True
     category.save()
     for code in codes:
         country = Country.objects.get(code=code)

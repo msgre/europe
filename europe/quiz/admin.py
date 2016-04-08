@@ -8,11 +8,11 @@ from .models import Category, Question
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'order', 'disabled', )
-    list_editable = ('order', 'disabled', )
+    list_display = ('title', 'order', 'enabled', )
+    list_editable = ('order', 'enabled', )
     fieldsets = (
         (None, {
-            'fields': ('title', 'order', 'disabled', 'icon', ),
+            'fields': ('title', 'order', 'enabled', 'icon', ),
         }),
         (_('Timing'), {
             'fields': (('time_easy', 'penalty_easy'),
