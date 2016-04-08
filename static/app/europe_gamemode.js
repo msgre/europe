@@ -137,7 +137,6 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
             obj = _this.collection.at_enabled(_this.index);
             _this.disable_keys();
             local_channel.trigger(_this.command, obj);
-            set_new_timeout = false;
           } else {
             set_new_timeout = false;
           }

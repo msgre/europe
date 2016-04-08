@@ -123,7 +123,6 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
                     obj = @collection.at_enabled(@index)
                     @disable_keys()
                     local_channel.trigger(@command, obj)
-                    set_new_timeout = false
                 else
                     set_new_timeout = false
 
