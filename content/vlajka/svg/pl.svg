@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="876px" height="550px" viewBox="0 0 876 550" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.6 (26304) - http://www.bohemiancoding.com/sketch -->
+    <title>pl</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="pl" transform="translate(3.000000, 3.000000)">
+            <g id="flag">
+                <rect id="rect149" fill="#FFFFFF" transform="translate(435.000000, 272.000000) scale(-1, -1) translate(-435.000000, -272.000000) " x="0" y="0" width="870" height="544"></rect>
+                <rect id="rect148" fill="#DC143C" transform="translate(435.000000, 408.000000) scale(-1, -1) translate(-435.000000, -408.000000) " x="0" y="272" width="870" height="272"></rect>
+            </g>
+            <rect id="Rectangle-3" stroke="#FFFFFF" stroke-width="3" x="0" y="0" width="870" height="544"></rect>
+        </g>
+    </g>
+</svg>

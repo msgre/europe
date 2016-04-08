@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="846px" height="441px" viewBox="0 0 846 441" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.6 (26304) - http://www.bohemiancoding.com/sketch -->
+    <title>mk</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="mk" transform="translate(3.000000, 3.000000)">
+            <path d="M0,0 L840,0 L840,435 L0,435 L0,0 Z" id="Shape" fill="#D20000"></path>
+            <path d="M0,0 L126,0 L420,209.733438 L714,0 L840,0 L0,435 L126,435 L420,225.266562 L714,435 L840,435 L0,0 Z M840,174 L840,261 L0,174 L0,261 L840,174 Z M367.5,0 L420,186.428313 L472.5,0 L367.5,0 Z M367.5,435 L420,248.571687 L472.5,435 L367.5,435 Z" id="Shape" fill="#FFE600"></path>
+            <ellipse id="Oval" stroke="#D20000" stroke-width="15" fill="#FFE600" cx="417.490365" cy="214.705422" rx="66.7671382" ry="66.7054219"></ellipse>
+            <rect id="Rectangle-1" stroke="#FFFFFF" stroke-width="3" x="0" y="0" width="840" height="435"></rect>
+        </g>
+    </g>
+</svg>

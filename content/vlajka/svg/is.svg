@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="812px" height="586px" viewBox="0 0 812 586" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.6 (26304) - http://www.bohemiancoding.com/sketch -->
+    <title>is</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="806" height="580"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="is" transform="translate(3.000000, 3.000000)">
+            <g id="flag-Clipped">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="rect3903"></g>
+                <g id="flag" mask="url(#mask-2)">
+                    <rect id="blarfeldur" fill="#003897" x="0" y="0" width="839.587531" height="580"></rect>
+                    <path d="M-2.10498285e-14,225.559583 L235.087531,225.559583 L235.087531,0 L369.425062,0 L369.425062,225.559583 L839.587531,225.559583 L839.587531,354.4525 L369.425062,354.4525 L369.425062,580.012083 L235.087531,580.012083 L235.087531,354.4525 L-5.68434189e-14,354.4525 L-5.68434189e-14,225.559583 L-2.10498285e-14,225.559583 Z" id="hviturkross" fill="#FFFFFF"></path>
+                    <path d="M0,257.77375 L268.662469,257.77375 L268.662469,0 L335.828716,0 L335.828716,257.77375 L839.578716,257.77375 L839.578716,322.217792 L335.828716,322.217792 L335.828716,579.991542 L268.662469,579.991542 L268.662469,322.217792 L0,322.217792 L0,257.77375 L0,257.77375 Z" id="raudurkross" fill="#D72828"></path>
+                </g>
+            </g>
+            <rect id="Rectangle-3" stroke="#FFFFFF" stroke-width="3" x="0" y="0" width="806" height="580"></rect>
+        </g>
+    </g>
+</svg>

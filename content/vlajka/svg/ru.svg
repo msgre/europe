@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="874px" height="584px" viewBox="0 0 874 584" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.6 (26304) - http://www.bohemiancoding.com/sketch -->
+    <title>ru</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ru" transform="translate(2.000000, 2.000000)">
+            <g id="Page-1">
+                <g id="ru">
+                    <g id="flag" transform="translate(0.000000, -0.000002)">
+                        <rect id="rect171" fill="#FFFFFF" x="0" y="2.73189062e-06" width="870" height="580"></rect>
+                        <rect id="rect403" fill="#01017E" x="0" y="193.337109" width="870" height="386.662891"></rect>
+                        <rect id="rect135" fill="#FE0101" x="0" y="386.662891" width="870" height="193.337109"></rect>
+                    </g>
+                    <g id="Rectangle-4">
+                        <g id="path-1-link"></g>
+                        <rect id="path-1" x="0" y="0" width="870" height="580"></rect>
+                    </g>
+                </g>
+            </g>
+            <rect id="path-1" stroke="#FFFFFF" stroke-width="3" x="0" y="0" width="870" height="580"></rect>
+        </g>
+    </g>
+</svg>
