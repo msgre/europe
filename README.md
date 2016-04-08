@@ -15,7 +15,7 @@ Europe is interactive knowledge game for children.
     * [Run](#run)
 * [Application](#application)
     * [Game interface](#game-interface)
-    * [Run](#run)
+    * [Administration interface](#administration-interface)
 * [Notes](#notes)
     * [Database initialization](#database-initialization)
     * [Coffeescript compilation](#coffeescript-compilation)
@@ -153,7 +153,7 @@ touching files in `watcher/gates` directory. For example:
 will simulate ball passing gate number 1 on board 14. Same way you could 
 simulate keyboard events.
 
-## Game administration
+## Administration interface
 
 There is standard Django admin interface on http://192.168.99.100:8081/admin.
 You could modify options, questions, and several other details about game.
