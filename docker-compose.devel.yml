@@ -5,3 +5,8 @@ services:
   watcher:
     environment:
       DEBUG: 1
+
+  # share folder with content, for easier game initialization
+  admin:
+    volumes:
+      - $PWD/content:/content
