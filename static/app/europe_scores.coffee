@@ -120,9 +120,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
     # --- timer handler
 
     handler = () ->
-        #window.channel.trigger('scores:idle', _options)
-        #TODO
-        console.log 'scores:idle'
+        window.channel.trigger('scores:idle', _options)
 
     # --- module
 

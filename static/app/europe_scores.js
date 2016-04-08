@@ -99,7 +99,7 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   handler = function() {
-    return console.log('scores:idle');
+    return window.channel.trigger('scores:idle', _options);
   };
   Mod.onStart = function(options) {
     console.log('Scores module');
