@@ -156,7 +156,7 @@ App.on('start', function(global_options) {
     return state_handler("Score", options);
   });
   window.channel.on('score:idle', function(options) {
-    return window.channel.trigger('intro:start', final_global_options);
+    return window.channel.trigger('intro:start', _.clone(final_global_options));
   });
   ServerOptions = Backbone.Collection.extend({
     model: Backbone.Model,
@@ -443,7 +443,7 @@ App.on('start', function(global_options) {
     }
     if (!debug) {
       console.log("Normal game launch (no debug)");
-      window.channel.trigger('intro:start', final_global_options);
+      window.channel.trigger('intro:start', _.clone(final_global_options));
     }
     handler = function() {
       return window.channel.trigger('intro:rainbow');

@@ -180,7 +180,7 @@ App.on 'start', (global_options) ->
         state_handler("Score", options)
 
     window.channel.on 'score:idle', (options) ->
-        window.channel.trigger('intro:start', final_global_options)
+        window.channel.trigger('intro:start', _.clone(final_global_options))
 
 
     # fetch global options from server (and then start)
@@ -280,7 +280,7 @@ App.on 'start', (global_options) ->
         if not debug
             # normal launch (no debug)
             console.log "Normal game launch (no debug)"
-            window.channel.trigger('intro:start', final_global_options)
+            window.channel.trigger('intro:start', _.clone(final_global_options))
 
         # initiate delayed rainbow on start, due to slow websocket initiation
         # (without this code event 'intro.rainbow' is launched before websocket links is created)
