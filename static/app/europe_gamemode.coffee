@@ -109,26 +109,25 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         set_key_handler: () ->
             window.channel.on 'key', (msg) =>
                 old_index = @index
-                set_new_timeout = true
                 change_collection = false
 
                 if msg == 'left' and @index > 0
+                    window.sfx.button.play()
+                    set_delay(handler, _options.options.IDLE_GAMEMODE)
                     @index -= 1
                     change_collection = true
                 else if msg == 'right' and @index < @collection.get_enabled_length() - 1
+                    window.sfx.button.play()
+                    set_delay(handler, _options.options.IDLE_GAMEMODE)
                     @index += 1
                     change_collection = true
                 else if msg == 'fire'
                     window.sfx.button2.play()
+                    if @command != 'done'
+                        set_delay(handler, _options.options.IDLE_GAMEMODE)
                     obj = @collection.at_enabled(@index)
                     @disable_keys()
                     local_channel.trigger(@command, obj)
-                else
-                    set_new_timeout = false
-
-                if set_new_timeout
-                    window.sfx.button.play()
-                    set_delay(handler, _options.options.IDLE_GAMEMODE)
 
                 if change_collection and old_index != @index
                     @collection.set_active(@index)

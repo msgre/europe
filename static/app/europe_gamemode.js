@@ -122,27 +122,27 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
     set_key_handler: function() {
       return window.channel.on('key', (function(_this) {
         return function(msg) {
-          var change_collection, obj, old_index, set_new_timeout;
+          var change_collection, obj, old_index;
           old_index = _this.index;
-          set_new_timeout = true;
           change_collection = false;
           if (msg === 'left' && _this.index > 0) {
+            window.sfx.button.play();
+            set_delay(handler, _options.options.IDLE_GAMEMODE);
             _this.index -= 1;
             change_collection = true;
           } else if (msg === 'right' && _this.index < _this.collection.get_enabled_length() - 1) {
+            window.sfx.button.play();
+            set_delay(handler, _options.options.IDLE_GAMEMODE);
             _this.index += 1;
             change_collection = true;
           } else if (msg === 'fire') {
             window.sfx.button2.play();
+            if (_this.command !== 'done') {
+              set_delay(handler, _options.options.IDLE_GAMEMODE);
+            }
             obj = _this.collection.at_enabled(_this.index);
             _this.disable_keys();
             local_channel.trigger(_this.command, obj);
-          } else {
-            set_new_timeout = false;
-          }
-          if (set_new_timeout) {
-            window.sfx.button.play();
-            set_delay(handler, _options.options.IDLE_GAMEMODE);
           }
           if (change_collection && old_index !== _this.index) {
             return _this.collection.set_active(_this.index);

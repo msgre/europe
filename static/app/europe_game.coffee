@@ -84,15 +84,15 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             if serialized_model.image and serialized_model.question
                 tmpl = """
                     <td><img src="<%= image %>" height="781px" /></td>
-                    <td class="text"><%= question %><br><small><%= country.board  %>/<%= country.gate  %></small></td>
+                    <td class="text"><%= question %><br><small style="font-weight:100;font-size:.5em;"><%= country.board  %>/<%= country.gate  %></small></td>
                 """
             else if serialized_model.image
                 tmpl = """
-                    <td><img src="<%= image %>" /><br><small><%= country.board  %>/<%= country.gate  %></small></td>
+                    <td><img src="<%= image %>" /><br><small style="font-weight:100;font-size:.5em;"><%= country.board  %>/<%= country.gate  %></small></td>
                 """
             else
                 tmpl = """
-                    <td><%= question %><br><small><%= country.board  %>/<%= country.gate  %></small></td>
+                    <td><%= question %><br><small style="font-weight:100;font-size:.5em;"><%= country.board  %>/<%= country.gate  %></small></td>
                 """
             _.template(tmpl)(serialized_model)
         initialize: (options) ->
