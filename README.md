@@ -1,4 +1,58 @@
-Demo of Europe application compounded from several components:
+Europe is interactive knowledge game for children.
+
+[![Europe prototype](docs/youtube.jpg)](https://youtu.be/zgLyUA2WT7c)
+
+**Content**:
+
+* [Construction](#construction)
+    * [Gameboard](#gameboard)
+    * [Hardware](#hardware)
+    * [Software](#software)
+    * [Design](#design)
+    * [Content](#content)
+* [Docker](#docker)
+    * [Build](#build)
+    * [Run](#run)
+    * [Watch](#watch)
+* [Application](#application)
+    * [Game interface](#game-interface)
+    * [Run](#run)
+    * [Watch](#watch)
+* [Notes](#notes)
+    * [Database initialization](#database-initialization)
+    * [Coffeescript compilation](#coffeescript-compilation)
+    * [LESS compilation](#less-compilation)
+    * [Debug mode for Javascript application](#debug-mode-for-javascript-application)
+
+# Construction
+
+It is constructed from several parts:
+
+* big wooden gameboard with map of Europe
+* bunch of electronics
+* software
+
+## Gameboard
+
+Board will be connected to the ground via spring, so children will be able to 
+tilt it. Each european country will have gate on his territory. 
+
+## Hardware
+
+Each gate is constructed as optical sensor. On bottom part of board is 10
+control boards, each of them capable to read state up to 6 sensors. Boards are
+interconnected via ModBus.
+
+There are additional 2 special boards -- one of them will serve as keyboard
+(instead of optical sensors it will read state from buttons), second as 
+controller of Neopixels RGB LED.
+
+Details about hardware solution is stored in [`hardware/`](hardware) directory.
+
+## Software
+
+ModBus is connected through USB adapter to Intel NUC miniPC with Ubuntu Linux
+and all necessary software:
 
 * Django API backend
 * Django Admin backend
@@ -8,60 +62,87 @@ Demo of Europe application compounded from several components:
 
 All components are dockerized and run behind Nginx proxy.
 
-**Content**:
+There are several subdirectories in regards to software part of this project:
 
-* [Basics](#basics)
-    * [Build](#build)
-    * [Run](#run)
-    * [Watch](#watch)
-* [Details](#details)
-    * [Database migrations](#database-migrations)
-    * [Coffeescript compilation](#coffeescript-compilation)
-    * [LESS compilation](#less-compilation)
-    * [Debug mode for Javascript application](#debug-mode-for-javascript-application)
+* [`ansible/`](ansible)  
+  Playbooks for bootstraping Ubuntu system (it will turn plain Ubuntu into 
+  Evropa dedicated machine)
+* [`europe/`](europe)  
+  Django backend application, which realise API interface and administration
+  for editing content (game questions)
+* [`static/`](static)  
+  Frontend Javascript application
+* [`watcher/`](watecher)  
+  Python3 application communicating with hardware (ModBus via USB) and implementing
+  websockets server. Frontend Javascript application communicate with HW in
+  real-time via messages sent over websocket.
 
-# Basics
+## Design
+
+Application design evolve in time. You could found some of the designs in 
+[`screenshots/`](screenshots) directory. In [`layouts/`](layouts) is stored 
+rough HTML version of early version application for easier CSS development.
+
+## Content
+
+Content of the game (questions about european countries) will be edited via
+web administration. For easier development there are some of the content
+store in directory [`content/`](content).
+
+
+# Docker
+
+There are several Dockerfiles in root directory, suffix indicate purpose of
+file. Because there are lot of them, and running them manually from commandline
+could be complicated, we use Docker Compose.
+
+Main description is stored in [`docker-compose.yml`](docker-compose.yml).
+According to [Docker Compose documentation](https://docs.docker.com/compose/extends/), 
+there is standard way how to extend basic yml and adapt it to different
+environments (notebook, Intel NUC, demo on Digital Ocean). This variants are
+stored as `docker-compose.<ENV>.yml` files. To apply it, choose one, copy it or
+make a named symlink `docker-compose.override.yml` (I personally use `devel`
+variant on my notebook).
 
 ## Build
 
+Run this commands:
+
     docker build -f Dockerfile.base -t msgre/common:europe-base.latest .
-    docker build -f Dockerfile.coffee -t msgre/common:coffee.latest .
     docker-compose build
     cd watcher/ && docker build -t msgre/common:europe-watcher.latest .
 
-`base` is general Django container, `coffee` is helper container for compiling 
-CoffeeScript files into Javascript, `watcher` take care about HW monitoring
+`base` is general Django container, `watcher` take care about HW monitoring
 and publish events on websockets.
 
 ## Run
 
-    docker-compose up
+    docker-compose up -d
+    docker-compose logs
 
-When you hit CTRL+C, containers will be stopped. Sometimes this is not true,
-so you must run manually:
+To kill and remove running containers, run:
 
-    docker-compose kill
+    docker-compose kill && docker-compose rm -f
 
-If you want remove stopped containers, call:
 
-    docker-compose rm
+# Application
 
-## Watch
+## Game interface
 
 Open in **Chrome** browser URL http://192.168.99.100:8081/
-(warning, doesn't work in Firefox due to disfunctional keyboard plugin).
+(warning, doesn't work properly in Firefox due to disfunctional keyboard plugin).
 
 For controling web app use following keys (they will be replaced in final 
 product to real physical keys):
 
-* `Q` is left
-* `W` is right
-* `P` is choice
+* `Q` = left
+* `W` = right
+* `P` = choice
 
-During questions phase, use:
+During game phase, use:
 
-* `0` as wrong answer
-* `1` as right answer
+* `0` = wrong answer
+* `1` = right answer
 
 If you run `watcher` container in debug mode, you could simulate HW events by
 touching files in `watcher/gates` directory. For example:
@@ -71,28 +152,39 @@ touching files in `watcher/gates` directory. For example:
 will simulate ball passing gate number 1 on board 14. Same way you could 
 simulate keyboard events.
 
-## Administration
+## Game administration
 
 There is standard Django admin interface on http://192.168.99.100:8081/admin.
-You could modify there options, questions, and several other details about
-game.
+You could modify options, questions, and several other details about game.
 
-# Details
 
-## Database migrations
+# Notes
 
-Connect to already running `api` container:
+## Database initialization
 
-    docker exec -ti api bash
+Connect to already running `admin` container:
 
-Make and apply migrations:
+    docker exec -ti admin bash
 
-    ./manage.py makemigrations --settings europe.settings_api
-    ./manage.py migrate --settings europe.settings_api
+Run following commands:
+
+    ./manage.py migrate
+    ./manage.py createsuperuser
+    ./manage.py initial_questions /content
+    ./manage.py fake_results
+
+After this sequence, your DB schema will be up to date, and will contain
+data about superadmin (to access administration via web interface), fake
+results data (to bypass results pages with no entries) and initial set of
+questions loaded from `content/` directory.
 
 ## Coffeescript compilation
 
-One-time compilation:
+First, check that you have CoffeeScript container. If no, build it:
+
+    docker build -f Dockerfile.coffee -t msgre/common:coffee.latest .
+
+One-time Coffeescript to Javascript compilation:
 
     docker run -ti --rm -v $PWD/static/app:/src msgre/common:coffee.latest -bc /src
 
