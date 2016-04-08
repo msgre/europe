@@ -288,4 +288,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
         choices = undefined
         categories = undefined
         difficulties = undefined
+        local_channel.off('done')
+        local_channel.off('choice')
+        local_channel.off('category')
         local_channel.reset()

@@ -291,8 +291,10 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     var score;
     clear_delay();
     time = void 0;
+    rank.off('sync');
     rank = void 0;
     score = void 0;
-    return layout.destroy();
+    layout.destroy();
+    return window.channel.off('result:save');
   };
 });

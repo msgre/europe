@@ -190,12 +190,14 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
                         difficulty: _options.constants.DIFFICULTY_EASY
                     new_easy_results.on 'sync', () ->
                         easy_results.reset(new_easy_results.toJSON())
+                        new_easy_results.off('sync')
                     new_easy_results.fetch()
                     new_hard_results = new Results null, 
                         category: new_category.get('id')
                         difficulty: _options.constants.DIFFICULTY_HARD
                     new_hard_results.on 'sync', () ->
                         hard_results.reset(new_hard_results.toJSON())
+                        hard_results.off('sync')
                     new_hard_results.fetch()
 
                     # update views
@@ -211,5 +213,6 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
         window.channel.off('key')
         clear_delay()
         layout.destroy()
+        categories.off('sync')
         categories = undefined
         layout = undefined

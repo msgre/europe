@@ -293,6 +293,9 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
     choices = void 0;
     categories = void 0;
     difficulties = void 0;
+    local_channel.off('done');
+    local_channel.off('choice');
+    local_channel.off('category');
     return local_channel.reset();
   };
 });

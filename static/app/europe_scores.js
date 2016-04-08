@@ -161,7 +161,8 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
             difficulty: _options.constants.DIFFICULTY_EASY
           });
           new_easy_results.on('sync', function() {
-            return easy_results.reset(new_easy_results.toJSON());
+            easy_results.reset(new_easy_results.toJSON());
+            return new_easy_results.off('sync');
           });
           new_easy_results.fetch();
           new_hard_results = new Results(null, {
@@ -169,7 +170,8 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
             difficulty: _options.constants.DIFFICULTY_HARD
           });
           new_hard_results.on('sync', function() {
-            return hard_results.reset(new_hard_results.toJSON());
+            hard_results.reset(new_hard_results.toJSON());
+            return hard_results.off('sync');
           });
           new_hard_results.fetch();
           return layout.getRegion('title').show(new TitleView({
@@ -185,6 +187,7 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
     window.channel.off('key');
     clear_delay();
     layout.destroy();
+    categories.off('sync');
     categories = void 0;
     return layout = void 0;
   };

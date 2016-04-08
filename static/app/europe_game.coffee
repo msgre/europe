@@ -243,6 +243,9 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
     Mod.onStop = (options) ->
         clear_timer()
         info = undefined
+        questions.off('sync')
         questions = undefined
         layout.destroy()
+        local_channel.off('penalty')
+        local_channel.off('next')
         local_channel.reset()

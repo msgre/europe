@@ -236,8 +236,11 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
   return Mod.onStop = function(options) {
     clear_timer();
     info = void 0;
+    questions.off('sync');
     questions = void 0;
     layout.destroy();
+    local_channel.off('penalty');
+    local_channel.off('next');
     return local_channel.reset();
   };
 });

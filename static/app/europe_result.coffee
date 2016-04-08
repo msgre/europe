@@ -277,6 +277,8 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
     Mod.onStop = () ->
         clear_delay()
         time = undefined
+        rank.off('sync')
         rank = undefined
         score = undefined
         layout.destroy()
+        window.channel.off('result:save')
