@@ -46,7 +46,7 @@ class Category(models.Model):
                          for k, g in itertools.groupby(countries, lambda a: a['id'])}
 
         # countries for which we have questions in current category
-        country_ids = Question.objects.filter(category=self, difficulty=difficulty).values_list('country', flat=True)
+        country_ids = Question.objects.filter(enabled=True, category=self, difficulty=difficulty).values_list('country', flat=True)
         # get first random "count" countries
         random_ids = list(set(country_ids))
         random.shuffle(random_ids)
@@ -74,7 +74,7 @@ class Category(models.Model):
 
         # get questions for random countries
         # beware! there could be more than one question for given country
-        data = Question.objects.select_related().filter(category=self, difficulty=difficulty, country__id__in=random_ids[:count]).order_by('country')
+        data = Question.objects.select_related().filter(enabled=True, category=self, difficulty=difficulty, country__id__in=random_ids[:count]).order_by('country')
 
         out = []
         for k, g in itertools.groupby(data, lambda a: a.country.id):
@@ -101,10 +101,11 @@ class Question(models.Model):
 
     difficulty = models.CharField(_('Difficulty'), max_length=1, choices=QUESTION_DIFFICULTY, default=QUESTION_DIFFICULTY_EASY)
     question   = models.TextField(_('Question'), blank=True, null=True)
-    image      = models.FileField(_('Image'), upload_to=upload_fn, max_length=256, help_text=_('Could be bitmap (PNG/JPG/GIF) or vector (SVG). MUST be in correct size, maximum width=1638, height=791.'))
+    image      = models.FileField(_('Image'), blank=True, null=True, upload_to=upload_fn, max_length=256, help_text=_('Could be bitmap (PNG/JPG/GIF) or vector (SVG). MUST be in correct size, maximum width=1638, height=791.'))
     country    = models.ForeignKey('geo.Country')
     category   = models.ForeignKey('Category')
     note       = models.TextField(_('Note'), blank=True, null=True)
+    enabled    = models.BooleanField(_('Enabled'), help_text=_('Only enabled questions will be used during game'), default=True)
     created    = models.DateTimeField(_('Created'), auto_now_add=True)
     updated    = models.DateTimeField(_('Updated'), auto_now=True)
 

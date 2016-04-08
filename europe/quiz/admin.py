@@ -23,10 +23,11 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('question_display', 'country', 'difficulty', )
-    list_filter = ('difficulty', 'category', 'country', )
+    list_display = ('question_display', 'country', 'difficulty', 'enabled')
+    list_editable = ('enabled', )
+    list_filter = ('enabled', 'difficulty', 'category', 'country', )
     search_fields = ['question', 'country__title']
-    fields = ('country', 'difficulty', 'category', 'question', 'image', 'note', )
+    fields = ('country', 'difficulty', 'category', 'question', 'image', 'enabled', 'note', )
 
     def question_display(self, obj):
         if obj.question:
@@ -34,3 +35,6 @@ class QuestionAdmin(admin.ModelAdmin):
         else:
             return _('[photo]')
     question_display.short_description = _('Question')
+
+    def has_delete_permission(self, request, obj=None):
+        return False
