@@ -13,11 +13,9 @@ Europe is interactive knowledge game for children.
 * [Docker](#docker)
     * [Build](#build)
     * [Run](#run)
-    * [Watch](#watch)
 * [Application](#application)
     * [Game interface](#game-interface)
     * [Run](#run)
-    * [Watch](#watch)
 * [Notes](#notes)
     * [Database initialization](#database-initialization)
     * [Coffeescript compilation](#coffeescript-compilation)
@@ -123,6 +121,9 @@ and publish events on websockets.
 To kill and remove running containers, run:
 
     docker-compose kill && docker-compose rm -f
+
+Beware! If you run Europe for first time, you must initiate database. See
+[Database initialization](#database-initialization) below.
 
 
 # Application
