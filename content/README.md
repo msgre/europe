@@ -16,3 +16,5 @@ You just provide path to content directory, for example:
 It's up to you how you implement `load` function. Look into already defined
 subdirectories. You find there examples how to load simple textual questions or
 image based questions.
+
+For further information see docstring inside `initial.py` files.
