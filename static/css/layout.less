@@ -11,8 +11,13 @@
         margin-left: .4em;
 
         img {
-            width:48px;
-            padding-right:.2em;
+            display:block;
+            position:relative;
+            float:left;
+            top:-8px;
+            width:82px;
+            height:60px;
+            padding-right:.1em;
             vertical-align:baseline;
         }
     }
@@ -186,12 +191,16 @@
 
         .button {
             p {
-                margin: 1.8em 1em;
+                margin: 1.7em 1em;
                 font-size: 2em;
 
                 img {
                     padding-right: .2em;
-                    width: 38px;
+                    vertical-align: middle;
+                    width:72px;
+                    height:48px;
+                    position:relative;
+                    top:-8px;
                 }
             }
             p.disabled {
@@ -242,12 +251,16 @@
 
         .button {
             p {
-                margin: 1.8em 1em;
+                margin: 1.7em 1em;
                 font-size: 2em;
 
                 img {
-                    vertical-align: baseline;
-                    margin-right: .3em;
+                    padding-right: .2em;
+                    vertical-align: middle;
+                    width:72px;
+                    height:48px;
+                    position:relative;
+                    top:-8px;
                 }
             }
         }
@@ -255,7 +268,7 @@
         .button:last-child {
             margin-right: 0;
             p {
-                margin-left: 3.2em; // kdyby bylo treba centrovat napis, posune se margin
+                margin-left: 2.6em; // kdyby bylo treba centrovat napis, posune se margin
             }
         }
     }
@@ -279,12 +292,21 @@
                     color: #aaa;
                     font-size: 4em;
                     text-transform: uppercase;
+
+                    img {
+                        padding-right: .2em;
+                        vertical-align: bottom;
+                        width:84px;
+                        position:relative;
+                        top:-8px;
+                    }
                 }
                 h2 {
                     color: #fff;
                     font-size: 8em;
                     font-weight: 700;
                     margin: .2em 0;
+                    height: 128px;
                 }
             }
         }

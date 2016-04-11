@@ -209,7 +209,7 @@ App.on 'start', (global_options) ->
                     crossroad: "game"
                     gamemode:
                         category: 1
-                        category_icon: 'svg/star.svg'
+                        category_icon: 'svg/hlavni-mesta.svg'
                         difficulty: 'E'
                         difficulty_title: 'Jednoduchá hra'
                         penalty: 3
@@ -219,7 +219,7 @@ App.on 'start', (global_options) ->
                     crossroad: "game"
                     gamemode:
                         category: 1
-                        category_icon: 'svg/star.svg'
+                        category_icon: 'svg/priroda.svg'
                         difficulty: 'E'
                         difficulty_title: 'Jednoduchá hra'
                         penalty: 3
@@ -232,9 +232,7 @@ App.on 'start', (global_options) ->
                         {id: 108, answer: true}
                         {id: 142, answer: true}
                         {id: 100, answer: true}
-                        {id: 110, answer: true}
-                        {id: 125, answer: true}
-                        {id: 120, answer: true}
+                        {id: 110, answer: false}
                     ]
                     time: 84
             states = 

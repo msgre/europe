@@ -53,8 +53,13 @@ body #main {
   margin-left: .4em;
 }
 #header h1 img {
-  width: 48px;
-  padding-right: .2em;
+  display: block;
+  position: relative;
+  float: left;
+  top: -8px;
+  width: 82px;
+  height: 60px;
+  padding-right: .1em;
   vertical-align: baseline;
 }
 #header h2 {
@@ -204,12 +209,16 @@ body #main {
   text-transform: uppercase;
 }
 #body table.gamemode .button p {
-  margin: 1.8em 1em;
+  margin: 1.7em 1em;
   font-size: 2em;
 }
 #body table.gamemode .button p img {
   padding-right: .2em;
-  width: 38px;
+  vertical-align: middle;
+  width: 72px;
+  height: 48px;
+  position: relative;
+  top: -8px;
 }
 #body table.gamemode .button p.disabled {
   opacity: .4;
@@ -245,18 +254,22 @@ body #main {
   text-transform: uppercase;
 }
 #body table.crossroad .button p {
-  margin: 1.8em 1em;
+  margin: 1.7em 1em;
   font-size: 2em;
 }
 #body table.crossroad .button p img {
-  vertical-align: baseline;
-  margin-right: .3em;
+  padding-right: .2em;
+  vertical-align: middle;
+  width: 72px;
+  height: 48px;
+  position: relative;
+  top: -8px;
 }
 #body table.crossroad .button:last-child {
   margin-right: 0;
 }
 #body table.crossroad .button:last-child p {
-  margin-left: 3.2em;
+  margin-left: 2.6em;
 }
 #body table.result {
   width: 100%;
@@ -277,11 +290,19 @@ body #main {
   font-size: 4em;
   text-transform: uppercase;
 }
+#body table.result tr.row-1 td h1 img {
+  padding-right: .2em;
+  vertical-align: bottom;
+  width: 84px;
+  position: relative;
+  top: -8px;
+}
 #body table.result tr.row-1 td h2 {
   color: #fff;
   font-size: 8em;
   font-weight: 700;
   margin: .2em 0;
+  height: 128px;
 }
 #body table.result td.typewriter {
   vertical-align: middle;

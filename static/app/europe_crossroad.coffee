@@ -46,7 +46,7 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
             class: 
                 "button #{@model.get('classes')} #{if @model.get('active') then 'active' else ''}"
         template: (serialized_model) ->
-            _.template("<p><img src='<%= icon %>' height='24' /><%= title %></p>")(serialized_model)
+            _.template("<p><img src='<%= icon %>' /><%= title %></p>")(serialized_model)
 
     ItemsView = Marionette.CollectionView.extend
         childView: ItemView
@@ -116,14 +116,14 @@ App.module "Crossroad", (Mod, App, Backbone, Marionette, $, _) ->
         items.add new Item
             id: "game"
             title: "Hra"
-            icon: "svg/star-small.svg"
+            icon: "svg/hra.svg"
             order: 10
             active: true
             classes: "button-3-4"
         items.add new Item
             id: "results"
             title: "Výsledky"
-            icon: "svg/star-small.svg"
+            icon: "svg/vysledky.svg"
             order: 20
             active: false
             classes: "button-1-4"

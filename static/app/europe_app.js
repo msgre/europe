@@ -349,7 +349,7 @@ App.on('start', function(global_options) {
           crossroad: "game",
           gamemode: {
             category: 1,
-            category_icon: 'svg/star.svg',
+            category_icon: 'svg/hlavni-mesta.svg',
             difficulty: 'E',
             difficulty_title: 'Jednoduchá hra',
             penalty: 3,
@@ -361,7 +361,7 @@ App.on('start', function(global_options) {
           crossroad: "game",
           gamemode: {
             category: 1,
-            category_icon: 'svg/star.svg',
+            category_icon: 'svg/priroda.svg',
             difficulty: 'E',
             difficulty_title: 'Jednoduchá hra',
             penalty: 3,
@@ -387,13 +387,7 @@ App.on('start', function(global_options) {
               answer: true
             }, {
               id: 110,
-              answer: true
-            }, {
-              id: 125,
-              answer: true
-            }, {
-              id: 120,
-              answer: true
+              answer: false
             }
           ],
           time: 84

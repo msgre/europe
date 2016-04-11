@@ -58,7 +58,7 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
   TitleView = Marionette.ItemView.extend({
     tagName: "h3",
     template: function(serialized_model) {
-      return _.template("<%= title %>")(serialized_model);
+      return _.template("<img src='<%= icon %>'><%= title %>")(serialized_model);
     },
     rerender: function(model) {
       this.model = model;

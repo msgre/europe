@@ -58,7 +58,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
     TitleView = Marionette.ItemView.extend
         tagName: "h3"
         template: (serialized_model) ->
-            _.template("<%= title %>")(serialized_model)
+            _.template("<img src='<%= icon %>'><%= title %>")(serialized_model)
 
         rerender: (model) ->
             @model = model
