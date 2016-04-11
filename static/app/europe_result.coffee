@@ -24,7 +24,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
             "#{ i.id }:#{ i.answer }"
         out =
             category: data.category.id
-            name: null                      # TODO: zatim bez jmena
+            name: null
             time: data.time
             answers: answers.join(',')
 
@@ -40,7 +40,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
             total: undefined
             top: undefined
         initialize: (attributes, options) ->
-            @url = "/api/results/#{ options.difficulty }-#{ options.category }/#{ options.time }"
+            @url = "/api/results/#{ options.difficulty }-#{ options.category }/#{ options.time }/#{ options.correct }"
 
     Name = Backbone.Model.extend
         defaults:
@@ -177,7 +177,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 <table class="result">
                     <tr class="row-1">
                         <td colspan="2">
-                            <h1>Nový rekord!</h1>
+                            <h1><img src="svg/rekord.svg" />Nový rekord!</h1>
                             <h2></h2>
                             <p>Tvůj čas se dostal do žebříčku. Zadej jméno svého týmu.</p>
                         </td>
@@ -229,10 +229,13 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
 
         # put results data into models
         time = new Time({time: options.time})
+        correct = _.filter options.answers, (i) ->
+            i.answer
         rank = new Rank null, 
             difficulty: options.gamemode.difficulty
             category: options.gamemode.category
             time: options.time
+            correct: correct.length
         name = new Name()
 
         # render basic layout

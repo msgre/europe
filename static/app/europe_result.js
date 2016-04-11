@@ -35,7 +35,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
       top: void 0
     },
     initialize: function(attributes, options) {
-      return this.url = "/api/results/" + options.difficulty + "-" + options.category + "/" + options.time;
+      return this.url = "/api/results/" + options.difficulty + "-" + options.category + "/" + options.time + "/" + options.correct;
     }
   });
   Name = Backbone.Model.extend({
@@ -197,7 +197,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   ScreenLayout = Marionette.LayoutView.extend({
-    template: _.template("<div id=\"header\"></div>\n<div id=\"body\">\n    <table class=\"result\">\n        <tr class=\"row-1\">\n            <td colspan=\"2\">\n                <h1>Nový rekord!</h1>\n                <h2></h2>\n                <p>Tvůj čas se dostal do žebříčku. Zadej jméno svého týmu.</p>\n            </td>\n        </tr>\n        <tr class=\"row-2\">\n            <td class=\"typewriter\"></td>\n            <td class=\"help\" rowspan=\"2\">\n                <div>\n                    <p>Tlačítky nahoru/dolů vybírej písmena,\n                    tlačítkem OK vyber konkrétní znak.<br/>Symbolem\n                    " + LETTER_BACKSPACE + " smažeš předchozí znak,\n                    symbolem " + LETTER_ENTER + " jméno\n                    uložíš.<br/>Délka jména maximálně \n                    " + NAME_MAX_LENGTH + " znaků.</p>\n                </div>\n            </td>\n        </tr>\n        <tr class=\"row-3\">\n            <td colspan=\"2\"></td>\n        </tr>\n    </table>\n</div>"),
+    template: _.template("<div id=\"header\"></div>\n<div id=\"body\">\n    <table class=\"result\">\n        <tr class=\"row-1\">\n            <td colspan=\"2\">\n                <h1><img src=\"svg/rekord.svg\" />Nový rekord!</h1>\n                <h2></h2>\n                <p>Tvůj čas se dostal do žebříčku. Zadej jméno svého týmu.</p>\n            </td>\n        </tr>\n        <tr class=\"row-2\">\n            <td class=\"typewriter\"></td>\n            <td class=\"help\" rowspan=\"2\">\n                <div>\n                    <p>Tlačítky nahoru/dolů vybírej písmena,\n                    tlačítkem OK vyber konkrétní znak.<br/>Symbolem\n                    " + LETTER_BACKSPACE + " smažeš předchozí znak,\n                    symbolem " + LETTER_ENTER + " jméno\n                    uložíš.<br/>Délka jména maximálně \n                    " + NAME_MAX_LENGTH + " znaků.</p>\n                </div>\n            </td>\n        </tr>\n        <tr class=\"row-3\">\n            <td colspan=\"2\"></td>\n        </tr>\n    </table>\n</div>"),
     onRender: function() {
       return $('body').attr('class', 'layout-a');
     },
@@ -217,6 +217,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     return window.channel.trigger('result:save', _name);
   };
   Mod.onStart = function(options) {
+    var correct;
     console.log('Result module');
     console.log(options);
     _options = options;
@@ -224,10 +225,14 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     time = new Time({
       time: options.time
     });
+    correct = _.filter(options.answers, function(i) {
+      return i.answer;
+    });
     rank = new Rank(null, {
       difficulty: options.gamemode.difficulty,
       category: options.gamemode.category,
-      time: options.time
+      time: options.time,
+      correct: correct.length
     });
     name = new Name();
     layout = new ScreenLayout({

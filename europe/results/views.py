@@ -55,6 +55,7 @@ class ResultRank(generics.RetrieveAPIView):
         except:
             raise Http404
         time = int(self.kwargs['time'])
+        correct = int(self.kwargs['correct'])
         count = Option.objects.get(key='RESULT_COUNT')
         count = int(count.value)
 
@@ -64,7 +65,7 @@ class ResultRank(generics.RetrieveAPIView):
         return {
             'position': position,
             'total': total,
-            'top': position <= count,
+            'top': correct >= count and position <= count,
         }
 
 
