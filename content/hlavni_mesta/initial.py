@@ -14,10 +14,6 @@ CITIES = {
     'al': u'Tirana',
     # Andora
     'ad': u'Andorra la Vella',
-    # Arménie
-    'am': u'Jerevan',
-    # Ázerbajdžán
-    'az': u'Baku',
     # Belgie
     'be': u'Brusel',
     # Bělorusko
@@ -38,8 +34,6 @@ CITIES = {
     'fi': u'Helsinky',
     # Francie
     'fr': u'Paříž',
-    # Gruzie
-    'ge': u'Tbilisi',
     # Chorvatsko
     'hr': u'Záhřeb',
     # Irsko
@@ -50,6 +44,8 @@ CITIES = {
     'it': u'Řím',
     # Kazachstán
     'kz': u'Astana',
+    # Kosovo
+    'xk': u'Priština',
     # Kypr
     'cy': u'Nikósie',
     # Lichtenštejnsko

@@ -21,7 +21,7 @@ comparison with their original size in wikipedia SVG):
 * +49%
   gr, ro, pl, by
 * +5%
-  rs, dk, hr, ba, nl, ee, al, bg, md, lv, lt, hu, sk, cz, at, ch, ie, am, ge, az, pt, is, me, mk, si, lu, cy, be
+  rs, dk, hr, ba, nl, ee, al, bg, md, lv, lt, hu, sk, cz, at, ch, ie, pt, is, me, mk, si, lu, cy, be
 
 Reason of the scaling is to get optimal utilization of game area and 
 simultaneously keep information about relative country size (for example we 

@@ -20,11 +20,11 @@ CODES_EASY = [
 
 # list of "hard" countries
 CODES_HARD = [
-    "al", "ad", "am", "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", 
-    "ge", "ie", "is", "it", "kz", "cy", "li", "lt", "lv", "lu", "mk", "mt", 
+    "al", "ad", "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", 
+    "ie", "is", "it", "kz", "cy", "li", "lt", "lv", "lu", "mk", "mt", 
     "hu", "md", "mc", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", "sm", 
-    "sk", "si", "gb", "rs", "tr", "ua", "va", "az", "me", "cz", "gr", "es", 
-    "se", "ch",
+    "sk", "si", "gb", "rs", "tr", "ua", "va", "me", "cz", "gr", "es", 
+    "se", "ch", "xk",
 ]
 
 def load_countries(codes, difficulty, stdout, stderr):
