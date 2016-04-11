@@ -298,44 +298,6 @@ App.on('start', function(global_options) {
             "penalty_hard": 3
           },
           "answer": true
-        }, {
-          "id": 125,
-          "question": "Ve které zemi se nachází město Skopje?",
-          "difficulty": "E",
-          "image": null,
-          "country": {
-            "id": 27,
-            "title": "Makedonie",
-            "sensor": "27"
-          },
-          "category": {
-            "id": 1,
-            "title": "Hlavní města",
-            "time_easy": 30,
-            "penalty_easy": 3,
-            "time_hard": 10,
-            "penalty_hard": 3
-          },
-          "answer": true
-        }, {
-          "id": 120,
-          "question": "Ve které zemi se nachází město Vaduz?",
-          "difficulty": "E",
-          "image": "/foto-4_3.jpg",
-          "country": {
-            "id": 22,
-            "title": "Lichtenštejnsko",
-            "sensor": "22"
-          },
-          "category": {
-            "id": 1,
-            "title": "Hlavní města",
-            "time_easy": 30,
-            "penalty_easy": 3,
-            "time_hard": 10,
-            "penalty_hard": 3
-          },
-          "answer": true
         }
       ];
       initials = {
