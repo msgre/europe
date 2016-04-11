@@ -208,7 +208,7 @@ App.on 'start', (global_options) ->
                 c:
                     crossroad: "game"
                     gamemode:
-                        category: 1
+                        category: 9
                         category_icon: 'svg/hlavni-mesta.svg'
                         difficulty: 'E'
                         difficulty_title: 'Jednoduchá hra'
@@ -218,7 +218,7 @@ App.on 'start', (global_options) ->
                 d:
                     crossroad: "game"
                     gamemode:
-                        category: 1
+                        category: 9
                         category_icon: 'svg/priroda.svg'
                         difficulty: 'E'
                         difficulty_title: 'Jednoduchá hra'

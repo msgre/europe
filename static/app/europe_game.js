@@ -59,7 +59,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
   });
   InfoItemView = Marionette.ItemView.extend({
     template: function(serialized_model) {
-      return _.template("<h1><%= category %></h1>\n<div class=\"bar\" style=\"background-position:<%= (current/total)*1100 %>px 0px\">\n    <p><%= question %>/<%= total_questions %></p>\n    <p><%= show_time() %></p>\n</div>")(serialized_model);
+      return _.template("<h1><img style='-webkit-filter: invert(100%)' src='<%= icon %>'/><%= category %></h1>\n<div class=\"bar\" style=\"background-position:<%= (current/total)*1100 %>px 0px\">\n    <p><%= question %>/<%= total_questions %></p>\n    <p><%= show_time() %></p>\n</div>")(serialized_model);
     },
     templateHelpers: function() {
       return {
@@ -155,6 +155,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       total_questions: _options.options.QUESTION_COUNT,
       category: _options.gamemode.title,
       total: _options.gamemode.time,
+      icon: _options.gamemode.category_icon,
       current: 0
     });
     questions = new Questions(null, {

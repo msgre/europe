@@ -63,7 +63,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
     InfoItemView = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <h1><%= category %></h1>
+                <h1><img style='-webkit-filter: invert(100%)' src='<%= icon %>'/><%= category %></h1>
                 <div class="bar" style="background-position:<%= (current/total)*1100 %>px 0px">
                     <p><%= question %>/<%= total_questions %></p>
                     <p><%= show_time() %></p>
@@ -165,6 +165,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             total_questions: _options.options.QUESTION_COUNT
             category: _options.gamemode.title
             total: _options.gamemode.time
+            icon: _options.gamemode.category_icon
             current: 0
 
         # data for questions
