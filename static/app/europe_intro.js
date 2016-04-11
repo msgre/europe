@@ -61,7 +61,7 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   ScreenLayout = Marionette.LayoutView.extend({
-    template: _.template("<div id=\"body\">\n    <table class=\"intro\">\n        <tr class=\"row-1\">\n            <td class=\"cell-a1\"></td>\n            <td class=\"cell-a2\">\n                <div>\n                    <h2>Nejlepší časy</h2>\n                    <table></table>\n                </div>\n            </td>\n        </tr>\n        <tr class=\"row-2\">\n            <td class=\"cell-b1\">\n                <div>\n                    <h1>Chceš začít novou hru?</h1>\n                    <h3>Stiskni kterékoliv tlačítko na panelu!</h3>\n                </div>\n            </td>\n            <td class=\"cell-b2\">\n                <img src=\"../svg/circle.svg\" width=\"200px\">\n            </td>\n        </tr>\n    </table>\n</div>"),
+    template: _.template("<div id=\"body\">\n    <table class=\"intro\">\n        <tr class=\"row-1\">\n            <td class=\"cell-a1\"></td>\n            <td class=\"cell-a2\">\n                <div>\n                    <h2>Nejlepší časy</h2>\n                    <table></table>\n                </div>\n            </td>\n        </tr>\n        <tr class=\"row-2\">\n            <td class=\"cell-b1\">\n                <div>\n                    <h1>Chceš začít novou hru?</h1>\n                    <h3>Stiskni kterékoliv tlačítko na panelu!</h3>\n                </div>\n            </td>\n            <td class=\"cell-b2\">\n                <img src=\"svg/logo.svg\">\n            </td>\n        </tr>\n    </table>\n</div>"),
     onRender: function() {
       return $('body').attr('class', 'layout-c');
     },

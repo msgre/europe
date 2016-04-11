@@ -209,7 +209,7 @@ body #main {
   text-transform: uppercase;
 }
 #body table.gamemode .button p {
-  margin: 1.7em 1em;
+  margin: 1.8em 1em;
   font-size: 2em;
 }
 #body table.gamemode .button p img {
@@ -227,16 +227,21 @@ body #main {
   margin: 0;
 }
 #body table.gamemode tr.row-2 {
+  margin-top: 18px;
   height: 100%;
 }
 #body table.gamemode tr.row-2 .button {
   margin-bottom: 18px;
+  height: 270px;
 }
 #body table.gamemode tr.row-2 .button:nth-child(4n) {
   margin-right: 0;
 }
-#body table.gamemode tr.row-2 .button:nth-child(n+9) {
+#body table.gamemode tr.row-2 .button:nth-child(n+4) {
   margin-bottom: 0;
+}
+#body table.gamemode tr.row-2 .button p {
+  margin-top: 3.5em;
 }
 #body table.gamemode tr.row-2 td {
   text-align: left;

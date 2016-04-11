@@ -90,7 +90,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
                             </div>
                         </td>
                         <td class="cell-b2">
-                            <img src="../svg/circle.svg" width="200px">
+                            <img src="svg/logo.svg">
                         </td>
                     </tr>
                 </table>
