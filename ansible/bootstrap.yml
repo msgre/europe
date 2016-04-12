@@ -7,6 +7,7 @@
     app_dir: /src/europe
     home_dir: /root
     app_conf_dir: "{{home_dir}}/europe"
+    docker_compose_override: "docker-compose.devel.yml"
 
   tasks:
     # -- basic 
@@ -67,6 +68,11 @@
       tags:
         - docker
 
+    - name: Add user europe to docker group
+      command: usermod -aG docker europe
+      tags:
+        - docker
+
     - name: Start docker daemon
       service:
         name: docker
@@ -81,12 +87,109 @@
       tags:
         - docker
 
-    - name: Auth file for docker
-      copy:
-        src: files/docker_config.json
-        dest: "{{home_dir}}/.docker/config.json"
+    # -- docker-compose
+
+    - name: Download docker-compose binary
+      raw: curl -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
       tags:
-        - docker
+        - docker-compose
+
+    - name: Make docker-compose executable
+      file:
+        path: /usr/local/bin/docker-compose
+        mode: 0755
+      tags:
+        - docker-compose
+
+    - name: BASH autocomplete for docker-compose
+      raw: curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+      tags:
+        - docker-compose
+
+    # -- system configuration
+
+    - name: Put docker aliases into ~/.bashrc
+      lineinfile:
+        dest: /home/europe/.bashrc
+        regexp: ^alias d="docker"$
+        line: alias d="docker"
+      tags:
+        - systemconf
+
+    - name: Put docker-compose aliases into ~/.bashrc
+      lineinfile:
+        dest: /home/europe/.bashrc
+        regexp: ^alias dc="docker-compose"$
+        line: alias dc="docker-compose"
+      tags:
+        - systemconf
+
+    - name: Copy .vimrc file
+      copy:
+        src: files/vimrc
+        dest: /home/europe/.vimrc
+        owner: europe
+        group: europe
+        mode: 0644
+      tags:
+        - systemconf
+
+    - name: Copy .vim directory
+      unarchive:
+        src: files/vim.tgz
+        dest: /home/europe/
+        owner: europe
+        group: europe
+        mode: 0644
+      tags:
+        - systemconf
+
+    - name: Change user/group on unpacked ~/.vim directory
+      file:
+        path: /home/europe/.vim
+        owner: europe
+        group: europe
+        recurse: yes
+      tags:
+        - systemconf
+
+    # http://sourcedigit.com/15388-turn-off-disable-update-manager-ubuntu-automatic-updates-in-ubuntu-14-0414-10/
+    - name: Remove Update Manager from Ubuntu
+      apt:
+        name: update-manager
+        state: absent
+      tags:
+        - systemconf
+
+    # -- prepare "kiosk"
+
+    - name: Install kiosk packages
+      apt: name={{item}}
+      with_items:
+        - lxde
+        - chromium-browser
+        - unclutter
+      tags:
+        - kiosk
+
+    - name: Make LXDE configuration directory
+      file:
+        path: /home/europe/.config/lxsession/LXDE
+        owner: europe
+        group: europe
+        state: directory
+        recurse: yes
+      tags:
+        - kiosk
+
+    - name: LXDE configuration file
+      copy:
+        src: files/autostart
+        dest: /home/europe/.config/lxsession/LXDE/autostart
+        owner: europe
+        group: europe
+      tags:
+        - kiosk
 
     # -- application
 
@@ -150,59 +253,91 @@
       tags:
         - app
         - config
+
+    # -- build
+
+    - name: Build base application image
+      command: docker build -f Dockerfile.base -t msgre/common:europe-base.latest .
+      args:
+        chdir: "{{app_dir}}"
+      tags:
+        - build
+
+    - name: Build images specified in docker-compose
+      command: docker-compose build
+      args:
+        chdir: "{{app_dir}}"
+      tags:
+        - build
+
+    - name: Build watcher image
+      command: docker build -t msgre/common:europe-watcher.latest .
+      args:
+        chdir: "{{app_dir}}/watcher"
+      tags:
+        - build
+
+    - name: Override docker-compose settings
+      file:
+        src: "{{app_dir}}/{{docker_compose_override}}"
+        dest: "{{app_dir}}/docker-compose.override.yml"
+        state: link
+      tags:
+        - build
+
+    - name: Run admin container
+      command: docker-compose up -d admin
+      environment:
+        PWD: "{{app_dir}}"
+      args:
+        chdir: "{{app_dir}}"
+      tags:
+        - build
+        - initial
   
-    - name: Copy Nginx configuration file
-      template:
-        src: templates/local_settings.py.j2
-        dest: "{{app_conf_dir}}/local_settings.py"
+    - name: Run Django application DB migration
+      command: docker exec -ti admin ./manage.py migrate --noinput
+      args:
+        chdir: "{{app_dir}}"
       tags:
-        - app
-        - config
+        - build
+        - initial
 
-    - name: Copy initial SQLite database
-      copy:
-        src: files/db.sqlite3
-        dest: "{{app_conf_dir}}/db.sqlite3"
+    - name: Fill Django DB with initial data
+      command: docker exec -ti admin ./manage.py initial_questions /content
+      args:
+        chdir: "{{app_dir}}"
       tags:
-        - app
-        - config
+        - build
+        - initial
 
-    - name: Helper stop script
-      copy:
-        src: files/stop.sh
-        dest: "{{app_conf_dir}}/stop.sh"
-        mode: 0755
+    - name: Fill Django DB with fake results data
+      command: docker exec -ti admin ./manage.py fake_results
+      args:
+        chdir: "{{app_dir}}"
       tags:
-        - app
-        - config
+        - build
+        - initial
 
-    - name: Helper restart script
-      copy:
-        src: files/stop.sh
-        dest: "{{app_conf_dir}}/restart.sh"
-        mode: 0755
+    - name: Kill admin container
+      command: docker-compose kill admin
+      environment:
+        PWD: "{{app_dir}}"
+      args:
+        chdir: "{{app_dir}}"
       tags:
-        - app
-        - config
+        - build
+        - initial
 
-    - name: Helper start script
-      template:
-        src: templates/start.sh.j2
-        dest: "{{app_conf_dir}}/start.sh"
-        mode: 0755
+    - name: Remove admin container
+      command: docker-compose rm -f admin
+      args:
+        chdir: "{{app_dir}}"
       tags:
-        - app
-        - config
+        - build
+        - initial
 
-    # -- maintenance
-
-    # NOTE: time is set to 20:00 which is in our time zone 2:00
-    - name: Clean high score after midnight
-      cron:
-        name: "clean high scores"
-        minute: 0
-        hour: 20
-        job: /usr/bin/docker exec europe-api /src/api/manage.py clear_high_scores >>{{app_conf_dir}}/clear_high_scores.log 2>&1
+    - name: We are done, reboot NUC
+      command: reboot
       tags:
-        - maintenance
-      
+        - done

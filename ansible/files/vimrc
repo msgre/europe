@@ -1,0 +1,132 @@
+set nocompatible                " be iMproved
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Vundle plugin management
+
+" set guifont=Monaco:h12
+" set guifont=Droid\ Sans\ Mono\ for\ Powerline:h12
+set guifont=Meslo\ LG\ S\ Regular\ for\ Powerline:h12
+
+filetype off                    " required!
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" Vundle - required!
+Plugin 'gmarik/vundle'
+Plugin 'kien/ctrlp.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'majutsushi/tagbar'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'rizzatti/funcoo.vim'
+Plugin 'bling/vim-airline'
+Plugin 'sudar/vim-arduino-syntax'
+Plugin 'ervandew/supertab'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+
+call vundle#end()
+
+filetype plugin indent on       " required!
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" General
+
+set history=100                 " How many lines of history to remember
+set clipboard+=unnamed          " sharing with system clipboard
+set viminfo+=!                  " make sure it can save viminfo
+set noswapfile                  " do not write annoying intermediate swap files
+set wildignore=*.swp,*.pyc      " ignore theese files
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Vim UI
+
+set guioptions=ac               " disable GUI and keep only useful stuff
+set lsp=0                       " space it out a little more (easier to read)
+set wildmenu                    " turn on wild menu
+set ruler                       " always show current positions along the bottom
+set number                      " turn on line numbers
+set showcmd                     " show partial commands in the last line of the screen
+set guicursor+=a:blinkon0       " turn off cursor blinking
+set laststatus=2                " always show the status line
+set noshowmode                  " don't show edit mode in statusline
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Theme
+
+syntax on                       " syntax highlighting on
+set colorcolumn=80              " colored column
+if !has("gui_running")
+    let g:solarized_termtrans = 1
+    let g:solarized_termcolors = 256
+    let g:solarized_visibility = "high"
+    let g:solarized_contrast = "high"
+endif
+set background=dark
+colorscheme solarized
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Visual Cues
+
+set so=5                        " keep lines (top/bottom) for scope
+set showmatch                   " show matching brackets
+set matchpairs+=<:>             " ^ match also < > brackets
+set hlsearch                    " do not highlight searched for phrases
+set incsearch                   " BUT do highlight as you type you search phrase
+set ignorecase                  " use case insensitive search
+set smartcase                   " ^ except when using capital letters
+set listchars=tab:\|\ ,trail:.,eol:$ " what to show when I hit :set list
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Text Formatting
+
+set autoindent                  " autoindent on new line
+set expandtab                   " spaces instead of TAB
+set tabstop=4                   " tab spacing (settings below are just to unify it)
+set softtabstop=4               " unify
+set shiftwidth=4                " unify
+set nowrap                      " do not wrap lines
+set backspace=indent,eol,start  " allow backspacing over autoindent, line breaks and start of insert action
+set isk+=$,@,%,#,_              " none of these should be word dividers, so make them not be
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Shortcuts
+
+" plugin CtrlP
+noremap <leader>e :CtrlP<CR>
+noremap <leader>f :CtrlPClearAllCaches<CR>
+
+" plugin Tagbar
+noremap <leader>i :TagbarToggle<CR>
+
+" new tab
+noremap <leader>t :tabnew<CR>
+
+" ag word under cursor
+noremap <leader>a :Ag!<CR>
+
+" Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
+" which is the default
+map Y y$
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Plugins
+
+" Airline
+let g:airline_theme = 'ubaryd'
+let g:airline_powerline_fonts = 1
+let g:airline_section_x = ''
+let g:airline_section_y = '%{airline#extensions#tagbar#currenttag()}'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Automatization
+
+" set python syntax for *.wsgi files
+autocmd BufReadPost *.wsgi set syntax=python
+
+autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2
+
+map :E :NERDTreeToggle
+map ,f :NERDTreeFind<CR>

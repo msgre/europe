@@ -1,0 +1,15 @@
+# @lxpanel --profile LXDE
+# @pcmanfm --desktop --profile LXDE
+@/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+
+@xset s off
+@xset -dpms
+@xset s noblank
+
+@sed -i 's/"exited_cleanly": false/"exited_cleanly": true/' ~/.config/chromium/Default/Preferences
+@chromium-browser --kiosk http://seznam.cz --noerrdialogs --incognito
+#TODO: start docker-compose (/root/europe/start.sh)
+#@chromium-browser --kiosk http://localhost:8081 --noerrdialogs --incognito
+
+# @xrandr --auto --output HDMI1 --primary --mode 1680x1050
+@xrandr --auto --output HDMI1 --primary --mode 1920x1680
