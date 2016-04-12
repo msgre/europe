@@ -56,10 +56,10 @@ CODES_EASY = [
 
 # list of "hard" countries
 CODES_HARD = [
-    "al", "am", "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", 
-    "ge", "ie", "is", "it", "kz", "cy", "lt", "lv", "lu", "mk", 
+    "al", "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", 
+    "ie", "is", "it", "kz", "cy", "lt", "lv", "lu", "mk", 
     "hu", "md", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", 
-    "sk", "si", "gb", "rs", "tr", "ua", "az", "me", "cz", "gr", "es", 
+    "sk", "si", "gb", "rs", "tr", "ua", "me", "cz", "gr", "es", 
     "se", "ch",
 ]
 
