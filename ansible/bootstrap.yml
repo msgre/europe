@@ -331,11 +331,22 @@
 
     - name: Remove admin container
       command: docker-compose rm -f admin
+      environment:
+        PWD: "{{app_dir}}"
       args:
         chdir: "{{app_dir}}"
       tags:
         - build
         - initial
+
+    - name: Start docke-compose
+      command: docker-compose up -d
+      environment:
+        PWD: "{{app_dir}}"
+      args:
+        chdir: "{{app_dir}}"
+      tags:
+        - start
 
     - name: We are done, reboot NUC
       command: reboot
