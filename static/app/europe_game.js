@@ -88,7 +88,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       } else if (serialized_model.image) {
         tmpl = "<td><img src=\"<%= image %>\" /><br><small style=\"font-weight:100;font-size:.5em;\"><%= country.board  %>/<%= country.gate  %></small></td>";
       } else {
-        tmpl = "<td><%= question %><br><small style=\"font-weight:100;font-size:.5em;\"><%= country.board  %>/<%= country.gate  %></small></td>";
+        tmpl = "<td class='text-only'><%= question %><br><small style=\"font-weight:100;font-size:.5em;\"><%= country.board  %>/<%= country.gate  %></small></td>";
       }
       return _.template(tmpl)(serialized_model);
     },

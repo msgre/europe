@@ -92,7 +92,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
                 """
             else
                 tmpl = """
-                    <td><%= question %><br><small style="font-weight:100;font-size:.5em;"><%= country.board  %>/<%= country.gate  %></small></td>
+                    <td class='text-only'><%= question %><br><small style="font-weight:100;font-size:.5em;"><%= country.board  %>/<%= country.gate  %></small></td>
                 """
             _.template(tmpl)(serialized_model)
         initialize: (options) ->
