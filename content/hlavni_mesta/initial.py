@@ -12,7 +12,7 @@ from quiz.models import Question, Category
 CITIES = {
     # Albánie
     'al': u'Tirana',
-    # Andora
+    # Andorra
     'ad': u'Andorra la Vella',
     # Belgie
     'be': u'Brusel',
