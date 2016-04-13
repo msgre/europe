@@ -8,13 +8,13 @@ from .models import Country
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'board', 'gate', 'led', )
+    list_display = ('title', 'code', 'board', 'gate', 'led', )
     list_editable = ('board', 'gate', 'led', )
     list_filter = ('board', 'gate')
-    search_fields = ['title', 'neighbours__title']
+    search_fields = ['title', 'code', 'neighbours__title']
     fieldsets = (
         (None, {
-            'fields': ('title', 'neighbours', )
+            'fields': ('title', 'code', 'neighbours', )
         }),
         (_('Hardware'), {
             'fields': (('board', 'gate', 'led', ), )
