@@ -20,7 +20,7 @@ class MainResultList(generics.ListAPIView):
     serializer_class = ResultsTopSerializer
 
     def get_queryset(self):
-        return Result.objects.values('category__title').annotate(best_time=Min('time')).order_by('category')
+        return Result.objects.filter(top=True).values('category__title').annotate(best_time=Min('time')).order_by('category')
 
 
 class CategoryResultList(generics.ListAPIView):
@@ -36,7 +36,7 @@ class CategoryResultList(generics.ListAPIView):
             category = Category.objects.get(pk=int(pk))
         except:
             raise Http404
-        results = Result.objects.filter(category=category, difficulty=difficulty)
+        results = Result.objects.filter(category=category, difficulty=difficulty, top=True)
         count = Option.objects.get(key='RESULT_COUNT')
         return results[:int(count.value)]
 
@@ -59,19 +59,19 @@ class ResultRank(generics.RetrieveAPIView):
         count = Option.objects.get(key='RESULT_COUNT')
         count = int(count.value)
 
-        position = Result.objects.filter(category=category, difficulty=difficulty, time__lte=time).count()
-        total = Result.objects.filter(category=category, difficulty=difficulty).count()
+        position = Result.objects.filter(category=category, difficulty=difficulty, time__lte=time, top=True).count()
+        total = Result.objects.filter(category=category, difficulty=difficulty, top=True).count()
 
         return {
             'position': position,
             'total': total,
-            'top': correct >= count and position <= count,
+            'top': correct >= count/2 and position <= count,
         }
 
 
 class CreateScoreRecord(generics.CreateAPIView):
     """
-    TODO:
+    Save game results.
     """
     serializer_class = ScoreSerializer
     queryset = Result.objects.all()

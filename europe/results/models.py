@@ -24,6 +24,7 @@ class Result(models.Model):
     category   = models.ForeignKey('quiz.Category')
     difficulty = models.CharField(_('Difficulty'), max_length=1, choices=RESULT_DIFFICULTY, default=RESULT_DIFFICULTY_EASY)
     questions  = models.ManyToManyField('quiz.Question', through='AnsweredQuestion')
+    top        = models.BooleanField(_('Top score'), default=False)
     created    = models.DateTimeField(_('Created'), auto_now_add=True)
 
     class Meta:

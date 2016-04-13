@@ -17,9 +17,9 @@ class AnsweredQuestionInline(admin.TabularInline):
 
 @admin.register(Result)
 class ResultAdmin(admin.ModelAdmin):
-    list_display = ('name_display', 'format_time', 'created', 'difficulty', 'category', )
+    list_display = ('name_display', 'top', 'format_time', 'created', 'difficulty', 'category', )
     date_hierarchy = 'created'
-    list_filter = ('difficulty', 'category')
+    list_filter = ('top', 'difficulty', 'category')
     fieldsets = (
         (None, {
             'fields': ('name', 'time', 'format_time', 'category', 'difficulty'),

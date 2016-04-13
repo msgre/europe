@@ -264,6 +264,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 category: _options.gamemode.category
                 difficulty: _options.gamemode.difficulty
                 questions: questions
+                top: if _name then true else false
             score.save()
             score.on 'sync', () ->
                 window.channel.trigger('result:close', _options)

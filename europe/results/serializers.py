@@ -59,14 +59,15 @@ class ScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Result
-        fields = ('name', 'time', 'category', 'difficulty', 'questions')
+        fields = ('name', 'time', 'category', 'difficulty', 'questions', 'top')
 
     def create(self, validated_data):
         result = Result.objects.create(
             name       = validated_data['name'],
             time       = validated_data['time'],
             category   = validated_data['category'],
-            difficulty = validated_data['difficulty']
+            difficulty = validated_data['difficulty'],
+            top         = validated_data['top']
         )
 
         for idx, answer in enumerate(validated_data['questions']):

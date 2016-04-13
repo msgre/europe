@@ -277,7 +277,8 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
         time: _options.time,
         category: _options.gamemode.category,
         difficulty: _options.gamemode.difficulty,
-        questions: questions
+        questions: questions,
+        top: _name ? true : false
       });
       score.save();
       return score.on('sync', function() {

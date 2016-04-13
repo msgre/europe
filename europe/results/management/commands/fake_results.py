@@ -43,7 +43,8 @@ class Command(BaseCommand):
                         name       = random.choice(NAMES),
                         time       = time,
                         category   = category, 
-                        difficulty = difficulty
+                        difficulty = difficulty,
+                        top        = True
                     )
 
         self.stdout.write('Done!')
