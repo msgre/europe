@@ -120,5 +120,6 @@ class Question(models.Model):
         return self.question or self.image.path
 
     def save(self, *args, **kwargs):
-        self.question = tipi.tipi(cgi.escape(self.question), lang='cs')
+        if self.question:
+            self.question = tipi.tipi(cgi.escape(self.question), lang='cs')
         super(Question, self).save(*args, **kwargs)
