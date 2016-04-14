@@ -13,6 +13,7 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
     categories = undefined
     choices = undefined
     local_channel = undefined
+    padding = undefined
 
     # --- models & collections
 
@@ -245,6 +246,19 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
             collection: choices
             command: 'done'
         
+        categories.on 'sync', (method, collection) ->
+            # NOTE: KEEP SYNCHRONISED WITH CSS PLEASE" (look into variables.less)
+            # dynamic padding for row-1 & row-3 to ensure accetable spacing in relation to row-2
+            rows = Math.ceil(collection.count / 4)
+            if rows >= 3
+                padding = 0
+            else if rows == 2
+                padding = 70
+            else
+                padding = 140
+            $('.row-1 td').css("padding-top", padding)
+            $('.row-3 td').css("padding-bottom", padding)
+
         categories.fetch()
 
         

@@ -18,3 +18,11 @@
 @intro-margin: @block-margin;
 @intro-1st-width: 1320px;
 @intro-1st-height: 600px;
+
+// Corelate this variable to most obvious value in relation to number of categories
+// 1-4 categories -> 140px
+// 5-8 categories -> 70px
+// 9-12 categories -> 0px
+// Same values must be set in Javascript code, europe_gamemode.coffee, 
+// on block marked "KEEP SYNCHRONISED WITH CSS PLEASE"
+@gamemode-padding: 70px;
