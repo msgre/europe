@@ -138,6 +138,9 @@ body #main {
   padding: .6em;
   text-align: left;
 }
+#body table.results tr td.text-right {
+  text-align: right;
+}
 #body table.results tr td:first-child {
   border-right: 1px solid #000;
 }
