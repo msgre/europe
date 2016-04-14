@@ -79,7 +79,7 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   NoResultsView = Marionette.ItemView.extend({
-    template: "<p>Tuto kategorii a obtížnost zatím nikdo nehrál.</p>"
+    template: "<p>Nahrávám...</p>"
   });
   CategoryResultView = Marionette.CollectionView.extend({
     childView: CategoryResultItemView,

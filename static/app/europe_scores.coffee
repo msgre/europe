@@ -76,7 +76,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
                 display_elapsed(@time)
 
     NoResultsView = Marionette.ItemView.extend
-        template: "<p>Tuto kategorii a obtížnost zatím nikdo nehrál.</p>"
+        template: "<p>Nahrávám...</p>"
         # TODO: nejde rozlisit, jestli to fakt nikdo nehral, nebo se ceka na odpoved ze serveru
         # mozna ale budu vychazet spis z toho, ze uz tam alespon jeden vysledek bude a
         # zobrazim tam nejakou vrtulku
