@@ -228,6 +228,9 @@ body #main {
 #body table.gamemode .button p.disabled {
   opacity: .4;
 }
+#body table.gamemode tr.row-1 td {
+  padding-top: 70px;
+}
 #body table.gamemode tr.row-1 .button:last-child {
   margin: 0;
 }
@@ -237,7 +240,6 @@ body #main {
 }
 #body table.gamemode tr.row-2 .button {
   margin-bottom: 18px;
-  height: 270px;
 }
 #body table.gamemode tr.row-2 .button:nth-child(4n) {
   margin-right: 0;
@@ -245,11 +247,11 @@ body #main {
 #body table.gamemode tr.row-2 .button:nth-child(n+4) {
   margin-bottom: 0;
 }
-#body table.gamemode tr.row-2 .button p {
-  margin-top: 3.5em;
-}
 #body table.gamemode tr.row-2 td {
   text-align: left;
+}
+#body table.gamemode tr.row-3 td {
+  padding-bottom: 70px;
 }
 #body table.gamemode tr.row-3 .button:last-child {
   margin: 0;
