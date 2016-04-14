@@ -15,9 +15,11 @@ as question for this difficulty level. If you don't want to put question in
 given difficulty level, leave cell empty.
 """
 
+import cgi
 import csv
 import sys
 import os
+import tipi
 
 from geo.models import Country
 from quiz.models import Question, Category
@@ -46,10 +48,11 @@ def load_csv(filename, title, stdout, stderr):
                 continue
             country = Country.objects.get(title=row[0])
 
+            question = tipi.tipi(cgi.escape(row[1].decode('utf-8')), lang='cs')
             kwargs = {
                 'category': category,
                 'country': country,
-                'question': row[1],
+                'question': question,
                 'difficulty': Question.QUESTION_DIFFICULTY_EASY
             }
             if row[2]:

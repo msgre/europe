@@ -13,4 +13,5 @@ RUN pip install \
     uwsgi==2.0 \
     PyYAML==3.11 \
     ipdb \
-    ipython
+    ipython \
+    tipi

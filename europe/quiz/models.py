@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import cgi
 import logging
 import random
 import itertools
+import tipi
 
 from django.db import models
 from django.utils.translation import ugettext as _
@@ -116,3 +118,7 @@ class Question(models.Model):
 
     def __unicode__(self):
         return self.question or self.image.path
+
+    def save(self, *args, **kwargs):
+        self.question = tipi.tipi(cgi.escape(self.question), lang='cs')
+        super(Question, self).save(*args, **kwargs)
