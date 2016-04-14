@@ -120,7 +120,6 @@
     // rekapitulace hry
     .recap {
         width: @recap-width;
-        height: @recap-height;
 
         margin-top: @recap-margin*2;
 
@@ -129,20 +128,29 @@
         background-color:#222;
         color: #fff;
 
-        div.text {
-            width: @recap-width * 1/2;
+        table.text {
+            //width: @recap-width * 1/2;
             float:left;
             
-            p.question {
-                margin: 1em 0 0 1em;;
+            td {
+                padding: 0.2em 2em;
+                font-size: 1.6em;
             }
-            p.answer {
-                color:yellow;
-                margin: .4em 0 0 1em;;
+            tr:first-child {
+                td {
+                    color:white;
+                    vertical-align:bottom;
+                }
+            }
+            tr:last-child {
+                td {
+                    color:yellow;
+                    vertical-align:top;
+                }
             }
         }
         img {
-            height: @recap-height;
+            height:100%;
             float:right;
         }
     }

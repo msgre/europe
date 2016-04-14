@@ -199,7 +199,16 @@ App.on 'start', (global_options) ->
         debug = false
         if window.location.search
             state = window.location.search.substr(1)
-            questions = [{"id":137,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},{"id":107,"question":"Ve které zemi se nachází město Podgorica?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":9,"title":"Černá Hora","sensor":"9"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},{"id":108,"question":"Ve které zemi se nachází město Praha?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":10,"title":"Česko","sensor":"10"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},{"id":142,"question":"Ve které zemi se nachází město Bělehrad?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":44,"title":"Srbsko","sensor":"44"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},{"id":100,"question":"Ve které zemi se nachází město Andorra la Vella?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":2,"title":"Andora","sensor":"2"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},{"id":110,"question":"Ve které zemi se nachází město Talin?","difficulty":"E","image":null,"country":{"id":12,"title":"Estonsko","sensor":"12"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true}]
+            questions = [
+                # {"id":237,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false}, 
+                # {"id":337,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false}, 
+                {"id":137,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false},
+                {"id":107,"question":"Ve které zemi se nachází město Podgorica?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":9,"title":"Černá Hora","sensor":"9"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
+                {"id":108,"question":"Ve které zemi se nachází město Praha?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":10,"title":"Česko","sensor":"10"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
+                {"id":142,"question":"Ve které zemi se nachází město Bělehrad?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":44,"title":"Srbsko","sensor":"44"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
+                {"id":100,"question":"Ve které zemi se nachází město Andorra la Vella?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":2,"title":"Andora","sensor":"2"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
+                {"id":110,"question":"Ve které zemi se nachází město Talin?","difficulty":"E","image":null,"country":{"id":12,"title":"Estonsko","sensor":"12"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true}
+            ]
             initials =
                 a:
                     crossroad: "results"
@@ -227,6 +236,8 @@ App.on 'start', (global_options) ->
                         title: 'Hlavní města'
                     questions: questions
                     answers: [
+                        # {id: 237, answer: false}
+                        # {id: 337, answer: false}
                         {id: 137, answer: false}
                         {id: 107, answer: true}
                         {id: 108, answer: true}

@@ -9,6 +9,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
 
     _options = undefined
     layout = undefined
+    height = undefined
 
     # --- models & collections
 
@@ -42,14 +43,43 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
             else
                 out = "bad"
             "recap #{ out }"
+        attributes: ->
+            out = 
+                style: "height:#{height}px"
+            out
         template: (serialized_model) ->
-            _.template("""
-                <div class="text">
-                    <p class="question"><%= question %></p>
-                    <p class="answer"><%= country.title %></p>
-                </div>
-                <% if (image) {%><img src='<%= image %>' /><% } %>
-            """)(serialized_model)
+            if serialized_model.image and serialized_model.question
+                _.template("""
+                    <table class="text" style="height:#{height}px;width:50%">
+                        <tr>
+                            <td><%= question %></td>
+                        </tr>
+                        <tr>
+                            <td><%= country.title %></td>
+                        </tr>
+                    </table>
+                    <img src="<%= image %>" />
+                """)(serialized_model)
+            else if serialized_model.image
+                _.template("""
+                    <table class="text" style="height:#{height}px;width:50%">
+                        <tr>
+                            <td style="vertical-align:middle"><%= country.title %></td>
+                        </tr>
+                    </table>
+                    <img src="<%= image %>" />
+                """)(serialized_model)
+            else
+                _.template("""
+                    <table class="text" style="height:#{height}px;width:100%">
+                        <tr>
+                            <td><%= question %></td>
+                        </tr>
+                        <tr>
+                            <td><%= country.title %></td>
+                        </tr>
+                    </table>
+                """)(serialized_model)
 
     BlankView = Marionette.ItemView.extend
         template: "<p>Nahrávám...</p>"
@@ -82,6 +112,10 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
         console.log 'Recap module'
         console.log options
         _options = options
+
+        # calculate optimal height of row according to number of answers
+        height = calc_optimal_height(Math.ceil(options.answers.length / 2), 20)
+
         layout = new ScreenLayout
             el: make_content_wrapper()
         layout.render()

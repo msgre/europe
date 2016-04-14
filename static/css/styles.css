@@ -150,25 +150,28 @@ body #main {
 }
 #body .recap {
   width: 809px;
-  height: 175px;
   margin-top: 20px;
   float: left;
   background-color: #222;
   color: #fff;
 }
-#body .recap div.text {
-  width: 404.5px;
+#body .recap table.text {
   float: left;
 }
-#body .recap div.text p.question {
-  margin: 1em 0 0 1em;
+#body .recap table.text td {
+  padding: 0.2em 2em;
+  font-size: 1.6em;
 }
-#body .recap div.text p.answer {
+#body .recap table.text tr:first-child td {
+  color: white;
+  vertical-align: bottom;
+}
+#body .recap table.text tr:last-child td {
   color: yellow;
-  margin: .4em 0 0 1em;
+  vertical-align: top;
 }
 #body .recap img {
-  height: 175px;
+  height: 100%;
   float: right;
 }
 #body .recap.good {

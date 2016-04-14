@@ -57,6 +57,10 @@ display_elapsed = (tenth_seconds) ->
 
     "#{ minutes }:#{ seconds },#{ tenth }"
 
+calc_optimal_height = (rows, margin, height=780) ->
+    out = (height - margin * rows) / rows
+    Math.floor(out)
+
 
 # --- casovac ----------------------------------------------------------------
 
