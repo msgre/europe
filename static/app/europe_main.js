@@ -47,7 +47,7 @@ display_elapsed = function(tenth_seconds) {
   if (seconds < 10) {
     seconds = "0" + seconds;
   }
-  return minutes + ":" + seconds + "." + tenth;
+  return minutes + ":" + seconds + "," + tenth;
 };
 
 delay_id = void 0;

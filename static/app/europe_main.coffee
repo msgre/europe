@@ -55,7 +55,7 @@ display_elapsed = (tenth_seconds) ->
     if seconds < 10
         seconds = "0#{ seconds }"
 
-    "#{ minutes }:#{ seconds }.#{ tenth }"
+    "#{ minutes }:#{ seconds },#{ tenth }"
 
 
 # --- casovac ----------------------------------------------------------------

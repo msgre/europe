@@ -295,8 +295,10 @@ body #main {
   text-align: center;
   vertical-align: middle;
 }
+#body table.result tr.row-1 td svg g {
+  fill: red;
+}
 #body table.result tr.row-1 td h1 {
-  color: #aaa;
   font-size: 4em;
   text-transform: uppercase;
 }
@@ -317,31 +319,70 @@ body #main {
 #body table.result td.typewriter {
   vertical-align: middle;
   text-align: center;
-  font-size: 4.2em;
-  color: #ccc;
-}
-#body table.result td.typewriter span {
-  float: left;
-  width: 60px;
-}
-#body table.result td.typewriter span.chosen {
+  font-size: 3.8em;
+  font-weight: 900;
   color: #000;
 }
-#body table.result td.typewriter span.selected {
+#body table.result td.typewriter table {
+  width: 100%;
+}
+#body table.result td.typewriter table td {
+  text-align: center;
+  vertical-align: middle;
+  width: 70px;
+}
+#body table.result td.typewriter table td.selected {
   color: #fff;
   background: #222;
+}
+#body table.result td.typewriter table td.selected svg path {
+  fill: #fff;
+}
+#body table.result td.typewriter table td.empty {
+  color: #ccc;
+}
+#body table.result td.typewriter table td.empty svg path {
+  fill: #fff;
 }
 #body table.result tr.row-3 {
-  font-size: 2em;
+  font-size: 2.2em;
 }
-#body table.result tr.row-3 span.selected {
+#body table.result tr.row-3 td {
+  padding: 4px 4px;
+  text-align: center;
+  width: 25px;
+}
+#body table.result tr.row-3 td:last-child {
+  width: 46px;
+}
+#body table.result tr.row-3 td.selected {
   color: #fff;
   background: #222;
-  padding: .2em;
+}
+#body table.result tr.row-3 td.selected svg path {
+  fill: #fff;
+}
+#body table.result tr.row-4 p {
+  font-size: 1.6em;
 }
 #body table.result td.help {
   padding: 1em;
-  width: 300px;
+  width: 280px;
+}
+#body table.result td.help table {
+  margin-top: 40px;
+}
+#body table.result td.help table tr td:first-child {
+  text-align: center;
+}
+#body table.result td.help table tr td:last-child {
+  padding-left: 1em;
+}
+#body table.result td.help table tr td {
+  vertical-align: middle;
+}
+#body table.result td.help svg {
+  padding: 4px 0 4px 0;
 }
 .layout-c #body {
   height: 900px;

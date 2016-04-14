@@ -297,9 +297,13 @@
             td {
                 text-align: center;
                 vertical-align: middle;
+                svg {
+                    g {
+                        fill:red;
+                    }
+                }
 
                 h1 {
-                    color: #aaa;
                     font-size: 4em;
                     text-transform: uppercase;
 
@@ -323,34 +327,96 @@
         td.typewriter {
             vertical-align: middle;
             text-align: center;
-            font-size: 4.2em;
-            color: #ccc;
-            span {
-                float:left;
-                width:60px;
-            }
-            span.chosen {
-                color:#000;
-            }
-            span.selected {
-                color: #fff;
-                background: #222;
-                //padding: .2em;
+            font-size: 3.8em;
+            font-weight: 900;
+            color: #000;
+            // span {
+            //     float:left;
+            //     width:62px;
+            // }
+            // span.chosen {
+            //     color:#000;
+            // }
+            // span.selected {
+            //     color: #fff;
+            //     background: #222;
+            //     //padding: .2em;
+            // }
+
+            table {
+                width:100%;
+
+                td {
+                    text-align:center;
+                    vertical-align:middle;
+                    width:70px;
+                }
+                td.selected {
+                    color: #fff;
+                    background: #222;
+                    svg {
+                        path {
+                            fill:#fff;
+                        }
+                    }
+                }
+                td.empty {
+                    color: #ccc;
+                    svg {
+                        path {
+                            fill:#fff;
+                        }
+                    }
+                }
             }
         }
         tr.row-3 {
-            font-size: 2em;
-
-            span.selected {
+            font-size: 2.2em;
+            td {
+                padding: 4px 4px;
+                text-align:center;
+                width:25px;
+            }
+            td:last-child {
+                width:46px;
+            }
+            td.selected {
                 color: #fff;
                 background: #222;
-                padding: .2em;
+                svg {
+                    path {
+                        fill:#fff;
+                    }
+                }
+            }
+        }
+        tr.row-4 {
+            p {
+                font-size: 1.6em;
             }
         }
 
         td.help {
+            table {
+                margin-top: 40px;
+                tr {
+                    td:first-child {
+                        text-align: center;
+                    }
+                    td:last-child {
+                        padding-left:1em;
+                    }
+                    td {
+                        vertical-align: middle;
+                    }
+                }
+            }
+            svg {
+                padding:4px 0 4px 0;
+            }
+
             padding: 1em;
-            width: 300px;
+            width: 280px;
         }
     }
 }
