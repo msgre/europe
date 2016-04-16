@@ -4,7 +4,7 @@ var App;
 App = new Marionette.Application();
 
 App.on('start', function(global_options) {
-  var ServerOptions, active_module, connection, final_global_options, server_options, state_handler, that, wsuri;
+  var active_module, connection, final_global_options, state_handler, that, wsuri;
   active_module = null;
   that = this;
   final_global_options = void 0;
@@ -21,7 +21,7 @@ App.on('start', function(global_options) {
     realm: "realm1"
   });
   connection.onopen = function(session, details) {
-    var on_gate, on_keyboard;
+    var ServerOptions, on_gate, on_keyboard, server_options;
     console.log("Connected to server through websockets...");
     window.eu_session = session;
     on_gate = function(args) {
@@ -83,328 +83,342 @@ App.on('start', function(global_options) {
     window.channel.on('intro:rainbow', function(options) {
       return session.publish('com.europe.rainbow', [1]);
     });
-    return window.channel.on('intro:blank', function(options) {
+    window.channel.on('intro:blank', function(options) {
       return session.publish('com.europe.blank', [1]);
     });
+    window.channel.on('debug:start', function(options) {
+      session.publish('com.europe.stop', [1]);
+      return window.setTimeout(function() {
+        session.publish('com.europe.start', [1]);
+        return state_handler("Debug", options);
+      }, 500);
+    });
+    window.channel.on('debug:close', function(options) {
+      session.publish('com.europe.stop', [1]);
+      return window.setTimeout(function() {
+        return window.location.replace(window.location.origin);
+      }, 500);
+    });
+    window.channel.on('intro:start', function(options) {
+      return state_handler("Intro", options);
+    });
+    window.channel.on('intro:close', function(options) {
+      return window.channel.trigger('crossroad:start', options);
+    });
+    window.channel.on('crossroad:start', function(options) {
+      return state_handler("Crossroad", options);
+    });
+    window.channel.on('crossroad:idle', function(options) {
+      return window.channel.trigger('intro:start', options);
+    });
+    window.channel.on('crossroad:close', function(options) {
+      if (options.crossroad === 'game') {
+        return window.channel.trigger('gamemode:start', options);
+      } else {
+        return window.channel.trigger('scores:start', options);
+      }
+    });
+    window.channel.on('scores:start', function(options) {
+      return state_handler("Scores", options);
+    });
+    window.channel.on('scores:idle', function(options) {
+      return window.channel.trigger('intro:start', options);
+    });
+    window.channel.on('scores:close', function(options) {
+      return window.channel.trigger('crossroad:start', options);
+    });
+    window.channel.on('gamemode:start', function(options) {
+      return state_handler("GameMode", options);
+    });
+    window.channel.on('gamemode:idle', function(options) {
+      return window.channel.trigger('intro:start', options);
+    });
+    window.channel.on('gamemode:close', function(options) {
+      return window.channel.trigger('countdown:start', options);
+    });
+    window.channel.on('countdown:start', function(options) {
+      return state_handler("Countdown", options);
+    });
+    window.channel.on('countdown:close', function(options) {
+      return window.channel.trigger('game:start', options);
+    });
+    window.channel.on('game:start', function(options) {
+      return state_handler("Game", options);
+    });
+    window.channel.on('game:close', function(options) {
+      return window.channel.trigger('result:start', options);
+    });
+    window.channel.on('result:start', function(options) {
+      return state_handler("Result", options);
+    });
+    window.channel.on('result:close', function(options) {
+      return window.channel.trigger('recap:start', options);
+    });
+    window.channel.on('recap:start', function(options) {
+      return state_handler("Recap", options);
+    });
+    window.channel.on('recap:close', function(options) {
+      return window.channel.trigger('score:start', options);
+    });
+    window.channel.on('score:start', function(options) {
+      return state_handler("Score", options);
+    });
+    window.channel.on('score:idle', function(options) {
+      return window.channel.trigger('intro:start', _.clone(final_global_options));
+    });
+    ServerOptions = Backbone.Collection.extend({
+      model: Backbone.Model,
+      url: '/api/options',
+      parse: function(response, options) {
+        return response.results;
+      }
+    });
+    server_options = new ServerOptions;
+    server_options.on('sync', function() {
+      var _global_options, _infinity, _options, debug, debug_data, handler, initials, key, questions, state, states;
+      _options = _.object(server_options.map(function(i) {
+        return [i.get('key'), parseInt(i.get('value'))];
+      }));
+      _global_options = _.extend({
+        options: _options
+      }, {
+        constants: {
+          DIFFICULTY_EASY: 'E',
+          DIFFICULTY_HARD: 'H'
+        }
+      });
+      final_global_options = _.extend(_global_options, global_options);
+      debug = false;
+      if (window.location.search) {
+        state = window.location.search.substr(1);
+        questions = [
+          {
+            "id": 137,
+            "question": "Ve které zemi se nachází město Atény?",
+            "difficulty": "E",
+            "image": "/foto-4_3.jpg",
+            "country": {
+              "id": 39,
+              "title": "Řecko",
+              "sensor": "39"
+            },
+            "category": {
+              "id": 1,
+              "title": "Hlavní města",
+              "time_easy": 30,
+              "penalty_easy": 3,
+              "time_hard": 10,
+              "penalty_hard": 3
+            },
+            "answer": false
+          }, {
+            "id": 107,
+            "question": "Ve které zemi se nachází město Podgorica?",
+            "difficulty": "E",
+            "image": "/foto-4_3.jpg",
+            "country": {
+              "id": 9,
+              "title": "Černá Hora",
+              "sensor": "9"
+            },
+            "category": {
+              "id": 1,
+              "title": "Hlavní města",
+              "time_easy": 30,
+              "penalty_easy": 3,
+              "time_hard": 10,
+              "penalty_hard": 3
+            },
+            "answer": true
+          }, {
+            "id": 108,
+            "question": "Ve které zemi se nachází město Praha?",
+            "difficulty": "E",
+            "image": "/foto-4_3.jpg",
+            "country": {
+              "id": 10,
+              "title": "Česko",
+              "sensor": "10"
+            },
+            "category": {
+              "id": 1,
+              "title": "Hlavní města",
+              "time_easy": 30,
+              "penalty_easy": 3,
+              "time_hard": 10,
+              "penalty_hard": 3
+            },
+            "answer": true
+          }, {
+            "id": 142,
+            "question": "Ve které zemi se nachází město Bělehrad?",
+            "difficulty": "E",
+            "image": "/foto-4_3.jpg",
+            "country": {
+              "id": 44,
+              "title": "Srbsko",
+              "sensor": "44"
+            },
+            "category": {
+              "id": 1,
+              "title": "Hlavní města",
+              "time_easy": 30,
+              "penalty_easy": 3,
+              "time_hard": 10,
+              "penalty_hard": 3
+            },
+            "answer": true
+          }, {
+            "id": 100,
+            "question": "Ve které zemi se nachází město Andorra la Vella?",
+            "difficulty": "E",
+            "image": "/foto-4_3.jpg",
+            "country": {
+              "id": 2,
+              "title": "Andora",
+              "sensor": "2"
+            },
+            "category": {
+              "id": 1,
+              "title": "Hlavní města",
+              "time_easy": 30,
+              "penalty_easy": 3,
+              "time_hard": 10,
+              "penalty_hard": 3
+            },
+            "answer": true
+          }, {
+            "id": 110,
+            "question": "Ve které zemi se nachází město Talin?",
+            "difficulty": "E",
+            "image": null,
+            "country": {
+              "id": 12,
+              "title": "Estonsko",
+              "sensor": "12"
+            },
+            "category": {
+              "id": 1,
+              "title": "Hlavní města",
+              "time_easy": 30,
+              "penalty_easy": 3,
+              "time_hard": 10,
+              "penalty_hard": 3
+            },
+            "answer": true
+          }
+        ];
+        initials = {
+          a: {
+            crossroad: "results"
+          },
+          b: {
+            crossroad: "game"
+          },
+          c: {
+            crossroad: "game",
+            gamemode: {
+              category: 9,
+              category_icon: 'svg/hlavni-mesta.svg',
+              difficulty: 'E',
+              difficulty_title: 'Jednoduchá hra',
+              penalty: 3,
+              time: 30,
+              title: 'Hlavní města'
+            }
+          },
+          d: {
+            crossroad: "game",
+            gamemode: {
+              category: 9,
+              category_icon: 'svg/priroda.svg',
+              difficulty: 'E',
+              difficulty_title: 'Jednoduchá hra',
+              penalty: 3,
+              time: 30,
+              title: 'Hlavní města'
+            },
+            questions: questions,
+            answers: [
+              {
+                id: 137,
+                answer: false
+              }, {
+                id: 107,
+                answer: true
+              }, {
+                id: 108,
+                answer: true
+              }, {
+                id: 142,
+                answer: true
+              }, {
+                id: 100,
+                answer: true
+              }, {
+                id: 110,
+                answer: false
+              }
+            ],
+            time: 84
+          }
+        };
+        states = {
+          intro: null,
+          crossroad: null,
+          scores: 'a',
+          gamemode: 'b',
+          countdown: 'c',
+          game: 'c',
+          result: 'd',
+          recap: 'd',
+          score: 'd',
+          debug: null
+        };
+        if (state in states) {
+          debug = true;
+          _infinity = 100000;
+          debug_data = {
+            constants: {
+              DIFFICULTY_EASY: "E",
+              DIFFICULTY_HARD: "H"
+            },
+            options: {
+              COUNTDOWN_TICK_TIMEOUT: 1100,
+              IDLE_CROSSROAD: 4000 * _infinity,
+              IDLE_GAMEMODE: 4000 * _infinity,
+              IDLE_RECAP: 10000 * _infinity,
+              IDLE_RESULT: 10000 * _infinity,
+              IDLE_SCORE: 10000 * _infinity,
+              IDLE_SCORES: 10000 * _infinity,
+              INTRO_TIME_PER_SCREEN: 3000,
+              QUESTION_COUNT: 8,
+              RESULT_COUNT: 10
+            }
+          };
+          if (states[state]) {
+            for (key in initials[states[state]]) {
+              debug_data[key] = initials[states[state]][key];
+            }
+          }
+          console.log("Final debug options, state " + state);
+          console.log(debug_data);
+          window.channel.trigger(state + ":start", debug_data);
+        }
+      }
+      if (!debug) {
+        console.log("Normal game launch (no debug)");
+        window.channel.trigger('intro:start', _.clone(final_global_options));
+      }
+      handler = function() {
+        return window.channel.trigger('intro:rainbow');
+      };
+      return set_delay(handler, 1500);
+    });
+    return server_options.fetch();
   };
   connection.onclose = function(reason, details) {
     return console.log("Websocket connection to backend lost: " + reason);
   };
-  connection.open();
-  window.channel.on('intro:start', function(options) {
-    return state_handler("Intro", options);
-  });
-  window.channel.on('intro:close', function(options) {
-    return window.channel.trigger('crossroad:start', options);
-  });
-  window.channel.on('crossroad:start', function(options) {
-    return state_handler("Crossroad", options);
-  });
-  window.channel.on('crossroad:idle', function(options) {
-    return window.channel.trigger('intro:start', options);
-  });
-  window.channel.on('crossroad:close', function(options) {
-    if (options.crossroad === 'game') {
-      return window.channel.trigger('gamemode:start', options);
-    } else {
-      return window.channel.trigger('scores:start', options);
-    }
-  });
-  window.channel.on('scores:start', function(options) {
-    return state_handler("Scores", options);
-  });
-  window.channel.on('scores:idle', function(options) {
-    return window.channel.trigger('intro:start', options);
-  });
-  window.channel.on('scores:close', function(options) {
-    return window.channel.trigger('crossroad:start', options);
-  });
-  window.channel.on('gamemode:start', function(options) {
-    return state_handler("GameMode", options);
-  });
-  window.channel.on('gamemode:idle', function(options) {
-    return window.channel.trigger('intro:start', options);
-  });
-  window.channel.on('gamemode:close', function(options) {
-    return window.channel.trigger('countdown:start', options);
-  });
-  window.channel.on('countdown:start', function(options) {
-    return state_handler("Countdown", options);
-  });
-  window.channel.on('countdown:close', function(options) {
-    return window.channel.trigger('game:start', options);
-  });
-  window.channel.on('game:start', function(options) {
-    return state_handler("Game", options);
-  });
-  window.channel.on('game:close', function(options) {
-    return window.channel.trigger('result:start', options);
-  });
-  window.channel.on('result:start', function(options) {
-    return state_handler("Result", options);
-  });
-  window.channel.on('result:close', function(options) {
-    return window.channel.trigger('recap:start', options);
-  });
-  window.channel.on('recap:start', function(options) {
-    return state_handler("Recap", options);
-  });
-  window.channel.on('recap:close', function(options) {
-    return window.channel.trigger('score:start', options);
-  });
-  window.channel.on('score:start', function(options) {
-    return state_handler("Score", options);
-  });
-  window.channel.on('score:idle', function(options) {
-    return window.channel.trigger('intro:start', _.clone(final_global_options));
-  });
-  ServerOptions = Backbone.Collection.extend({
-    model: Backbone.Model,
-    url: '/api/options',
-    parse: function(response, options) {
-      return response.results;
-    }
-  });
-  server_options = new ServerOptions;
-  server_options.on('sync', function() {
-    var _global_options, _infinity, _options, debug, debug_data, handler, initials, key, questions, state, states;
-    _options = _.object(server_options.map(function(i) {
-      return [i.get('key'), parseInt(i.get('value'))];
-    }));
-    _global_options = _.extend({
-      options: _options
-    }, {
-      constants: {
-        DIFFICULTY_EASY: 'E',
-        DIFFICULTY_HARD: 'H'
-      }
-    });
-    final_global_options = _.extend(_global_options, global_options);
-    debug = false;
-    if (window.location.search) {
-      state = window.location.search.substr(1);
-      questions = [
-        {
-          "id": 137,
-          "question": "Ve které zemi se nachází město Atény?",
-          "difficulty": "E",
-          "image": "/foto-4_3.jpg",
-          "country": {
-            "id": 39,
-            "title": "Řecko",
-            "sensor": "39"
-          },
-          "category": {
-            "id": 1,
-            "title": "Hlavní města",
-            "time_easy": 30,
-            "penalty_easy": 3,
-            "time_hard": 10,
-            "penalty_hard": 3
-          },
-          "answer": false
-        }, {
-          "id": 107,
-          "question": "Ve které zemi se nachází město Podgorica?",
-          "difficulty": "E",
-          "image": "/foto-4_3.jpg",
-          "country": {
-            "id": 9,
-            "title": "Černá Hora",
-            "sensor": "9"
-          },
-          "category": {
-            "id": 1,
-            "title": "Hlavní města",
-            "time_easy": 30,
-            "penalty_easy": 3,
-            "time_hard": 10,
-            "penalty_hard": 3
-          },
-          "answer": true
-        }, {
-          "id": 108,
-          "question": "Ve které zemi se nachází město Praha?",
-          "difficulty": "E",
-          "image": "/foto-4_3.jpg",
-          "country": {
-            "id": 10,
-            "title": "Česko",
-            "sensor": "10"
-          },
-          "category": {
-            "id": 1,
-            "title": "Hlavní města",
-            "time_easy": 30,
-            "penalty_easy": 3,
-            "time_hard": 10,
-            "penalty_hard": 3
-          },
-          "answer": true
-        }, {
-          "id": 142,
-          "question": "Ve které zemi se nachází město Bělehrad?",
-          "difficulty": "E",
-          "image": "/foto-4_3.jpg",
-          "country": {
-            "id": 44,
-            "title": "Srbsko",
-            "sensor": "44"
-          },
-          "category": {
-            "id": 1,
-            "title": "Hlavní města",
-            "time_easy": 30,
-            "penalty_easy": 3,
-            "time_hard": 10,
-            "penalty_hard": 3
-          },
-          "answer": true
-        }, {
-          "id": 100,
-          "question": "Ve které zemi se nachází město Andorra la Vella?",
-          "difficulty": "E",
-          "image": "/foto-4_3.jpg",
-          "country": {
-            "id": 2,
-            "title": "Andora",
-            "sensor": "2"
-          },
-          "category": {
-            "id": 1,
-            "title": "Hlavní města",
-            "time_easy": 30,
-            "penalty_easy": 3,
-            "time_hard": 10,
-            "penalty_hard": 3
-          },
-          "answer": true
-        }, {
-          "id": 110,
-          "question": "Ve které zemi se nachází město Talin?",
-          "difficulty": "E",
-          "image": null,
-          "country": {
-            "id": 12,
-            "title": "Estonsko",
-            "sensor": "12"
-          },
-          "category": {
-            "id": 1,
-            "title": "Hlavní města",
-            "time_easy": 30,
-            "penalty_easy": 3,
-            "time_hard": 10,
-            "penalty_hard": 3
-          },
-          "answer": true
-        }
-      ];
-      initials = {
-        a: {
-          crossroad: "results"
-        },
-        b: {
-          crossroad: "game"
-        },
-        c: {
-          crossroad: "game",
-          gamemode: {
-            category: 9,
-            category_icon: 'svg/hlavni-mesta.svg',
-            difficulty: 'E',
-            difficulty_title: 'Jednoduchá hra',
-            penalty: 3,
-            time: 30,
-            title: 'Hlavní města'
-          }
-        },
-        d: {
-          crossroad: "game",
-          gamemode: {
-            category: 9,
-            category_icon: 'svg/priroda.svg',
-            difficulty: 'E',
-            difficulty_title: 'Jednoduchá hra',
-            penalty: 3,
-            time: 30,
-            title: 'Hlavní města'
-          },
-          questions: questions,
-          answers: [
-            {
-              id: 137,
-              answer: false
-            }, {
-              id: 107,
-              answer: true
-            }, {
-              id: 108,
-              answer: true
-            }, {
-              id: 142,
-              answer: true
-            }, {
-              id: 100,
-              answer: true
-            }, {
-              id: 110,
-              answer: false
-            }
-          ],
-          time: 84
-        }
-      };
-      states = {
-        intro: null,
-        crossroad: null,
-        scores: 'a',
-        gamemode: 'b',
-        countdown: 'c',
-        game: 'c',
-        result: 'd',
-        recap: 'd',
-        score: 'd'
-      };
-      if (state in states) {
-        debug = true;
-        _infinity = 100000;
-        debug_data = {
-          constants: {
-            DIFFICULTY_EASY: "E",
-            DIFFICULTY_HARD: "H"
-          },
-          options: {
-            COUNTDOWN_TICK_TIMEOUT: 1100,
-            IDLE_CROSSROAD: 4000 * _infinity,
-            IDLE_GAMEMODE: 4000 * _infinity,
-            IDLE_RECAP: 10000 * _infinity,
-            IDLE_RESULT: 10000 * _infinity,
-            IDLE_SCORE: 10000 * _infinity,
-            IDLE_SCORES: 10000 * _infinity,
-            INTRO_TIME_PER_SCREEN: 3000,
-            QUESTION_COUNT: 8,
-            RESULT_COUNT: 10
-          }
-        };
-        if (states[state]) {
-          for (key in initials[states[state]]) {
-            debug_data[key] = initials[states[state]][key];
-          }
-        }
-        console.log("Final debug options, state " + state);
-        console.log(debug_data);
-        window.channel.trigger(state + ":start", debug_data);
-      }
-    }
-    if (!debug) {
-      console.log("Normal game launch (no debug)");
-      window.channel.trigger('intro:start', _.clone(final_global_options));
-    }
-    handler = function() {
-      return window.channel.trigger('intro:rainbow');
-    };
-    return set_delay(handler, 1500);
-  });
-  return server_options.fetch();
+  return connection.open();
 });

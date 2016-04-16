@@ -86,6 +86,228 @@ App.on 'start', (global_options) ->
         window.channel.on 'intro:blank', (options) ->
             session.publish('com.europe.blank', [1])
 
+        # --- debug
+
+        window.channel.on 'debug:start', (options) ->
+            session.publish('com.europe.stop', [1])
+            window.setTimeout ()->
+                session.publish('com.europe.start', [1])
+                state_handler("Debug", options)
+            , 500
+
+        window.channel.on 'debug:close', (options) ->
+            session.publish('com.europe.stop', [1])
+            window.setTimeout ()->
+                window.location.replace(window.location.origin)
+            , 500
+
+        # --- intro
+
+        window.channel.on 'intro:start', (options) ->
+            state_handler("Intro", options)
+
+        window.channel.on 'intro:close', (options) ->
+            window.channel.trigger('crossroad:start', options)
+
+        # --- crossroad
+
+        window.channel.on 'crossroad:start', (options) ->
+            state_handler("Crossroad", options)
+
+        window.channel.on 'crossroad:idle', (options) ->
+            window.channel.trigger('intro:start', options)
+
+        window.channel.on 'crossroad:close', (options) ->
+            if options.crossroad == 'game'
+                window.channel.trigger('gamemode:start', options)
+            else
+                # set_delay () ->
+                #     # NOTE: without delay, intro immediately recognise keypress and go to crossroad again
+                #     window.channel.trigger('intro:start', options) # TODO: sup na vysledky
+                # , 100
+                window.channel.trigger('scores:start', options)
+
+        # --- scores
+
+        window.channel.on 'scores:start', (options) ->
+            state_handler("Scores", options)
+
+        window.channel.on 'scores:idle', (options) ->
+            window.channel.trigger('intro:start', options)
+
+        window.channel.on 'scores:close', (options) ->
+            window.channel.trigger('crossroad:start', options)
+
+        # --- gamemode
+
+        window.channel.on 'gamemode:start', (options) ->
+            state_handler("GameMode", options)
+
+        window.channel.on 'gamemode:idle', (options) ->
+            window.channel.trigger('intro:start', options)
+
+        window.channel.on 'gamemode:close', (options) ->
+            window.channel.trigger('countdown:start', options)
+
+        # --- countdown
+
+        window.channel.on 'countdown:start', (options) ->
+            state_handler("Countdown", options)
+
+        window.channel.on 'countdown:close', (options) ->
+            window.channel.trigger('game:start', options)
+
+        # --- game
+
+        window.channel.on 'game:start', (options) ->
+            state_handler("Game", options)
+
+        window.channel.on 'game:close', (options) ->
+            window.channel.trigger('result:start', options)
+
+        # --- result
+
+        window.channel.on 'result:start', (options) ->
+            state_handler("Result", options)
+
+        window.channel.on 'result:close', (options) ->
+            window.channel.trigger('recap:start', options)
+
+        # --- result
+
+        window.channel.on 'recap:start', (options) ->
+            state_handler("Recap", options)
+
+        window.channel.on 'recap:close', (options) ->
+            window.channel.trigger('score:start', options)
+
+        # --- score
+
+        window.channel.on 'score:start', (options) ->
+            state_handler("Score", options)
+
+        window.channel.on 'score:idle', (options) ->
+            window.channel.trigger('intro:start', _.clone(final_global_options))
+
+
+
+        # fetch global options from server (and then start)
+        ServerOptions = Backbone.Collection.extend
+            model: Backbone.Model
+            url: '/api/options'
+            parse: (response, options) ->
+                response.results
+        server_options = new ServerOptions
+        server_options.on 'sync', ->
+            _options = _.object(server_options.map (i) -> [i.get('key'), parseInt(i.get('value'))])
+            _global_options = _.extend({options: _options}, {constants: {DIFFICULTY_EASY: 'E', DIFFICULTY_HARD: 'H'}}) 
+            final_global_options = _.extend(_global_options, global_options) 
+
+            # debug settings
+            debug = false
+            if window.location.search
+                state = window.location.search.substr(1)
+                questions = [
+                    # {"id":237,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false}, 
+                    # {"id":337,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false}, 
+                    {"id":137,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false},
+                    {"id":107,"question":"Ve které zemi se nachází město Podgorica?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":9,"title":"Černá Hora","sensor":"9"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
+                    {"id":108,"question":"Ve které zemi se nachází město Praha?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":10,"title":"Česko","sensor":"10"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
+                    {"id":142,"question":"Ve které zemi se nachází město Bělehrad?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":44,"title":"Srbsko","sensor":"44"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
+                    {"id":100,"question":"Ve které zemi se nachází město Andorra la Vella?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":2,"title":"Andora","sensor":"2"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
+                    {"id":110,"question":"Ve které zemi se nachází město Talin?","difficulty":"E","image":null,"country":{"id":12,"title":"Estonsko","sensor":"12"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true}
+                ]
+                initials =
+                    a:
+                        crossroad: "results"
+                    b:
+                        crossroad: "game"
+                    c:
+                        crossroad: "game"
+                        gamemode:
+                            category: 9
+                            category_icon: 'svg/hlavni-mesta.svg'
+                            difficulty: 'E'
+                            difficulty_title: 'Jednoduchá hra'
+                            penalty: 3
+                            time: 30
+                            title: 'Hlavní města'
+                    d:
+                        crossroad: "game"
+                        gamemode:
+                            category: 9
+                            category_icon: 'svg/priroda.svg'
+                            difficulty: 'E'
+                            difficulty_title: 'Jednoduchá hra'
+                            penalty: 3
+                            time: 30
+                            title: 'Hlavní města'
+                        questions: questions
+                        answers: [
+                            # {id: 237, answer: false}
+                            # {id: 337, answer: false}
+                            {id: 137, answer: false}
+                            {id: 107, answer: true}
+                            {id: 108, answer: true}
+                            {id: 142, answer: true}
+                            {id: 100, answer: true}
+                            {id: 110, answer: false}
+                        ]
+                        time: 84
+                states = 
+                    intro: null
+                    crossroad: null
+                    scores: 'a'
+                    gamemode: 'b'
+                    countdown: 'c'
+                    game: 'c'
+                    result: 'd'
+                    recap: 'd'
+                    score: 'd'
+                    debug: null
+
+                if state of states
+                    debug = true
+                    # tweak options to "infinite" timeouts
+                    _infinity = 100000
+                    debug_data = 
+                        constants:
+                            DIFFICULTY_EASY: "E"
+                            DIFFICULTY_HARD: "H"
+                        options:
+                            COUNTDOWN_TICK_TIMEOUT : 1100
+                            IDLE_CROSSROAD: 4000 * _infinity
+                            IDLE_GAMEMODE: 4000 * _infinity
+                            IDLE_RECAP: 10000 * _infinity
+                            IDLE_RESULT: 10000 * _infinity
+                            IDLE_SCORE: 10000 * _infinity
+                            IDLE_SCORES: 10000 * _infinity
+                            INTRO_TIME_PER_SCREEN: 3000
+                            QUESTION_COUNT: 8
+                            RESULT_COUNT: 10
+                    # add missing keys to initial options
+                    if states[state]
+                        for key of initials[states[state]]
+                            debug_data[key] = initials[states[state]][key]
+                    # launch game
+                    console.log "Final debug options, state #{state}"
+                    console.log debug_data
+                    window.channel.trigger("#{state}:start", debug_data)
+        
+            # normal settings
+            if not debug
+                # normal launch (no debug)
+                console.log "Normal game launch (no debug)"
+                window.channel.trigger('intro:start', _.clone(final_global_options))
+
+            # initiate delayed rainbow on start, due to slow websocket initiation
+            # (without this code event 'intro.rainbow' is launched before websocket links is created)
+            handler = () ->
+                window.channel.trigger('intro:rainbow')
+            set_delay(handler, 1500)
+
+        server_options.fetch()
+
     connection.onclose = (reason, details) ->
         # TODO: tohle by mohlo byt osetrene nejak specialne
         # napr. nejakym error overlayem, timeoutem a refreshem stranky
@@ -93,208 +315,3 @@ App.on 'start', (global_options) ->
         console.log("Websocket connection to backend lost: " + reason)
 
     connection.open()
-
-    # --- intro
-
-    window.channel.on 'intro:start', (options) ->
-        state_handler("Intro", options)
-
-    window.channel.on 'intro:close', (options) ->
-        window.channel.trigger('crossroad:start', options)
-
-    # --- crossroad
-
-    window.channel.on 'crossroad:start', (options) ->
-        state_handler("Crossroad", options)
-
-    window.channel.on 'crossroad:idle', (options) ->
-        window.channel.trigger('intro:start', options)
-
-    window.channel.on 'crossroad:close', (options) ->
-        if options.crossroad == 'game'
-            window.channel.trigger('gamemode:start', options)
-        else
-            # set_delay () ->
-            #     # NOTE: without delay, intro immediately recognise keypress and go to crossroad again
-            #     window.channel.trigger('intro:start', options) # TODO: sup na vysledky
-            # , 100
-            window.channel.trigger('scores:start', options)
-
-    # --- scores
-
-    window.channel.on 'scores:start', (options) ->
-        state_handler("Scores", options)
-
-    window.channel.on 'scores:idle', (options) ->
-        window.channel.trigger('intro:start', options)
-
-    window.channel.on 'scores:close', (options) ->
-        window.channel.trigger('crossroad:start', options)
-
-    # --- gamemode
-
-    window.channel.on 'gamemode:start', (options) ->
-        state_handler("GameMode", options)
-
-    window.channel.on 'gamemode:idle', (options) ->
-        window.channel.trigger('intro:start', options)
-
-    window.channel.on 'gamemode:close', (options) ->
-        window.channel.trigger('countdown:start', options)
-
-    # --- countdown
-
-    window.channel.on 'countdown:start', (options) ->
-        state_handler("Countdown", options)
-
-    window.channel.on 'countdown:close', (options) ->
-        window.channel.trigger('game:start', options)
-
-    # --- game
-
-    window.channel.on 'game:start', (options) ->
-        state_handler("Game", options)
-
-    window.channel.on 'game:close', (options) ->
-        window.channel.trigger('result:start', options)
-
-    # --- result
-
-    window.channel.on 'result:start', (options) ->
-        state_handler("Result", options)
-
-    window.channel.on 'result:close', (options) ->
-        window.channel.trigger('recap:start', options)
-
-    # --- result
-
-    window.channel.on 'recap:start', (options) ->
-        state_handler("Recap", options)
-
-    window.channel.on 'recap:close', (options) ->
-        window.channel.trigger('score:start', options)
-
-    # --- score
-
-    window.channel.on 'score:start', (options) ->
-        state_handler("Score", options)
-
-    window.channel.on 'score:idle', (options) ->
-        window.channel.trigger('intro:start', _.clone(final_global_options))
-
-
-    # fetch global options from server (and then start)
-    ServerOptions = Backbone.Collection.extend
-        model: Backbone.Model
-        url: '/api/options'
-        parse: (response, options) ->
-            response.results
-    server_options = new ServerOptions
-    server_options.on 'sync', ->
-        _options = _.object(server_options.map (i) -> [i.get('key'), parseInt(i.get('value'))])
-        _global_options = _.extend({options: _options}, {constants: {DIFFICULTY_EASY: 'E', DIFFICULTY_HARD: 'H'}}) 
-        final_global_options = _.extend(_global_options, global_options) 
-
-        # debug settings
-        debug = false
-        if window.location.search
-            state = window.location.search.substr(1)
-            questions = [
-                # {"id":237,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false}, 
-                # {"id":337,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false}, 
-                {"id":137,"question":"Ve které zemi se nachází město Atény?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":39,"title":"Řecko","sensor":"39"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":false},
-                {"id":107,"question":"Ve které zemi se nachází město Podgorica?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":9,"title":"Černá Hora","sensor":"9"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
-                {"id":108,"question":"Ve které zemi se nachází město Praha?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":10,"title":"Česko","sensor":"10"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
-                {"id":142,"question":"Ve které zemi se nachází město Bělehrad?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":44,"title":"Srbsko","sensor":"44"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
-                {"id":100,"question":"Ve které zemi se nachází město Andorra la Vella?","difficulty":"E","image":"/foto-4_3.jpg","country":{"id":2,"title":"Andora","sensor":"2"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true},
-                {"id":110,"question":"Ve které zemi se nachází město Talin?","difficulty":"E","image":null,"country":{"id":12,"title":"Estonsko","sensor":"12"},"category":{"id":1,"title":"Hlavní města","time_easy":30,"penalty_easy":3,"time_hard":10,"penalty_hard":3},"answer":true}
-            ]
-            initials =
-                a:
-                    crossroad: "results"
-                b:
-                    crossroad: "game"
-                c:
-                    crossroad: "game"
-                    gamemode:
-                        category: 9
-                        category_icon: 'svg/hlavni-mesta.svg'
-                        difficulty: 'E'
-                        difficulty_title: 'Jednoduchá hra'
-                        penalty: 3
-                        time: 30
-                        title: 'Hlavní města'
-                d:
-                    crossroad: "game"
-                    gamemode:
-                        category: 9
-                        category_icon: 'svg/priroda.svg'
-                        difficulty: 'E'
-                        difficulty_title: 'Jednoduchá hra'
-                        penalty: 3
-                        time: 30
-                        title: 'Hlavní města'
-                    questions: questions
-                    answers: [
-                        # {id: 237, answer: false}
-                        # {id: 337, answer: false}
-                        {id: 137, answer: false}
-                        {id: 107, answer: true}
-                        {id: 108, answer: true}
-                        {id: 142, answer: true}
-                        {id: 100, answer: true}
-                        {id: 110, answer: false}
-                    ]
-                    time: 84
-            states = 
-                intro: null
-                crossroad: null
-                scores: 'a'
-                gamemode: 'b'
-                countdown: 'c'
-                game: 'c'
-                result: 'd'
-                recap: 'd'
-                score: 'd'
-
-            if state of states
-                debug = true
-                # tweak options to "infinite" timeouts
-                _infinity = 100000
-                debug_data = 
-                    constants:
-                        DIFFICULTY_EASY: "E"
-                        DIFFICULTY_HARD: "H"
-                    options:
-                        COUNTDOWN_TICK_TIMEOUT : 1100
-                        IDLE_CROSSROAD: 4000 * _infinity
-                        IDLE_GAMEMODE: 4000 * _infinity
-                        IDLE_RECAP: 10000 * _infinity
-                        IDLE_RESULT: 10000 * _infinity
-                        IDLE_SCORE: 10000 * _infinity
-                        IDLE_SCORES: 10000 * _infinity
-                        INTRO_TIME_PER_SCREEN: 3000
-                        QUESTION_COUNT: 8
-                        RESULT_COUNT: 10
-                # add missing keys to initial options
-                if states[state]
-                    for key of initials[states[state]]
-                        debug_data[key] = initials[states[state]][key]
-                # launch game
-                console.log "Final debug options, state #{state}"
-                console.log debug_data
-                window.channel.trigger("#{state}:start", debug_data)
-    
-        # normal settings
-        if not debug
-            # normal launch (no debug)
-            console.log "Normal game launch (no debug)"
-            window.channel.trigger('intro:start', _.clone(final_global_options))
-
-        # initiate delayed rainbow on start, due to slow websocket initiation
-        # (without this code event 'intro.rainbow' is launched before websocket links is created)
-        handler = () ->
-            window.channel.trigger('intro:rainbow')
-        set_delay(handler, 1500)
-
-    server_options.fetch()
