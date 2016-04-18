@@ -23,6 +23,7 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       that = this;
       return local_channel.on('penalty', function(count) {
         var current, time, total;
+        window.sfx.no.play();
         time = that.get('time');
         current = that.get('current');
         total = that.get('total');
