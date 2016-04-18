@@ -60,9 +60,9 @@
                 {
                     "type": "class",
                     "extra": {
-                        "gates": [3,14,3,14,3,14,3,14,3,14],
-                        "led_gate": 13,
-                        "keyboard_gate": 15,
+                        "gates": [1, 2, 3, 4, 5, 6, 7, 8, 10],
+                        "led_gate": 11,
+                        "keyboard_gate": 9,
                         "usb_regex": "^ttyUSB\\d+$"
                     },
                     "classname": "watcher.AppSession",
