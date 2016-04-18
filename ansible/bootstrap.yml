@@ -22,8 +22,18 @@
       with_items:
         - vim
         - git
+        - python-pip
       tags:
         - basic
+
+    - name: Upgrade pip
+      command: pip install --upgrade pip
+
+    - name: Install Python packages for easier HW debugging
+      pip: name={{item}}
+      with_items:
+        - pyserial
+        - minimalmodbus
 
     # -- docker
 
