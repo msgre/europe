@@ -19,7 +19,6 @@ import cgi
 import csv
 import sys
 import os
-import tipi
 
 from geo.models import Country
 from quiz.models import Question, Category
@@ -48,7 +47,7 @@ def load_csv(filename, title, stdout, stderr):
                 continue
             country = Country.objects.get(title=row[0])
 
-            question = tipi.tipi(cgi.escape(row[1].decode('utf-8')), lang='cs')
+            question = row[1].decode('utf-8')
             kwargs = {
                 'category': category,
                 'country': country,
