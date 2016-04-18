@@ -72,9 +72,10 @@ App.module("Countdown", function(Mod, App, Backbone, Marionette, $, _) {
     if (number === 0) {
       clear_timer();
       window.channel.trigger('countdown:blank');
-      window.channel.trigger('countdown:close', _options);
+      return window.channel.trigger('countdown:close', _options);
+    } else {
+      return window.sfx["odpocet" + number].play();
     }
-    return window.sfx["odpocet" + number].play();
   };
   Mod.onStart = function(options) {
     console.log('Countdown module');

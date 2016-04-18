@@ -77,7 +77,8 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
             clear_timer()
             window.channel.trigger('countdown:blank')
             window.channel.trigger('countdown:close', _options)
-        window.sfx["odpocet#{number}"].play()
+        else
+            window.sfx["odpocet#{number}"].play()
 
     # --- module
 

@@ -53,19 +53,19 @@
 
 // cerny titulek, kategorie, nekdy obtiznost
 .layout-a #header {
-    background-color: #222;
+    background-color: @color-lightblue;
     color: #fff;
 }
 // bily titulek, kategorie, teplomer
 .layout-b #header {
     background-color: #fff;
-    color: #000;
+    color: @color-gray;
     h1 {
         margin-left: 0;
     }
     .bar {
         float: right;
-        background: #666 url(../svg/bar.svg) no-repeat; // NOTE: pozice ukazatele v teplomeru bude pres pozici SVG
+        background: @color-red url(../svg/bar.svg) no-repeat; // NOTE: pozice ukazatele v teplomeru bude pres pozici SVG
         width: @bar-width;
         height: @bar-height;
         margin-top: (@layout-header-height - @bar-height) / 2;
@@ -195,7 +195,7 @@
     table.game {
         width: 100%;
         height: 100%;
-        background-color: #222;
+        background-color: @color-lightblue;
         color: #fff;
         font-size: 3.4em;
 
@@ -239,9 +239,6 @@
                     position:relative;
                     top:-8px;
                 }
-            }
-            p.disabled {
-                opacity: .4;
             }
         }
 
@@ -394,11 +391,6 @@
             td {
                 text-align: center;
                 vertical-align: middle;
-                svg {
-                    g {
-                        fill:red;
-                    }
-                }
 
                 h1 {
                     font-size: 4em;
@@ -426,10 +418,10 @@
             text-align: center;
             font-size: 3.8em;
             font-weight: 900;
-            color: #000;
+            color: @color-darkblue;
 
             table {
-                width:100%;
+                width:99%;
 
                 td {
                     text-align:center;
@@ -438,19 +430,19 @@
                 }
                 td.selected {
                     color: #fff;
-                    background: #222;
+                    background: @color-darkblue;
                     svg {
-                        path {
-                            fill:#fff;
+                        width: 38px;
+                        height: 38px;
+                        rect {
+                            fill: @color-darkblue;
                         }
                     }
                 }
                 td.empty {
-                    color: #ccc;
                     svg {
-                        path {
-                            fill:#fff;
-                        }
+                        position: relative;
+                        top:11px;
                     }
                 }
             }
@@ -458,21 +450,18 @@
         tr.row-3 {
             font-size: 2.2em;
             td {
+                color: @color-gray;
                 padding: 4px 4px;
                 text-align:center;
                 width:25px;
-            }
-            td:last-child {
-                width:46px;
+                svg {
+                    position: relative;
+                    top: 2px;
+                }
             }
             td.selected {
                 color: #fff;
-                background: #222;
-                svg {
-                    path {
-                        fill:#fff;
-                    }
-                }
+                background: @color-gray;
             }
         }
         tr.row-4 {
@@ -504,6 +493,18 @@
             width: 280px;
         }
     }
+
+    table.good-result {
+        tr.row-1 {
+            background: @color-red;
+        }
+    }
+    table.bad-result {
+        tr.row-1 {
+            background: @color-darkblue;
+        }
+    }
+
 }
 
 // countdown, odpocet pred zacatkem hry 
@@ -566,6 +567,7 @@
         }
 
         td.cell-a2 {
+            background-color: @color-red;
             text-align: left;
             vertical-align: top;
             div {
@@ -598,6 +600,7 @@
             }
         }
         td.cell-b1 {
+            background-color: @color-lightblue;
             div {
                 padding: 2.8em 0 0 2em;
 
@@ -614,6 +617,7 @@
             }
         }
         td.cell-b2 {
+            background-color: @color-darkblue;
             text-align: center;
             vertical-align: middle;
         }
@@ -626,13 +630,16 @@
 .button {
     height: @block-height;
     float: left;
-    background-color:#222;
+    background-color: @color-darkblue;
     color:#fff;
     margin: 0 @block-margin 0 0;
 }
 .button.active {
-    background-color:orange;
+    background-color: @color-red;
     color:#fff;
+}
+.button.disabled {
+    background-color: @color-gray;
 }
 
 // tlacitka 4 velikosti

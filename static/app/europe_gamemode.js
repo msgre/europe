@@ -175,7 +175,7 @@ App.module("GameMode", function(Mod, App, Backbone, Marionette, $, _) {
   CategoryItemView = Marionette.ItemView.extend({
     tagName: "div",
     className: function() {
-      return "button button-1-4 " + (this.model.get('active') ? 'active' : '');
+      return "button button-1-4 " + (this.model.get('active') ? 'active' : '') + " " + (!this.model.get('enabled') ? 'disabled' : '');
     },
     template: function(serialized_model) {
       return _.template("<p<% if (!enabled) {%> class='disabled'<% } %>><img src='<%= icon %>'/><%= title %></p>")(serialized_model);

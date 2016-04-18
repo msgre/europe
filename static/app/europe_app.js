@@ -210,7 +210,7 @@ App.on('start', function(global_options) {
               "time_hard": 10,
               "penalty_hard": 3
             },
-            "answer": false
+            "answer": true
           }, {
             "id": 107,
             "question": "Ve které zemi se nachází město Podgorica?",

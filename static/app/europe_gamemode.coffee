@@ -155,8 +155,8 @@ App.module "GameMode", (Mod, App, Backbone, Marionette, $, _) ->
 
     CategoryItemView = Marionette.ItemView.extend
         tagName: "div"
-        className: ->
-            "button button-1-4 #{ if @model.get('active') then 'active' else '' }"
+        className: ()->
+            "button button-1-4 #{ if @model.get('active') then 'active' else '' } #{ if not @model.get('enabled') then 'disabled' else '' }"
         template: (serialized_model) ->
             _.template("<p<% if (!enabled) {%> class='disabled'<% } %>><img src='<%= icon %>'/><%= title %></p>")(serialized_model)
 

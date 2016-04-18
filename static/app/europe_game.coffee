@@ -64,7 +64,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
     InfoItemView = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <h1><img style='-webkit-filter: invert(100%)' src='<%= icon %>'/><%= category %></h1>
+                <h1><img style='-webkit-filter: invert(100%) opacity(70%)' src='<%= icon %>'/><%= category %></h1>
                 <div class="bar" style="background-position:<%= (current/total)*1100 %>px 0px">
                     <p><%= question %>/<%= total_questions %></p>
                     <p><%= show_time() %></p>
@@ -83,25 +83,15 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         tagName: 'tr'
         template: (serialized_model) ->
             if serialized_model.image and serialized_model.question
-                # tmpl = """
-                #     <td><img src="<%= image %>" height="781px" /></td>
-                #     <td class="text"><%= question %><br><small style="font-weight:100;font-size:.5em;"><%= country.board  %>/<%= country.gate  %></small></td>
-                # """
                 tmpl = """
                     <td><img src="<%= image %>" height="781px" /></td>
                     <td class="text"><%= question %></td>
                 """
             else if serialized_model.image
-                # tmpl = """
-                #     <td><img src="<%= image %>" /><br><small style="font-weight:100;font-size:.5em;"><%= country.board  %>/<%= country.gate  %></small></td>
-                # """
                 tmpl = """
                     <td><img src="<%= image %>" /></td>
                 """
             else
-                # tmpl = """
-                #     <td class='text-only'><%= question %><br><small style="font-weight:100;font-size:.5em;"><%= country.board  %>/<%= country.gate  %></small></td>
-                # """
                 tmpl = """
                     <td class='text-only'><%= question %></td>
                 """
