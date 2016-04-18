@@ -178,11 +178,6 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       layout.getRegion('question').show(question_view);
       local_channel.on('next', function(user_answer) {
         var bad_answers, bad_leds, correct_answers, good_leds, leds, old_q, output, question;
-        if (user_answer) {
-          window.sfx.yes.play();
-        } else {
-          window.sfx.no.play();
-        }
         question = info.get('question');
         old_q = questions.at(question - 1);
         old_q.set('answer', user_answer);
@@ -218,6 +213,11 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
           });
           return window.channel.trigger('game:close', output);
         } else {
+          if (user_answer) {
+            window.sfx.yes.play();
+          } else {
+            window.sfx.no.play();
+          }
           leds = _.map(correct_answers, function(i) {
             return i.get('country').led;
           });

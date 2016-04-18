@@ -198,10 +198,6 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             layout.getRegion('question').show(question_view)
 
             local_channel.on 'next', (user_answer) ->
-                if user_answer
-                    window.sfx.yes.play()
-                else
-                    window.sfx.no.play()
                 question = info.get('question')
 
                 # record user answer
@@ -234,6 +230,11 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
                         time: info.get('time')
                     window.channel.trigger('game:close', output)
                 else
+                    if user_answer
+                        window.sfx.yes.play()
+                    else
+                        window.sfx.no.play()
+
                     # blink LED
                     leds = _.map(correct_answers, (i) -> i.get('country').led)
                     window.channel.trigger('game:goodblink', leds, questions.at(question-2).get('answer') == true)
