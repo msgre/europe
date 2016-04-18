@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-NEOPIXEL_SIZE = 24
+NEOPIXEL_SIZE = 48
 COLORLENGTH = NEOPIXEL_SIZE / 4
 FADE = 2
 
