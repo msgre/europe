@@ -44,7 +44,7 @@ App.module "Debug", (Mod, App, Backbone, Marionette, $, _) ->
                         gate: passed.get('gate')
                         led: passed.get('led')
                     })
-                    window.channel.trigger('game:goodblink', [passed.led])
+                    window.channel.trigger('game:goodblink', [passed.get('led')])
 
     # --- views                                  
                                                 

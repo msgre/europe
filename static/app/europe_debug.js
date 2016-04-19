@@ -37,7 +37,7 @@ App.module("Debug", function(Mod, App, Backbone, Marionette, $, _) {
             gate: passed.get('gate'),
             led: passed.get('led')
           });
-          return window.channel.trigger('game:goodblink', [passed.led]);
+          return window.channel.trigger('game:goodblink', [passed.get('led')]);
         }
       });
     }

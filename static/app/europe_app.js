@@ -89,6 +89,7 @@ App.on('start', function(global_options) {
       return session.publish('com.europe.blank', [1]);
     });
     window.channel.on('debug:start', function(options) {
+      session.publish('com.europe.blank', [1]);
       session.publish('com.europe.stop', [1]);
       return window.setTimeout(function() {
         session.publish('com.europe.start', [1]);
@@ -413,7 +414,9 @@ App.on('start', function(global_options) {
         window.channel.trigger('intro:start', _.clone(final_global_options));
       }
       handler = function() {
-        return window.channel.trigger('intro:rainbow');
+        if (debug && state === 'intro' || !debug) {
+          return window.channel.trigger('intro:rainbow');
+        }
       };
       return set_delay(handler, 1500);
     });

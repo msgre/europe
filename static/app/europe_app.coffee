@@ -92,6 +92,7 @@ App.on 'start', (global_options) ->
         # --- debug
 
         window.channel.on 'debug:start', (options) ->
+            session.publish('com.europe.blank', [1])
             session.publish('com.europe.stop', [1])
             window.setTimeout ()->
                 session.publish('com.europe.start', [1])
@@ -306,7 +307,8 @@ App.on 'start', (global_options) ->
             # initiate delayed rainbow on start, due to slow websocket initiation
             # (without this code event 'intro.rainbow' is launched before websocket links is created)
             handler = () ->
-                window.channel.trigger('intro:rainbow')
+                if debug and state == 'intro' or not debug
+                    window.channel.trigger('intro:rainbow')
             set_delay(handler, 1500)
 
         server_options.fetch()
