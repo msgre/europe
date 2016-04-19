@@ -5,6 +5,6 @@ EXPOSE 8082
 ENTRYPOINT ["crossbar"]
 CMD ["start"]
 
-RUN pip install pyserial minimalmodbus autobahn[twisted]==0.13.0 crossbar
+RUN pip install pyserial minimalmodbus autobahn[twisted]==0.13.1 crossbar
 
 ADD watcher /src/
