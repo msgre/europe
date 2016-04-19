@@ -103,7 +103,7 @@ class Question(models.Model):
 
     difficulty = models.CharField(_('Difficulty'), max_length=1, choices=QUESTION_DIFFICULTY, default=QUESTION_DIFFICULTY_EASY)
     question   = models.TextField(_('Question'), blank=True, null=True)
-    image      = models.FileField(_('Image'), blank=True, null=True, upload_to=upload_fn, max_length=256, help_text=_('Could be bitmap (PNG/JPG/GIF) or vector (SVG). MUST be in correct size, maximum width=1638, height=791.'))
+    image      = models.FileField(_('Image'), blank=True, null=True, upload_to=upload_fn, max_length=256, help_text=_('Could be bitmap (PNG/JPG/GIF) or vector (SVG). MUST be in correct size, maximum width=1638, height=780.'))
     country    = models.ForeignKey('geo.Country')
     category   = models.ForeignKey('Category')
     note       = models.TextField(_('Note'), blank=True, null=True)
