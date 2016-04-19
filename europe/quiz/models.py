@@ -55,7 +55,7 @@ class Category(models.Model):
 
         # find countries which are **not** close together
         i_count = 0
-        temp = [random_ids[i_count]]
+        temp = [random_ids[0]]
         random_ids = list(set(country_ids).difference(temp))
         while i_count <= count - 2:
             logger.debug('Selected country %i' % (temp[-1], ))
@@ -70,7 +70,7 @@ class Category(models.Model):
                 random_ids = list(set(random_ids).difference([temp[-1]]))
             logger.debug('Current set of possible countries: %s' % (random_ids, ))
             i_count += 1
-            temp.append(random_ids[i_count])
+            temp.append(random_ids[0])
             logger.debug('Current set of selected countries: %s' % (temp, ))
         random_ids = temp
 
