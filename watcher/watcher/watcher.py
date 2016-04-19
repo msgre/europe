@@ -120,6 +120,7 @@ class AppSession(ApplicationSession):
             try:
                 response = self.instruments[gate].read_registers(GATE_ADDRESS, 1)[0]
             except builtins.OSError:
+                self.log.warn("problem with gate #{}".format(gate))
                 response = None  # TODO: nevim jestli to nebudu muset osetrit jinak, v Dockeru se mi to tady seklo a vyhnilo; minimalne bych mel zurive logovat
             out[gate] = response
             time_sleep(INSTRUMENT_SLEEP)
@@ -222,7 +223,7 @@ class AppSession(ApplicationSession):
                     yield self.publish('com.europe.gate', diff)
                     self.log.info("gate passing detected {diff}, event 'com.europe.gate' published", diff=diff)
                 old_value = value
-            yield sleep(CYCLE_SLEEP)
+            yield sleep(CYCLE_SLEEP/3.0)
 
             # control neopixels
             if not LED_OFF and self.neopixel and self.neopixel.is_running:

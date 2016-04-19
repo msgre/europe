@@ -1,7 +1,7 @@
 import random
 
 NEOPIXELS_ADDR = 0x1000
-NEOPIXELS_COUNT = 12   # TODO: debug; in production it will be set to 50
+NEOPIXELS_COUNT = 48
 
 
 class NeopixelsBase(object):
