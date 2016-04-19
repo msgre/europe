@@ -28,7 +28,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
         initialize: () ->
             that = @
             local_channel.on 'penalty', (count) ->
-                window.sfx.no.play()
+                window.sfx.gate.play()
                 # time penalty due to passing wrong tunnel
                 time = that.get('time')
 

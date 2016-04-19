@@ -377,7 +377,6 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     console.log('Result module');
     console.log(options);
     _options = options;
-    window.sfx.surprise.play();
     time = new Time({
       time: options.time
     });
@@ -417,6 +416,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
     });
     rank.on('sync', function() {
       if (rank.get('top')) {
+        window.sfx.surprise.play();
         layout = new GoodScreenLayout({
           el: make_content_wrapper()
         });
@@ -438,6 +438,7 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
           model: name
         }));
       } else {
+        window.sfx.notsurprise.play();
         layout = new BadScreenLayout({
           el: make_content_wrapper()
         });

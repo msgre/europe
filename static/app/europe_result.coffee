@@ -314,7 +314,6 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
         console.log 'Result module'
         console.log options
         _options = options
-        window.sfx.surprise.play()
 
         # put results data into models
         time = new Time({time: options.time})
@@ -348,6 +347,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
         # get rank of player score from server
         rank.on 'sync', () ->
             if rank.get('top')
+                window.sfx.surprise.play()
                 # render basic layout
                 layout = new GoodScreenLayout
                     el: make_content_wrapper()
@@ -358,6 +358,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                 layout.getRegion('input').show(new TypewriterView1({model: name}))
                 layout.getRegion('alphabet').show(new TypewriterView2({model: name}))
             else
+                window.sfx.notsurprise.play()
                 # render basic layout
                 layout = new BadScreenLayout
                     el: make_content_wrapper()
