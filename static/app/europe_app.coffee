@@ -6,6 +6,9 @@ App.on 'start', (global_options) ->
     that = @
     final_global_options = undefined
 
+    COLOR_RED = 28912
+    COLOR_GREEN = 32512
+
     state_handler = (new_module_name, options) ->
         if active_module != null
             active_module.stop()
@@ -64,12 +67,12 @@ App.on 'start', (global_options) ->
 
         window.channel.on 'game:goodblink', (leds, blink) ->
             if blink
-                session.publish('com.europe.blink', [_.initial(leds), 28912, [_.last(leds)], 28912])
+                session.publish('com.europe.blink', [_.initial(leds), COLOR_GREEN, [_.last(leds)], COLOR_GREEN])
             else
-                session.publish('com.europe.blink', [leds, 28912, [], 28912])
+                session.publish('com.europe.blink', [leds, COLOR_GREEN, [], COLOR_GREEN])
 
         window.channel.on 'game:badblink', (good_leds, bad_leds) ->
-            session.publish('com.europe.blink', [good_leds, 28912, bad_leds, 32512])
+            session.publish('com.europe.blink', [good_leds, COLOR_GREEN, bad_leds, COLOR_RED])
 
         window.channel.on 'countdown:flash', (options) ->
             session.publish('com.europe.flash', [1])

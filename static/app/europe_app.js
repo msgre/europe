@@ -4,10 +4,12 @@ var App;
 App = new Marionette.Application();
 
 App.on('start', function(global_options) {
-  var active_module, connection, final_global_options, state_handler, that, wsuri;
+  var COLOR_GREEN, COLOR_RED, active_module, connection, final_global_options, state_handler, that, wsuri;
   active_module = null;
   that = this;
   final_global_options = void 0;
+  COLOR_RED = 28912;
+  COLOR_GREEN = 32512;
   state_handler = function(new_module_name, options) {
     if (active_module !== null) {
       active_module.stop();
@@ -63,13 +65,13 @@ App.on('start', function(global_options) {
     });
     window.channel.on('game:goodblink', function(leds, blink) {
       if (blink) {
-        return session.publish('com.europe.blink', [_.initial(leds), 28912, [_.last(leds)], 28912]);
+        return session.publish('com.europe.blink', [_.initial(leds), COLOR_GREEN, [_.last(leds)], COLOR_GREEN]);
       } else {
-        return session.publish('com.europe.blink', [leds, 28912, [], 28912]);
+        return session.publish('com.europe.blink', [leds, COLOR_GREEN, [], COLOR_GREEN]);
       }
     });
     window.channel.on('game:badblink', function(good_leds, bad_leds) {
-      return session.publish('com.europe.blink', [good_leds, 28912, bad_leds, 32512]);
+      return session.publish('com.europe.blink', [good_leds, COLOR_GREEN, bad_leds, COLOR_RED]);
     });
     window.channel.on('countdown:flash', function(options) {
       return session.publish('com.europe.flash', [1]);
