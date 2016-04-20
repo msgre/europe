@@ -46,7 +46,8 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
       image: null,
       country: null,
       category: null,
-      answer: null
+      answer: null,
+      image_css_game: null
     }
   });
   Questions = Backbone.Collection.extend({
@@ -82,12 +83,18 @@ App.module("Game", function(Mod, App, Backbone, Marionette, $, _) {
   });
   QuestionItemView = Marionette.ItemView.extend({
     tagName: 'tr',
+    attributes: function() {
+      var styles;
+      return styles = {
+        style: styles ? styles : ''
+      };
+    },
     template: function(serialized_model) {
       var tmpl;
       if (serialized_model.image && serialized_model.question) {
-        tmpl = "<td><img src=\"<%= image %>\" height=\"781px\" /></td>\n<td class=\"text\"><%= question %></td>";
+        tmpl = "<td><img style=\"<%= image_css_game %>\" src=\"<%= image %>\" height=\"781px\" /></td>\n<td class=\"text\"><%= question %></td>";
       } else if (serialized_model.image) {
-        tmpl = "<td><img src=\"<%= image %>\" /></td>";
+        tmpl = "<td><img style=\"<%= image_css_game %>\" src=\"<%= image %>\" /></td>";
       } else {
         tmpl = "<td class='text-only'><%= question %></td>";
       }

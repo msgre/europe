@@ -9,7 +9,6 @@
             <rect id="Rectangle-path" fill="#000000" x="0" y="0" width="870" height="551.57625"></rect>
             <rect id="Rectangle-path" fill="#FFFFFF" x="0" y="370.14125" width="870" height="183.85875"></rect>
             <path d="M0,0 L870,0 L870,183.85875 L0,183.85875 L0,0 Z" id="Shape" fill="#1291FF"></path>
-            <rect id="Rectangle-3" stroke="#FFFFFF" stroke-width="3" x="0" y="0" width="870" height="552"></rect>
         </g>
     </g>
 </svg>

@@ -11,7 +11,6 @@
             <path d="M0,217.5 L798,217.5 L798,362.5 L0,362.5 L0,217.5 Z" id="Shape" fill="#FFFFFF"></path>
             <path d="M261.84375,0 L336.65625,0 L336.65625,580 L261.84375,580 L261.84375,0 Z" id="Shape" fill="#002868"></path>
             <path d="M0,253.75 L798,253.75 L798,326.25 L0,326.25 L0,253.75 Z" id="Shape" fill="#002868"></path>
-            <rect id="Rectangle-1" stroke="#FFFFFF" stroke-width="3" x="0" y="0" width="798" height="580"></rect>
         </g>
     </g>
 </svg>

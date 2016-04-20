@@ -22,6 +22,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
             country: null
             category: null
             answer: null
+            image_css_recap: null
 
     Questions = Backbone.Collection.extend
         model: Question
@@ -58,7 +59,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
                             <td><%= country.title %></td>
                         </tr>
                     </table>
-                    <img src="<%= image %>" />
+                    <img style="<%= image_css_recap %>" src="<%= image %>" />
                 """)(serialized_model)
             else if serialized_model.image
                 _.template("""
@@ -67,7 +68,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
                             <td style="vertical-align:middle"><%= country.title %></td>
                         </tr>
                     </table>
-                    <img src="<%= image %>" />
+                    <img style="<%= image_css_recap %>" src="<%= image %>" />
                 """)(serialized_model)
             else
                 _.template("""

@@ -9,7 +9,6 @@
             <path d="M0,0 L222.653846,0 L222.653846,579.996375 L0,579.996375 L0,0 Z" id="Shape" fill="#000000"></path>
             <path d="M222.653846,0 L445.307691,0 L445.307691,579.996375 L222.653846,579.996375 L222.653846,0 Z" id="Shape" fill="#FFD90C"></path>
             <path d="M445.307691,0 L667.961537,0 L667.961537,579.996375 L445.307691,579.996375 L445.307691,0 Z" id="Shape" fill="#F31830"></path>
-            <rect id="Rectangle-1" stroke="#FFFFFF" stroke-width="3" x="0" y="0" width="668" height="580"></rect>
         </g>
     </g>
 </svg>

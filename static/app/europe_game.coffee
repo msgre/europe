@@ -51,6 +51,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             country: null
             category: null
             answer: null
+            image_css_game: null
 
     Questions = Backbone.Collection.extend
         model: Question
@@ -81,15 +82,18 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
 
     QuestionItemView = Marionette.ItemView.extend
         tagName: 'tr'
+        attributes: () ->
+            styles = 
+            {style: if styles then styles else ''}
         template: (serialized_model) ->
             if serialized_model.image and serialized_model.question
                 tmpl = """
-                    <td><img src="<%= image %>" height="781px" /></td>
+                    <td><img style="<%= image_css_game %>" src="<%= image %>" height="781px" /></td>
                     <td class="text"><%= question %></td>
                 """
             else if serialized_model.image
                 tmpl = """
-                    <td><img src="<%= image %>" /></td>
+                    <td><img style="<%= image_css_game %>" src="<%= image %>" /></td>
                 """
             else
                 tmpl = """

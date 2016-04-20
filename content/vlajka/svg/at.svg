@@ -8,7 +8,6 @@
         <g id="Group" transform="translate(3.000000, 3.000000)">
             <path d="M870,580 L0,580 L0,0 L870,0 L870,580 Z" id="Shape" fill="#FFFFFF"></path>
             <path d="M870,580 L0,580 L0,386.663042 L870,386.663042 L870,580 Z M870,193.484375 L0,193.484375 L0,0.147416667 L870,0.147416667 L870,193.484375 Z" id="Shape" fill="#DF0000"></path>
-            <rect id="Rectangle-1" stroke="#FFFFFF" stroke-width="3" x="0" y="0" width="870" height="584"></rect>
         </g>
     </g>
 </svg>

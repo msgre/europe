@@ -101,15 +101,17 @@ class Question(models.Model):
         (QUESTION_DIFFICULTY_HARD, _('Hard')),
     )
 
-    difficulty = models.CharField(_('Difficulty'), max_length=1, choices=QUESTION_DIFFICULTY, default=QUESTION_DIFFICULTY_EASY)
-    question   = models.TextField(_('Question'), blank=True, null=True)
-    image      = models.FileField(_('Image'), blank=True, null=True, upload_to=upload_fn, max_length=256, help_text=_('Could be bitmap (PNG/JPG/GIF) or vector (SVG). MUST be in correct size, maximum width=1638, height=780.'))
-    country    = models.ForeignKey('geo.Country')
-    category   = models.ForeignKey('Category')
-    note       = models.TextField(_('Note'), blank=True, null=True)
-    enabled    = models.BooleanField(_('Enabled'), help_text=_('Only enabled questions will be used during game'), default=True)
-    created    = models.DateTimeField(_('Created'), auto_now_add=True)
-    updated    = models.DateTimeField(_('Updated'), auto_now=True)
+    difficulty      = models.CharField(_('Difficulty'), max_length=1, choices=QUESTION_DIFFICULTY, default=QUESTION_DIFFICULTY_EASY)
+    question        = models.TextField(_('Question'), blank=True, null=True)
+    image           = models.FileField(_('Image'), blank=True, null=True, upload_to=upload_fn, max_length=256, help_text=_('Could be bitmap (PNG/JPG/GIF) or vector (SVG). MUST be in correct size, maximum width=1638, height=780.'))
+    country         = models.ForeignKey('geo.Country')
+    category        = models.ForeignKey('Category')
+    note            = models.TextField(_('Note'), blank=True, null=True)
+    image_css_game  = models.CharField(_('CSS styles for images on game screen'), max_length=256, blank=True, null=True, help_text=_('CSS styles applied on image question during regular game'))
+    image_css_recap = models.CharField(_('CSS styles for images recap screen'), max_length=256, blank=True, null=True, help_text=_('CSS styles applied to images on recap page'))
+    enabled         = models.BooleanField(_('Enabled'), help_text=_('Only enabled questions will be used during game'), default=True)
+    created         = models.DateTimeField(_('Created'), auto_now_add=True)
+    updated         = models.DateTimeField(_('Updated'), auto_now=True)
 
     class Meta:
         ordering = ('category', 'question', 'image')
