@@ -2,6 +2,7 @@
 
 import imp
 import os
+from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -9,6 +10,13 @@ from django.conf import settings
 class Command(BaseCommand):
     args = '<path>'
     help = 'Load initial questions data into database'
+    option_list = BaseCommand.option_list + (
+        make_option('--subdir',
+            action='append',
+            dest='subdir',
+            help='Import data only from given subdirectories. You could define this argument several times.'),
+        )
+    
 
     def handle(self, *args, **options):
         if len(args) < 1:
@@ -20,6 +28,11 @@ class Command(BaseCommand):
 
         # http://stackoverflow.com/a/973488
         subdirs = next(os.walk(path))[1]
+        if options['subdir']:
+            _subdirs = [i for i in subdirs if i in options['subdir']]
+            if not _subdirs:
+                raise CommandError('Subdirs "{}" doesn\'t exist. Allowed values are "{}".'.format(options['subdir'], subdirs))
+            subdirs = _subdirs
 
         modules = {}
         for subdir in subdirs:
