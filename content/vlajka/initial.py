@@ -5,7 +5,7 @@ Flags of european countries.
 
 Flags are stored as SVG files in `svg/` directory. They came from several 
 sources and all of them was manualy processed in Sketch application
-(added 3px white border, corrected width/height ratio according to
+(corrected width/height ratio according to
 https://en.wikipedia.org/wiki/List_of_aspect_ratios_of_national_flags,
 fixed several visual problems).
 
