@@ -61,6 +61,9 @@ App.module("Score", function(Mod, App, Backbone, Marionette, $, _) {
     childView: CategoryResultItemView,
     tagName: 'table',
     className: 'results',
+    attributes: {
+      style: "margin-top:2.4em"
+    },
     emptyView: NoResultsView
   });
   ScreenLayout = Marionette.LayoutView.extend({

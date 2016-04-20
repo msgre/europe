@@ -21,7 +21,7 @@ img {
   text-transform: uppercase;
 }
 body {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 .icon {
   padding-left: 1.3em;
@@ -50,8 +50,8 @@ body #main {
 }
 #header h1,
 #header-debug h1 {
-  font-size: 3.5em;
   font-weight: 400;
+  font-size: 3.5em;
   text-transform: uppercase;
   float: left;
   margin-top: .6em;
@@ -70,8 +70,8 @@ body #main {
 }
 #header h2,
 #header-debug h2 {
+  font-weight: 400;
   font-size: 2em;
-  font-weight: 300;
   text-transform: uppercase;
   float: right;
   margin-top: 1.4em;
@@ -134,6 +134,7 @@ body #main {
 }
 #body h2 {
   font-size: 1.6em;
+  font-weight: 700;
   text-transform: uppercase;
 }
 #body p {
@@ -143,7 +144,7 @@ body #main {
   margin-top: 2em;
 }
 #body .col {
-  margin-top: 20px;
+  margin-top: 3em;
   width: 48%;
 }
 #body .col:nth-child(1) {
@@ -151,6 +152,17 @@ body #main {
 }
 #body .col:nth-child(2) {
   float: right;
+}
+#body table.help {
+  margin-top: 2em;
+}
+#body table.help td {
+  vertical-align: middle;
+}
+#body table.help td p {
+  font-size: 1.4em;
+  padding-left: .5em;
+  padding-right: 1em;
 }
 #body table.results {
   width: 100%;
@@ -246,7 +258,7 @@ body #main {
   text-transform: uppercase;
 }
 #body table.gamemode .button p {
-  margin: 1.8em 1em;
+  margin: 1.9em 1em;
   font-size: 2em;
 }
 #body table.gamemode .button p img {
@@ -275,6 +287,9 @@ body #main {
 }
 #body table.gamemode tr.row-2 .button:nth-child(n+4) {
   margin-bottom: 0;
+}
+#body table.gamemode tr.row-2 .button p {
+  margin-top: 1.75em;
 }
 #body table.gamemode tr.row-2 td {
   text-align: left;
@@ -360,7 +375,7 @@ body #main {
   margin-right: 0;
 }
 #body table.crossroad .button:last-child p {
-  margin-left: 2.6em;
+  margin-left: 2.3em;
 }
 #body table.result {
   width: 100%;
@@ -402,9 +417,10 @@ body #main {
   color: #1f3c60;
 }
 #body table.result td.typewriter table {
-  width: 99%;
+  width: 100%;
 }
 #body table.result td.typewriter table td {
+  padding: 20px 0 10px 0;
   text-align: center;
   vertical-align: middle;
   width: 70px;
@@ -429,7 +445,7 @@ body #main {
 }
 #body table.result tr.row-3 td {
   color: #4d4944;
-  padding: 4px 4px;
+  padding: 8px 4px 3px 4px;
   text-align: center;
   width: 25px;
 }
@@ -441,27 +457,11 @@ body #main {
   color: #fff;
   background: #4d4944;
 }
+#body table.result tr.row-3 td.selected svg rect {
+  fill: #4d4944;
+}
 #body table.result tr.row-4 p {
   font-size: 1.6em;
-}
-#body table.result td.help {
-  padding: 1em;
-  width: 280px;
-}
-#body table.result td.help table {
-  margin-top: 40px;
-}
-#body table.result td.help table tr td:first-child {
-  text-align: center;
-}
-#body table.result td.help table tr td:last-child {
-  padding-left: 1em;
-}
-#body table.result td.help table tr td {
-  vertical-align: middle;
-}
-#body table.result td.help svg {
-  padding: 4px 0 4px 0;
 }
 #body table.good-result tr.row-1 {
   background: #d06156;
@@ -494,7 +494,7 @@ body #main {
   background-color: orange;
 }
 .layout-c #body table.state-0 td {
-  font-size: 10em;
+  font-size: 9em;
   background-color: green;
 }
 .layout-c #body table.intro {
@@ -526,7 +526,7 @@ body #main {
   margin: 1.6em;
 }
 .layout-c #body table.intro td.cell-a2 div h2 {
-  font-size: 2.2em;
+  font-size: 2.1em;
 }
 .layout-c #body table.intro td.cell-a2 div table {
   font-size: 1.3em;
@@ -550,16 +550,16 @@ body #main {
   background-color: #6d9499;
 }
 .layout-c #body table.intro td.cell-b1 div {
-  padding: 2.8em 0 0 2em;
+  padding: 3.6em 0 0 3.2em;
 }
 .layout-c #body table.intro td.cell-b1 div h1 {
-  font-size: 6.8em;
+  font-size: 5.8em;
   font-weight: 700;
   text-transform: uppercase;
 }
 .layout-c #body table.intro td.cell-b1 div h3 {
   margin-top: .3em;
-  font-size: 4em;
+  font-size: 3.6em;
   font-weight: 400;
 }
 .layout-c #body table.intro td.cell-b2 {

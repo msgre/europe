@@ -3,8 +3,8 @@
     width: 100%;
 
     h1 {
-        font-size: 3.5em;
         font-weight: 400;
+        font-size: 3.5em;
         text-transform: uppercase;
         float: left;
         margin-top: .6em;
@@ -22,8 +22,8 @@
         }
     }
     h2 {
+        font-weight: 400;
         font-size: 2em;
-        font-weight: 300;
         text-transform: uppercase;
         float: right;
         margin-top: 1.4em;
@@ -94,6 +94,7 @@
     // obecne
     h2 {
         font-size: 1.6em;
+        font-weight: 700;
         text-transform: uppercase;
     }
     p {
@@ -105,7 +106,7 @@
 
     // obrazovka s vysledkama v tabulkach
     .col {
-        margin-top: 20px; // TODO: 
+        margin-top: 3em;
         width:48%;
     }
     .col:nth-child(1) {
@@ -114,6 +115,18 @@
     .col:nth-child(2) {
         float: right;
     }
+    table.help {
+        margin-top: 2em;
+        td {
+            vertical-align: middle;
+            p {
+                font-size: 1.4em;
+                padding-left: .5em;
+                padding-right: 1em;
+            }
+        }
+    }
+
     table.results {
         width: 100%;
         font-size: 1.4em;
@@ -228,7 +241,7 @@
 
         .button {
             p {
-                margin: 1.8em 1em;
+                margin: 1.9em 1em;
                 font-size: 2em;
 
                 img {
@@ -265,6 +278,7 @@
                 margin-bottom: 0;
             }
             .button p {
+                margin-top: 1.75em;
             }
 
             td {
@@ -372,7 +386,7 @@
         .button:last-child {
             margin-right: 0;
             p {
-                margin-left: 2.6em; // kdyby bylo treba centrovat napis, posune se margin
+                margin-left: 2.3em; // kdyby bylo treba centrovat napis, posune se margin
             }
         }
     }
@@ -421,9 +435,10 @@
             color: @color-darkblue;
 
             table {
-                width:99%;
+                width:100%;
 
                 td {
+                    padding:20px 0 10px 0;
                     text-align:center;
                     vertical-align:middle;
                     width:70px;
@@ -451,7 +466,7 @@
             font-size: 2.2em;
             td {
                 color: @color-gray;
-                padding: 4px 4px;
+                padding: 8px 4px 3px 4px;
                 text-align:center;
                 width:25px;
                 svg {
@@ -462,35 +477,17 @@
             td.selected {
                 color: #fff;
                 background: @color-gray;
+                svg {
+                    rect {
+                        fill: @color-gray;
+                    }
+                }
             }
         }
         tr.row-4 {
             p {
                 font-size: 1.6em;
             }
-        }
-
-        td.help {
-            table {
-                margin-top: 40px;
-                tr {
-                    td:first-child {
-                        text-align: center;
-                    }
-                    td:last-child {
-                        padding-left:1em;
-                    }
-                    td {
-                        vertical-align: middle;
-                    }
-                }
-            }
-            svg {
-                padding:4px 0 4px 0;
-            }
-
-            padding: 1em;
-            width: 280px;
         }
     }
 
@@ -540,7 +537,7 @@
     }
     table.state-0 {
         td {
-            font-size: 10em;
+            font-size: 9em;
             background-color: green;
         }
     }
@@ -574,7 +571,7 @@
                 margin: 1.6em;
 
                 h2 {
-                    font-size: 2.2em;
+                    font-size: 2.1em;
                 }
 
                 table {
@@ -602,16 +599,16 @@
         td.cell-b1 {
             background-color: @color-lightblue;
             div {
-                padding: 2.8em 0 0 2em;
+                padding: 3.6em 0 0 3.2em;
 
                 h1 {
-                    font-size: 6.8em;
+                    font-size: 5.8em;
                     font-weight: 700;
                     text-transform: uppercase;
                 }
                 h3 {
                     margin-top: .3em;
-                    font-size: 4em;
+                    font-size: 3.6em;
                     font-weight: 400;
                 }
             }
@@ -628,6 +625,7 @@
 
 // obecne tlacitko
 .button {
+    // font-family: 'Roboto Condensed', sans-serif;
     height: @block-height;
     float: left;
     background-color: @color-darkblue;

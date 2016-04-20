@@ -88,7 +88,7 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
     emptyView: NoResultsView
   });
   ScreenLayout = Marionette.LayoutView.extend({
-    template: _.template("<div id=\"main\">\n    <div id=\"header\">\n        <h1></h1>\n    </div>\n    <div id=\"body\">\n        <div class=\"col\">\n            <h2>Jednoduchá úroveň</h2>\n            <div id=\"easy-results\"></div>\n        </div>\n        <div class=\"col\">\n            <h2>Obtížná úroveň</h2>\n            <div id=\"hard-results\"></div>\n        </div>\n        <div class=\"clear\"></div>\n        <p class=\"help\">Nápověda: zmáčkni vlevo/vpravo pro zobrazení dalších kategorií s výsledkama, OK pro návrat</p>\n    </div>\n</div>"),
+    template: _.template("<div id=\"main\">\n    <div id=\"header\">\n        <h1></h1>\n    </div>\n    <div id=\"body\">\n        <div class=\"col\">\n            <h2>Jednoduchá úroveň</h2>\n            <div id=\"easy-results\"></div>\n        </div>\n        <div class=\"col\">\n            <h2>Obtížná úroveň</h2>\n            <div id=\"hard-results\"></div>\n        </div>\n        <div class=\"clear\"></div>\n        <table style=\"margin-top:3em\" class=\"help\">\n            <tr>\n                <td>" + SVG.left + "&nbsp;" + SVG.right + "</td>\n                <td><p>Výběr kategorie</p></td>\n                <td>" + SVG.ok + "</td>\n                <td><p>Návrat</p></td>\n            </tr>\n        </table>\n    </div>\n</div>"),
     onRender: function() {
       return $('body').attr('class', 'layout-a');
     },

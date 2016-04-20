@@ -103,7 +103,14 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
                         <div id="hard-results"></div>
                     </div>
                     <div class="clear"></div>
-                    <p class="help">Nápověda: zmáčkni vlevo/vpravo pro zobrazení dalších kategorií s výsledkama, OK pro návrat</p>
+                    <table style="margin-top:3em" class="help">
+                        <tr>
+                            <td>#{SVG.left}&nbsp;#{SVG.right}</td>
+                            <td><p>Výběr kategorie</p></td>
+                            <td>#{SVG.ok}</td>
+                            <td><p>Návrat</p></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         """

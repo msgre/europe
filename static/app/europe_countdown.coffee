@@ -26,7 +26,7 @@ App.module "Countdown", (Mod, App, Backbone, Marionette, $, _) ->
         templateHelpers: ->
             display_number: ->
                 if @number == 4
-                    'Připrav se!'
+                    'Připravit'
                 else if @number > 0
                     @number
                 else

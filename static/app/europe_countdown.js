@@ -18,7 +18,7 @@ App.module("Countdown", function(Mod, App, Backbone, Marionette, $, _) {
       return {
         display_number: function() {
           if (this.number === 4) {
-            return 'Připrav se!';
+            return 'Připravit';
           } else if (this.number > 0) {
             return this.number;
           } else {
