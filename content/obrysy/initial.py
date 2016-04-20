@@ -50,7 +50,7 @@ from quiz.models import Question, Category
 CODES_EASY = [
     "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", "ie", "is", "it", 
     "lt", "lv", "lu", "hu", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", 
-    "sk", "si", "gb", "rs", "tr", "ua", "me", "cz", "gr", "es", 
+    "sk", "si", "gb", "tr", "ua", "me", "cz", "gr", "es", 
     "se", "ch",
 ]
 
@@ -59,7 +59,7 @@ CODES_HARD = [
     "al", "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", 
     "ie", "is", "it", "kz", "cy", "lt", "lv", "lu", "mk", 
     "hu", "md", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", 
-    "sk", "si", "gb", "rs", "tr", "ua", "me", "cz", "gr", "es", 
+    "sk", "si", "gb", "tr", "ua", "me", "cz", "gr", "es", 
     "se", "ch",
 ]
 

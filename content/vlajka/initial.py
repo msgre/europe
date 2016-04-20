@@ -9,6 +9,8 @@ sources and all of them was manualy processed in Sketch application
 https://en.wikipedia.org/wiki/List_of_aspect_ratios_of_national_flags,
 fixed several visual problems).
 
+Flags are normalised to maximum size 870x580.
+
 There is no known visual problem in Chrome browser (49.0.2623.110), other
 browser was not inspected.
 
@@ -41,7 +43,7 @@ CODES_HARD = [
     "ie", "is", "it", "kz", "cy", "li", "lt", "lv", "lu", "mk", "mt", 
     "hu", "md", "mc", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", "sm", 
     "sk", "si", "gb", "rs", "tr", "ua", "va", "me", "cz", "gr", "es", 
-    "se", "ch",
+    "se", "ch", "xk",
 ]
 
 
