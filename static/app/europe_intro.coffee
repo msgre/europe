@@ -7,9 +7,8 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
 
     # --- constants & variables
 
-    view_list = undefined
+    SLIDESHOW_TIMER = 5000
     layout = undefined
-    state = undefined
     _options = undefined
 
     # --- models & collections
@@ -45,28 +44,15 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
         tagName: 'tbody'
         emptyView: NoResultsView
 
-    Intro01 = Marionette.ItemView.extend
+    Slideshow = Marionette.ItemView.extend
         template: (serialized_model) ->
             _.template("""
-                <img src="img/brandenburg.jpg" width="1320" height="600">
-            """)(serialized_model)
-
-    Intro02 = Marionette.ItemView.extend
-        template: (serialized_model) ->
-            _.template("""
-                <img src="img/brusel.jpg" width="1320" height="600">
-            """)(serialized_model)
-
-    Intro03 = Marionette.ItemView.extend
-        template: (serialized_model) ->
-            _.template("""
-                <img src="img/london.jpg" width="1320" height="600">
-            """)(serialized_model)
-
-    Intro04 = Marionette.ItemView.extend
-        template: (serialized_model) ->
-            _.template("""
-                <img src="img/budapest.jpg" width="1320" height="600">
+                <div class="fadein">
+                    <img src="img/brandenburg.jpg" width="1320" height="600">
+                    <img src="img/brusel.jpg" width="1320" height="600">
+                    <img src="img/london.jpg" width="1320" height="600">
+                    <img src="img/budapest.jpg" width="1320" height="600">
+                </div>
             """)(serialized_model)
 
     ScreenLayout = Marionette.LayoutView.extend
@@ -107,10 +93,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
     # --- herr director
 
     handler = () ->
-        if state >= view_list.length
-            state = 0
-        layout.getRegion('slideshow').show(new view_list[state]())
-        state++
+        $('.fadein :first-child').fadeOut().next('img').fadeIn().end().appendTo('.fadein')
 
     # --- module
 
@@ -119,15 +102,12 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
         console.log options
         _options = options
         window.channel.trigger('intro:rainbow')
-        state = 0
-        view_list = [
-            Intro01
-            Intro02
-            Intro03
-            Intro04
-        ]
+
         layout = new ScreenLayout({el: make_content_wrapper()})
         layout.render()
+        layout.getRegion('slideshow').show(new Slideshow())
+
+        $('.fadein img:gt(0)').hide()
 
         results = new Results
         layout.getRegion('top').show new HighScoreView
@@ -137,13 +117,11 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
         window.channel.on 'keypress', () ->
             window.sfx.button.play()
             window.channel.trigger('intro:close', options)
-        handler()
-        set_timer(handler, _options.options.INTRO_TIME_PER_SCREEN)
+
+        set_timer(handler, SLIDESHOW_TIMER)
 
     Mod.onStop = () ->
         window.channel.trigger('intro:blank')
         clear_timer()
         window.channel.off('keypress')
         layout.destroy()
-        view_list = undefined
-        state = undefined
