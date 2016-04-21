@@ -200,15 +200,15 @@ body #main {
   float: left;
 }
 #body .recap table.text td {
-  padding: 0.2em 2em;
-  font-size: 1.6em;
+  padding: 0.3em 2em;
+  font-size: 2.2em;
 }
 #body .recap table.text tr:first-child td {
   color: white;
   vertical-align: bottom;
 }
 #body .recap table.text tr:last-child td {
-  color: #fcea10;
+  font-weight: 900;
   vertical-align: top;
 }
 #body .recap img {
@@ -231,7 +231,7 @@ body #main {
   width: 100%;
   height: 100%;
   color: #fff;
-  font-size: 3.4em;
+  font-size: 4em;
 }
 #body table.game td {
   text-align: center;
@@ -377,7 +377,10 @@ body #main {
   margin-right: 0;
 }
 #body table.crossroad .button:last-child p {
-  margin-left: 2.3em;
+  margin-left: 2.1em;
+}
+#body table.crossroad .button:last-child p img {
+  padding-right: .4em;
 }
 #body table.result {
   width: 100%;
@@ -570,6 +573,7 @@ body #main {
   vertical-align: middle;
 }
 .button {
+  font-weight: 900;
   height: 150px;
   float: left;
   background-color: #2096bd;
