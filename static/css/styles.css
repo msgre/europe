@@ -211,9 +211,14 @@ body #main {
   font-weight: 900;
   vertical-align: top;
 }
-#body .recap img {
-  height: 100%;
+#body .recap div.img {
+  text-align: right;
   float: right;
+  width: 49%;
+  overflow: hidden;
+}
+#body .recap div.img img {
+  height: 100%;
 }
 #body .recap.good {
   background-color: #87b024;

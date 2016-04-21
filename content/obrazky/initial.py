@@ -48,7 +48,7 @@ def load_photos(path, difficulty, stdout, stderr):
             question   = None,
             country    = country,
             category   = category,
-            image_css_recap = 'background:#fff;padding:0 0 0 4px;'
+            image_css_recap = 'border-left:#fff 4px solid;'
         )
         question.image.save(filename, File(open(filepath, 'rb')), save=True)
 

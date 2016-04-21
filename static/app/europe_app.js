@@ -199,7 +199,7 @@ App.on('start', function(global_options) {
             "id": 137,
             "question": "Ve které zemi se nachází město Atény?",
             "difficulty": "E",
-            "image": "/foto-4_3.jpg",
+            "image": "/foto-16_9.jpg",
             "country": {
               "id": 39,
               "title": "Řecko",

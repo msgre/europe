@@ -59,7 +59,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
                             <td><%= country.title %></td>
                         </tr>
                     </table>
-                    <img style="<%= image_css_recap %>" src="<%= image %>" />
+                    <div style="height:#{height}px;<%= image_css_recap %>" class="img"><img src="<%= image %>" /></div>
                 """)(serialized_model)
             else if serialized_model.image
                 _.template("""
@@ -68,7 +68,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
                             <td style="vertical-align:middle"><%= country.title %></td>
                         </tr>
                     </table>
-                    <img style="<%= image_css_recap %>" src="<%= image %>" />
+                    <div style="height:#{height}px;<%= image_css_recap %>" class="img"><img src="<%= image %>" /></div>
                 """)(serialized_model)
             else
                 if serialized_model.country.title == serialized_model.question
