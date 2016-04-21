@@ -71,16 +71,25 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
                     <img style="<%= image_css_recap %>" src="<%= image %>" />
                 """)(serialized_model)
             else
-                _.template("""
-                    <table class="text" style="height:#{height}px;width:100%">
-                        <tr>
-                            <td><%= shorten_question(90) %></td>
-                        </tr>
-                        <tr>
-                            <td><%= country.title %></td>
-                        </tr>
-                    </table>
-                """)(serialized_model)
+                if serialized_model.country.title == serialized_model.question
+                    _.template("""
+                        <table class="text" style="height:#{height}px;width:100%">
+                            <tr>
+                                <td style="vertical-align:middle;font-weight:900"><%= country.title %></td>
+                            </tr>
+                        </table>
+                    """)(serialized_model)
+                else
+                    _.template("""
+                        <table class="text" style="height:#{height}px;width:100%">
+                            <tr>
+                                <td><%= shorten_question(90) %></td>
+                            </tr>
+                            <tr>
+                                <td><%= country.title %></td>
+                            </tr>
+                        </table>
+                    """)(serialized_model)
         templateHelpers: ->
             shorten_question: (length)->
                 shorten(@question, length)

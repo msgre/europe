@@ -49,7 +49,11 @@ App.module("Recap", function(Mod, App, Backbone, Marionette, $, _) {
       } else if (serialized_model.image) {
         return _.template("<table class=\"text\" style=\"height:" + height + "px;width:50%\">\n    <tr>\n        <td style=\"vertical-align:middle\"><%= country.title %></td>\n    </tr>\n</table>\n<img style=\"<%= image_css_recap %>\" src=\"<%= image %>\" />")(serialized_model);
       } else {
-        return _.template("<table class=\"text\" style=\"height:" + height + "px;width:100%\">\n    <tr>\n        <td><%= shorten_question(90) %></td>\n    </tr>\n    <tr>\n        <td><%= country.title %></td>\n    </tr>\n</table>")(serialized_model);
+        if (serialized_model.country.title === serialized_model.question) {
+          return _.template("<table class=\"text\" style=\"height:" + height + "px;width:100%\">\n    <tr>\n        <td style=\"vertical-align:middle;font-weight:900\"><%= country.title %></td>\n    </tr>\n</table>")(serialized_model);
+        } else {
+          return _.template("<table class=\"text\" style=\"height:" + height + "px;width:100%\">\n    <tr>\n        <td><%= shorten_question(90) %></td>\n    </tr>\n    <tr>\n        <td><%= country.title %></td>\n    </tr>\n</table>")(serialized_model);
+        }
       }
     },
     templateHelpers: function() {
