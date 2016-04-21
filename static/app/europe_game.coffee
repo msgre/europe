@@ -14,6 +14,7 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
     info = undefined
     questions = undefined
     layout = undefined
+    gate_passing_time = undefined
 
     # --- models & collections
 
@@ -107,11 +108,35 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             that = @
             # event about tunnel crossing
             window.channel.on 'tunnel', (event) ->
+                # now = Date.now()
+                # country = that.model.get('country')
+                # if "#{country.board}" of event and event["#{country.board}"] & country.gate
+                #     local_channel.trigger('next', true)
+                #     gate_passing_time = now
+                # else
+                #     if gate_passing_time
+                #         if (now - gate_passing_time) > _options.options.DUMBNESS_TIME
+                #             local_channel.trigger('penalty', PENALTY_TIME)
+                #     else
+                #         gate_passing_time = now
+
+                now = Date.now()
                 country = that.model.get('country')
                 if "#{country.board}" of event and event["#{country.board}"] & country.gate
                     local_channel.trigger('next', true)
+                    gate_passing_time = now
                 else
-                    local_channel.trigger('penalty', PENALTY_TIME)
+                    if not gate_passing_time
+                        gate_passing_time = now
+                    delta = now - gate_passing_time
+                    if delta <= _options.options.DUMBNESS_TIME
+                        # ignoruju udalost (at projede jakoukoliv spatnou branou)
+                        ''
+                    else
+                        # vyprsel ca
+                        local_channel.trigger('penalty', PENALTY_TIME)
+                        gate_passing_time = now
+
 
             window.channel.on 'debug:good', () ->
                 local_channel.trigger('next', true)
