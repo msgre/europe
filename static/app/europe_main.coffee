@@ -71,6 +71,15 @@ calc_optimal_height = (rows, margin, height=780) ->
     out = (height - margin * rows) / rows
     Math.floor(out)
 
+shorten = (string, length) ->
+    if string.length <= length
+        string
+    else
+        trimmed = string.substr(0, length)
+        trimmed = trimmed.substr(0, Math.min(trimmed.length, trimmed.lastIndexOf(" ")))
+        if trimmed.length < string.length - 1
+            trimmed = "#{trimmed}&nbsp;…"
+        trimmed
 
 # --- casovac ----------------------------------------------------------------
 

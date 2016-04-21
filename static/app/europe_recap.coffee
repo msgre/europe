@@ -53,7 +53,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
                 _.template("""
                     <table class="text" style="height:#{height}px;width:50%">
                         <tr>
-                            <td><%= question %></td>
+                            <td><%= shorten_question(50) %></td>
                         </tr>
                         <tr>
                             <td><%= country.title %></td>
@@ -74,13 +74,16 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
                 _.template("""
                     <table class="text" style="height:#{height}px;width:100%">
                         <tr>
-                            <td><%= question %></td>
+                            <td><%= shorten_question(90) %></td>
                         </tr>
                         <tr>
                             <td><%= country.title %></td>
                         </tr>
                     </table>
                 """)(serialized_model)
+        templateHelpers: ->
+            shorten_question: (length)->
+                shorten(@question, length)
 
     BlankView = Marionette.ItemView.extend
         template: "<p>Nahrávám...</p>"

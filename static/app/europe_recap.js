@@ -45,12 +45,19 @@ App.module("Recap", function(Mod, App, Backbone, Marionette, $, _) {
     },
     template: function(serialized_model) {
       if (serialized_model.image && serialized_model.question) {
-        return _.template("<table class=\"text\" style=\"height:" + height + "px;width:50%\">\n    <tr>\n        <td><%= question %></td>\n    </tr>\n    <tr>\n        <td><%= country.title %></td>\n    </tr>\n</table>\n<img style=\"<%= image_css_recap %>\" src=\"<%= image %>\" />")(serialized_model);
+        return _.template("<table class=\"text\" style=\"height:" + height + "px;width:50%\">\n    <tr>\n        <td><%= shorten_question(50) %></td>\n    </tr>\n    <tr>\n        <td><%= country.title %></td>\n    </tr>\n</table>\n<img style=\"<%= image_css_recap %>\" src=\"<%= image %>\" />")(serialized_model);
       } else if (serialized_model.image) {
         return _.template("<table class=\"text\" style=\"height:" + height + "px;width:50%\">\n    <tr>\n        <td style=\"vertical-align:middle\"><%= country.title %></td>\n    </tr>\n</table>\n<img style=\"<%= image_css_recap %>\" src=\"<%= image %>\" />")(serialized_model);
       } else {
-        return _.template("<table class=\"text\" style=\"height:" + height + "px;width:100%\">\n    <tr>\n        <td><%= question %></td>\n    </tr>\n    <tr>\n        <td><%= country.title %></td>\n    </tr>\n</table>")(serialized_model);
+        return _.template("<table class=\"text\" style=\"height:" + height + "px;width:100%\">\n    <tr>\n        <td><%= shorten_question(90) %></td>\n    </tr>\n    <tr>\n        <td><%= country.title %></td>\n    </tr>\n</table>")(serialized_model);
       }
+    },
+    templateHelpers: function() {
+      return {
+        shorten_question: function(length) {
+          return shorten(this.question, length);
+        }
+      };
     }
   });
   BlankView = Marionette.ItemView.extend({
