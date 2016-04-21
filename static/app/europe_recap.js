@@ -52,7 +52,7 @@ App.module("Recap", function(Mod, App, Backbone, Marionette, $, _) {
         if (serialized_model.country.title === serialized_model.question) {
           return _.template("<table class=\"text\" style=\"height:" + height + "px;width:100%\">\n    <tr>\n        <td style=\"vertical-align:middle;font-weight:900\"><%= country.title %></td>\n    </tr>\n</table>")(serialized_model);
         } else {
-          return _.template("<table class=\"text\" style=\"height:" + height + "px;width:100%\">\n    <tr>\n        <td><%= shorten_question(90) %></td>\n    </tr>\n    <tr>\n        <td><%= country.title %></td>\n    </tr>\n</table>")(serialized_model);
+          return _.template("<table class=\"text\" style=\"height:" + height + "px;width:100%\">\n    <tr>\n        <td><%= shorten_question(70) %></td>\n    </tr>\n    <tr>\n        <td><%= country.title %></td>\n    </tr>\n</table>")(serialized_model);
         }
       }
     },

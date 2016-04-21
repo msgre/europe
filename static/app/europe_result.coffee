@@ -240,7 +240,7 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                         <td>
                             <h1>#{SVG.rekord}Nový rekord!</h1>
                             <h2></h2>
-                            <p>Tvůj čas se dostal do žebříčku nejlepších. Zadej jméno svého týmu.</p>
+                            <p style="text-transform:uppercase;">Tvůj čas se dostal do žebříčku nejlepších. Zadej jméno svého týmu.</p>
                         </td>
                     </tr>
                     <tr class="row-2">

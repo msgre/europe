@@ -83,7 +83,7 @@ App.module "Recap", (Mod, App, Backbone, Marionette, $, _) ->
                     _.template("""
                         <table class="text" style="height:#{height}px;width:100%">
                             <tr>
-                                <td><%= shorten_question(90) %></td>
+                                <td><%= shorten_question(70) %></td>
                             </tr>
                             <tr>
                                 <td><%= country.title %></td>
