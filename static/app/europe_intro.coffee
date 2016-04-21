@@ -72,7 +72,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
                         <td class="cell-b1">
                             <div>
                                 <h1>Chceš začít novou hru?</h1>
-                                <h3>Stiskni kterékoliv tlačítko na panelu!</h3>
+                                <h3>Stiskni kterékoliv tlačítko na panelu</h3>
                             </div>
                         </td>
                         <td class="cell-b2">

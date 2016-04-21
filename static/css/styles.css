@@ -97,7 +97,7 @@ body #main {
   background-color: orange;
 }
 .layout-a #header {
-  background-color: #6d9499;
+  background-color: #4d4944;
   color: #fff;
 }
 .layout-b #header {
@@ -109,7 +109,7 @@ body #main {
 }
 .layout-b #header .bar {
   float: right;
-  background: #d06156 url(../svg/bar.svg) no-repeat;
+  background: #e0432d url(../svg/bar.svg) no-repeat;
   width: 1100px;
   height: 60px;
   margin-top: 30px;
@@ -208,7 +208,7 @@ body #main {
   vertical-align: bottom;
 }
 #body .recap table.text tr:last-child td {
-  color: yellow;
+  color: #fcea10;
   vertical-align: top;
 }
 #body .recap img {
@@ -216,10 +216,10 @@ body #main {
   float: right;
 }
 #body .recap.good {
-  background-color: green;
+  background-color: #87b024;
 }
 #body .recap.bad {
-  background-color: red;
+  background-color: #e0432d;
 }
 #body .recap:nth-child(even) {
   margin-left: 10px;
@@ -242,13 +242,13 @@ body #main {
   border-left: 10px solid #fff;
   padding: 1em 2em;
   width: 100%;
-  background-color: #6d9499;
+  background-color: #2096bd;
 }
 #body table.game td.text-only {
   padding: 1em 2em;
   line-height: 1.4em;
   width: 100%;
-  background-color: #6d9499;
+  background-color: #2096bd;
 }
 #body table.gamemode {
   width: 100%;
@@ -416,7 +416,7 @@ body #main {
   text-align: center;
   font-size: 3.8em;
   font-weight: 900;
-  color: #1f3c60;
+  color: #2096bd;
 }
 #body table.result td.typewriter table {
   width: 100%;
@@ -429,14 +429,14 @@ body #main {
 }
 #body table.result td.typewriter table td.selected {
   color: #fff;
-  background: #1f3c60;
+  background: #2096bd;
 }
 #body table.result td.typewriter table td.selected svg {
   width: 38px;
   height: 38px;
 }
 #body table.result td.typewriter table td.selected svg rect {
-  fill: #1f3c60;
+  fill: #2096bd;
 }
 #body table.result td.typewriter table td.empty svg {
   position: relative;
@@ -466,10 +466,10 @@ body #main {
   font-size: 1.6em;
 }
 #body table.good-result tr.row-1 {
-  background: #d06156;
+  background: #e0432d;
 }
 #body table.bad-result tr.row-1 {
-  background: #1f3c60;
+  background: #2096bd;
 }
 .layout-c #body {
   height: 900px;
@@ -487,17 +487,17 @@ body #main {
 }
 .layout-c #body table.state-4 td {
   font-size: 6em;
-  background-color: red;
+  background-color: #e0432d;
 }
 .layout-c #body table.state-3 td,
 .layout-c #body table.state-2 td,
 .layout-c #body table.state-1 td {
   font-size: 28em;
-  background-color: orange;
+  background-color: #f29913;
 }
 .layout-c #body table.state-0 td {
   font-size: 9em;
-  background-color: green;
+  background-color: #87b024;
 }
 .layout-c #body table.intro {
   width: 100%;
@@ -520,7 +520,7 @@ body #main {
   border-right: 18px solid #ffffff;
 }
 .layout-c #body table.intro td.cell-a2 {
-  background-color: #d06156;
+  background-color: #2096bd;
   text-align: left;
   vertical-align: top;
 }
@@ -549,7 +549,7 @@ body #main {
   white-space: nowrap;
 }
 .layout-c #body table.intro td.cell-b1 {
-  background-color: #6d9499;
+  background-color: #4d4944;
 }
 .layout-c #body table.intro td.cell-b1 div {
   padding: 3.6em 0 0 3.2em;
@@ -565,23 +565,26 @@ body #main {
   font-weight: 400;
 }
 .layout-c #body table.intro td.cell-b2 {
-  background-color: #1f3c60;
+  background-color: #4d4944;
   text-align: center;
   vertical-align: middle;
 }
 .button {
   height: 150px;
   float: left;
-  background-color: #1f3c60;
+  background-color: #2096bd;
   color: #fff;
   margin: 0 18px 0 0;
 }
 .button.active {
-  background-color: #d06156;
+  background-color: #e0432d;
   color: #fff;
 }
 .button.disabled {
   background-color: #4d4944;
+}
+.button.disabled p {
+  opacity: .6;
 }
 .button-1-4 {
   width: 396px;
