@@ -68,7 +68,9 @@ def load_flags(codes, difficulty, stdout, stderr):
             difficulty = difficulty,
             question   = None,
             country    = country,
-            category   = category
+            category   = category,
+            image_css_game = 'background:#fff;padding:3px',
+            image_css_recap = 'height:70%;background:#fff;padding:3px;margin:24px;'
         )
         question.image.save(filename, File(open(filepath, 'rb')), save=True)
 
