@@ -133,8 +133,8 @@ body #main {
   background-color: #fff;
 }
 #body h2 {
-  font-size: 1.6em;
-  font-weight: 700;
+  font-size: 2.5em;
+  font-weight: 400;
   text-transform: uppercase;
 }
 #body p {
@@ -160,13 +160,16 @@ body #main {
   vertical-align: middle;
 }
 #body table.help td p {
-  font-size: 1.4em;
+  text-transform: uppercase;
+  font-size: 1.8em;
   padding-left: .5em;
   padding-right: 1em;
 }
 #body table.results {
   width: 100%;
-  font-size: 1.4em;
+  font-size: 1.9em;
+  text-transform: uppercase;
+  font-weight: 700;
   margin-top: 1em;
 }
 #body table.results tr {
@@ -539,7 +542,7 @@ body #main {
   font-size: 2.1em;
 }
 .layout-c #body table.intro td.cell-a2 div table {
-  font-size: 1.3em;
+  font-size: 1.6em;
   width: 100%;
   margin-top: 1em;
   border-top: 1px solid #fff;
