@@ -108,18 +108,6 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
             that = @
             # event about tunnel crossing
             window.channel.on 'tunnel', (event) ->
-                # now = Date.now()
-                # country = that.model.get('country')
-                # if "#{country.board}" of event and event["#{country.board}"] & country.gate
-                #     local_channel.trigger('next', true)
-                #     gate_passing_time = now
-                # else
-                #     if gate_passing_time
-                #         if (now - gate_passing_time) > _options.options.DUMBNESS_TIME
-                #             local_channel.trigger('penalty', PENALTY_TIME)
-                #     else
-                #         gate_passing_time = now
-
                 now = Date.now()
                 country = that.model.get('country')
                 if "#{country.board}" of event and event["#{country.board}"] & country.gate

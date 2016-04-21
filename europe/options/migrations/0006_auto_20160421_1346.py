@@ -6,7 +6,7 @@ from django.db import models, migrations
 
 def dumbness_initial(apps, schema_editor):
     Option = apps.get_model("options", "Option")
-    Option.objects.create(key='DUMBNESS_TIME', value='600', description=u'Čas v [ms] po průjezdu branou, po kterou se ignorují jakékoliv další chybné průjezdy.')
+    Option.objects.create(key='DUMBNESS_TIME', value='1400', description=u'Čas v [ms] po průjezdu branou, po kterou se ignorují jakékoliv další chybné průjezdy.')
 
 class Migration(migrations.Migration):
 
