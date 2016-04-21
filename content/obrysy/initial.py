@@ -1,37 +1,21 @@
 # -*- coding: utf-8 -*-
 
 """
-Outlines of european countries.
+Blind maps of European countries.
 
-Outlines are stored as SVG files in `svg/` directory. They came from 
-wikipedia image https://commons.wikimedia.org/wiki/Category:Blank_SVG_maps_of_Europe#/media/File:Blank_map_europe_coloured.svg,
+Maps are stored as SVG files in `svg/` directory. They came from 
+wikipedia image https://commons.wikimedia.org/wiki/File:Blank_political_map_Europe_in_2008_WF_(with_Kosovo).svg#/media/File:Blank_political_map_Europe_in_2008_WF_(with_Kosovo).svg
 which was transformed into individual files.
 (NOTE: wikipedia is full of useful sources, for example 
 https://commons.wikimedia.org/wiki/Category:Blank_SVG_maps_of_Europe)
 
-Countries was separated into 5 groups according their size and scaled (in 
-comparison with their original size in wikipedia SVG):
+SVG image was imported to Sketch application (see map.sketch file), all 
+countries was filled with green color and white outline, blue sea. Individual
+countries was filled with white color and masked with rectangular with ratio
+2.1:1 (whole country and their nearest neighbours must be visible). After
+masking, final group was resized to 1638x780 and stored as SVG.
 
-* -44%
-  ru
-* -14%
-  kz 
-* +13.5%
-  fr, gb, tr, ua, no, se, de, fi, it, es
-* +49%
-  gr, ro, pl, by
-* +5%
-  rs, dk, hr, ba, nl, ee, al, bg, md, lv, lt, hu, sk, cz, at, ch, ie, pt, is, me, mk, si, lu, cy, be
-
-Reason of the scaling is to get optimal utilization of game area and 
-simultaneously keep information about relative country size (for example we 
-don't want Belgium in same size as France). See `grouped.sketch` file.
-After scaling, all images was resized to fit 1050*700px area and exported
-into individual files as shapes with no border and white fill. See 
-`normalised.sketch` file.
-
-This countries are missing due to their size (they are too small for game):
-ad, li, mt, mc, sm, va
+Some countries wasn't processed due to their size (San Marino for example).
 
 There is no known visual problem in Chrome browser (49.0.2623.110), other
 browser was not inspected.
