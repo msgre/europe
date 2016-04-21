@@ -27,7 +27,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_editable = ('enabled', )
     list_filter = ('enabled', 'difficulty', 'category', 'country', )
     search_fields = ['question', 'country__title']
-    fields = ('country', 'difficulty', 'category', 'question', 'image', 'enabled', 'note', )
+    fields = ('country', 'difficulty', 'category', 'question', 'image', 'enabled', 'image_css_game', 'image_css_recap', 'note', )
 
     def question_display(self, obj):
         if obj.question:
