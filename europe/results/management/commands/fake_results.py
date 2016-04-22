@@ -26,12 +26,12 @@ class Command(BaseCommand):
         categories = Category.objects.all()
         difficulties = {
             Question.QUESTION_DIFFICULTY_EASY: {
-                'initial': 600,
-                'delta': 60,
+                'initial': 6000,
+                'delta': 600,
             },
             Question.QUESTION_DIFFICULTY_HARD: {
-                'initial': 300,
-                'delta': 30,
+                'initial': 3000,
+                'delta': 600,
             }
         }
 
