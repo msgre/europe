@@ -19,6 +19,7 @@ import cgi
 import csv
 import sys
 import os
+import tipi
 
 from geo.models import Country
 from quiz.models import Question, Category
@@ -33,7 +34,10 @@ def load_csv(filename, title, stdout, stderr):
     category.save()
 
     def _create(kwargs):
+        original_question = kwargs['question']
+        kwargs['question'] = tipi.tipi(cgi.escape(kwargs['question']), lang='cs')
         question = Question.objects.filter(**kwargs)
+        kwargs['question'] = original_question # BEWARE! kwargs is not immutable!
         if question.exists():
             stderr.write(u'Question for "{}" country, category "{}" and "{}" difficulty already exist'.format(kwargs['country'], kwargs['category'], kwargs['difficulty']))
         else:
