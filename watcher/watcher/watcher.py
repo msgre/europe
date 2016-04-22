@@ -210,19 +210,49 @@ class AppSession(ApplicationSession):
 
         # main cycle fow watching gates
         old_value = self.read_instruments()
+
+        last_key_value = None
+        last_key_value_counter = 20
+
         while True:
             # read state from gate boards
             value = self.read_instruments()
             diff = self.get_state_diff(old_value, value)
             if old_value != value:
-                if self.keyboard_gate in diff:
-                    yield self.publish('com.europe.keyboard', diff[self.keyboard_gate])
-                    self.log.info("keypress detected {keys}, event 'com.europe.keyboard' published", keys=diff[self.keyboard_gate])
-                    del diff[self.keyboard_gate]
+                # if self.keyboard_gate in diff:
+                #     yield self.publish('com.europe.keyboard', diff[self.keyboard_gate])
+                #     self.log.info("keypress detected {keys}, event 'com.europe.keyboard' published", keys=diff[self.keyboard_gate])
+                #     del diff[self.keyboard_gate]
                 if self.watch_gates and len(diff) > 0:
                     yield self.publish('com.europe.gate', diff)
                     self.log.info("gate passing detected {diff}, event 'com.europe.gate' published", diff=diff)
                 old_value = value
+            
+            # tlacitka
+            if self.keyboard_gate in value:
+                # stiskle tlacitko
+                if value[self.keyboard_gate] == 0:
+                    last_key_value = None
+                else:
+                    if value[self.keyboard_gate] == last_key_value:
+                        # stejne jako minule
+                        if last_key_value_counter < 1:
+                            self.log.info("repeated key value detected {keys}, event 'com.europe.keyboard' published", keys=value[self.keyboard_gate])
+                            yield self.publish('com.europe.keyboard', value[self.keyboard_gate])
+                            last_key_value_counter = 5
+                        else:
+                            last_key_value_counter -= 1
+                    else:
+                        # jine nez minule
+                        self.log.info("new key value detected {keys}, event 'com.europe.keyboard' published", keys=value[self.keyboard_gate])
+                        yield self.publish('com.europe.keyboard', value[self.keyboard_gate])
+                        last_key_value = value[self.keyboard_gate]
+                        last_key_value_counter = 20
+
+                if self.keyboard_gate in diff:
+                    del diff[self.keyboard_gate]
+
+
             yield sleep(CYCLE_SLEEP/3.0)
 
             # control neopixels
