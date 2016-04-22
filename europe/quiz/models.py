@@ -122,6 +122,7 @@ class Question(models.Model):
         return self.question or self.image.path
 
     def save(self, *args, **kwargs):
-        if self.question:
+        ignore_tipi = kwargs.pop('ignore_tipi', False)
+        if self.question and not ignore_tipi:
             self.question = tipi.tipi(cgi.escape(self.question), lang='cs')
         super(Question, self).save(*args, **kwargs)
