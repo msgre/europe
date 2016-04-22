@@ -48,10 +48,14 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
         template: (serialized_model) ->
             _.template("""
                 <div class="fadein">
-                    <img src="img/brandenburg.jpg" width="1320" height="600">
-                    <img src="img/brusel.jpg" width="1320" height="600">
-                    <img src="img/london.jpg" width="1320" height="600">
-                    <img src="img/budapest.jpg" width="1320" height="600">
+                    <img src="img/titul1.png">
+                    <img src="img/brandenburg.jpg">
+                    <img src="img/titul1.png">
+                    <img src="img/brusel.jpg">
+                    <img src="img/titul1.png">
+                    <img src="img/london.jpg">
+                    <img src="img/titul1.png">
+                    <img src="img/budapest.jpg">
                 </div>
             """)(serialized_model)
 
