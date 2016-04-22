@@ -32,7 +32,9 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   NoResultsView = Marionette.ItemView.extend({
-    template: "<p>Nahrávám...</p>"
+    tagName: 'tr',
+    className: 'loading',
+    template: _.template("<td>Nahrávám…</td>")
   });
   HighScoreView = Marionette.CollectionView.extend({
     childView: HighScoreItemView,
@@ -78,7 +80,7 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
       window.sfx.button.play();
       return window.channel.trigger('intro:close', options);
     });
-    return set_timer(handler, SLIDESHOW_TIMER);
+    return set_timer(handler, _options.options.INTRO_TIME_PER_SCREEN);
   };
   return Mod.onStop = function() {
     window.channel.trigger('intro:blank');

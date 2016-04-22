@@ -610,6 +610,9 @@ body #main {
 .button-4-4 {
   width: 1638px;
 }
+td.loading {
+  font-weight: 400;
+}
 .fadein {
   position: relative;
   width: 1320px;

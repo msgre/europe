@@ -37,7 +37,9 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
                 display_elapsed(@time)
 
     NoResultsView = Marionette.ItemView.extend
-        template: "<p>Nahrávám...</p>"
+        tagName: 'tr'
+        className: 'loading'
+        template: _.template("<td>Nahrávám…</td>")
 
     HighScoreView = Marionette.CollectionView.extend
         childView: HighScoreItemView
@@ -122,7 +124,7 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
             window.sfx.button.play()
             window.channel.trigger('intro:close', options)
 
-        set_timer(handler, SLIDESHOW_TIMER)
+        set_timer(handler, _options.options.INTRO_TIME_PER_SCREEN)
 
     Mod.onStop = () ->
         window.channel.trigger('intro:blank')

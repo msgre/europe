@@ -76,10 +76,8 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
                 display_elapsed(@time)
 
     NoResultsView = Marionette.ItemView.extend
-        template: "<p>Nahrávám...</p>"
-        # TODO: nejde rozlisit, jestli to fakt nikdo nehral, nebo se ceka na odpoved ze serveru
-        # mozna ale budu vychazet spis z toho, ze uz tam alespon jeden vysledek bude a
-        # zobrazim tam nejakou vrtulku
+        tagName: 'tr'
+        template: _.template("<td style='font-weight:400;text-align:left;border-right:none'>Nahrávám…</td>")
 
     CategoryResultView = Marionette.CollectionView.extend
         childView: CategoryResultItemView

@@ -79,7 +79,8 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
     }
   });
   NoResultsView = Marionette.ItemView.extend({
-    template: "<p>Nahrávám...</p>"
+    tagName: 'tr',
+    template: _.template("<td style='font-weight:400;text-align:left;border-right:none'>Nahrávám…</td>")
   });
   CategoryResultView = Marionette.CollectionView.extend({
     childView: CategoryResultItemView,
