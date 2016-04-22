@@ -35,7 +35,7 @@ class Command(BaseCommand):
             subdirs = _subdirs
 
         modules = {}
-        for subdir in subdirs:
+        for subdir in sorted(subdirs):
             filepath = os.path.join(path, subdir, 'initial.py')
             if not os.path.exists(filepath):
                 continue
