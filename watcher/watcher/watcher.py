@@ -26,6 +26,9 @@ INSTRUMENT_SLEEP = 0.005     # sleep between ModBus read_registers calls; sleep 
 
 GATE_ADDRESS = 0x0000
 
+KEYBOARD_REPEAT_COUNTER = 1
+KEYBOARD_WAIT_COUNTER = 6
+
 
 class AppSession(ApplicationSession):
 
@@ -219,10 +222,6 @@ class AppSession(ApplicationSession):
             value = self.read_instruments()
             diff = self.get_state_diff(old_value, value)
             if old_value != value:
-                # if self.keyboard_gate in diff:
-                #     yield self.publish('com.europe.keyboard', diff[self.keyboard_gate])
-                #     self.log.info("keypress detected {keys}, event 'com.europe.keyboard' published", keys=diff[self.keyboard_gate])
-                #     del diff[self.keyboard_gate]
                 if self.watch_gates and len(diff) > 0:
                     yield self.publish('com.europe.gate', diff)
                     self.log.info("gate passing detected {diff}, event 'com.europe.gate' published", diff=diff)
@@ -239,7 +238,7 @@ class AppSession(ApplicationSession):
                         if last_key_value_counter < 1:
                             self.log.info("repeated key value detected {keys}, event 'com.europe.keyboard' published", keys=value[self.keyboard_gate])
                             yield self.publish('com.europe.keyboard', value[self.keyboard_gate])
-                            last_key_value_counter = 5
+                            last_key_value_counter = KEYBOARD_REPEAT_COUNTER
                         else:
                             last_key_value_counter -= 1
                     else:
@@ -247,7 +246,7 @@ class AppSession(ApplicationSession):
                         self.log.info("new key value detected {keys}, event 'com.europe.keyboard' published", keys=value[self.keyboard_gate])
                         yield self.publish('com.europe.keyboard', value[self.keyboard_gate])
                         last_key_value = value[self.keyboard_gate]
-                        last_key_value_counter = 20
+                        last_key_value_counter = KEYBOARD_WAIT_COUNTER
 
                 if self.keyboard_gate in diff:
                     del diff[self.keyboard_gate]
