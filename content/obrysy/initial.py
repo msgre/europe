@@ -32,19 +32,16 @@ from quiz.models import Question, Category
 
 # list of "easy" countries
 CODES_EASY = [
-    "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", "ie", "is", "it", 
-    "lt", "lv", "lu", "hu", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", 
-    "sk", "si", "gb", "tr", "ua", "me", "cz", "gr", "es", 
-    "se", "ch",
+    'cz', 'fi', 'fr', 'hr', 'ie', 'is', 'it', 'cy', 'de', 'no', 'pl',
+    'pt', 'ru', 'gr', 'sk', 'gb', 'es', 'se',
 ]
 
 # list of "hard" countries
 CODES_HARD = [
-    "al", "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", 
-    "ie", "is", "it", "kz", "cy", "lt", "lv", "lu", "mk", 
-    "hu", "md", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", 
-    "sk", "si", "gb", "tr", "ua", "me", "cz", "gr", "es", 
-    "se", "ch",
+    'ad', 'al', 'at', 'ba', 'be', 'bg', 'by', 'ch', 'cy', 'cz', 'de',
+    'dk', 'ee', 'es', 'fi', 'fr', 'gb', 'gr', 'hr', 'hu', 'ie', 'is',
+    'it', 'kz', 'lt', 'lu', 'lv', 'md', 'me', 'mk', 'nl', 'no', 'pl',
+    'pt', 'ro', 'rs', 'ru', 'se', 'si', 'sk', 'tr', 'ua', 'xk',
 ]
 
 

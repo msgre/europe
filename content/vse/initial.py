@@ -14,10 +14,14 @@ def load_all(difficulty, stdout, stderr):
     category.enabled = True
     category.save()
 
+    cache = {}
+
     attrs = ['difficulty', 'question', 'image', 'country', 'note', 'image_css_game', 'image_css_recap', 'enabled']
     questions = list(Question.objects.filter(difficulty=difficulty).values(*attrs))
     for kwargs in questions:
-        kwargs['country'] = Country.objects.get(id=kwargs['country'])
+        if kwargs['country'] not in cache:
+            cache[kwargs['country']] = Country.objects.get(id=kwargs['country'])
+        kwargs['country'] = cache[kwargs['country']]
         kwargs['category'] = category
         question = Question.objects.filter(**kwargs)
         if question.exists():

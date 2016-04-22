@@ -110,19 +110,18 @@ CITIES = {
 
 # list of "easy" countries
 CODES_EASY = [
-    "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", "ie", "is", "it", 
-    "lt", "lv", "lu", "hu", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", 
-    "sm", "sk", "si", "gb", "rs", "tr", "ua", "va", "me", "cz", "gr", "es", 
-    "se", "ch",
+    'be', 'bg', 'cz', 'dk', 'fi', 'fr', 'hr', 'ie', 'is', 'it', 'hu',
+    'de', 'nl', 'no', 'pl', 'pt', 'at', 'ro', 'ru', 'gr', 'sk', 'gb',
+    'es', 'se', 'ua',
 ]
 
 # list of "hard" countries
 CODES_HARD = [
-    "al", "ad", "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", 
-    "ie", "is", "it", "kz", "cy", "li", "lt", "lv", "lu", "mk", "mt", 
-    "hu", "md", "mc", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", "sm", 
-    "sk", "si", "gb", "rs", "tr", "ua", "va", "me", "cz", "gr", "es", 
-    "se", "ch", "xk",
+    'al', 'ad', 'be', 'by', 'ba', 'bg', 'me', 'cz', 'dk', 'ee', 'fi',
+    'fr', 'hr', 'ie', 'is', 'it', 'kz', 'xk', 'cy', 'li', 'lt', 'lv',
+    'lu', 'hu', 'mk', 'mt', 'md', 'mc', 'de', 'nl', 'no', 'pl', 'pt',
+    'at', 'ro', 'ru', 'gr', 'sm', 'sk', 'si', 'gb', 'rs', 'es', 'se',
+    'ch', 'tr', 'ua', 'va',
 ]
 
 def load_cities(codes, difficulty, stdout, stderr):

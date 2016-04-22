@@ -31,19 +31,17 @@ from quiz.models import Question, Category
 
 # list of "easy" countries
 CODES_EASY = [
-    "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", "ie", "is", "it", 
-    "lt", "lv", "lu", "hu", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", 
-    "sm", "sk", "si", "gb", "rs", "tr", "ua", "va", "me", "cz", "gr", "es", 
-    "se", "ch",
+    'be', 'cz', 'dk', 'fi', 'fr', 'it', 'hu', 'de', 'no', 'pl', 'at',
+    'ro', 'gr', 'sk', 'gb', 'se', 'ch', 'tr',
 ]
 
 # list of "hard" countries
 CODES_HARD = [
-    "al", "ad", "be", "ba", "bg", "by", "hr", "dk", "ee", "fi", "fr", 
-    "ie", "is", "it", "kz", "cy", "li", "lt", "lv", "lu", "mk", "mt", 
-    "hu", "md", "mc", "nl", "no", "de", "pl", "pt", "at", "ro", "ru", "sm", 
-    "sk", "si", "gb", "rs", "tr", "ua", "va", "me", "cz", "gr", "es", 
-    "se", "ch", "xk",
+    'ad', 'al', 'at', 'ba', 'be', 'bg', 'by', 'ch', 'cy', 'cz', 'de',
+    'dk', 'ee', 'es', 'fi', 'fr', 'gb', 'gr', 'hr', 'hu', 'ie', 'is',
+    'it', 'kz', 'li', 'lt', 'lu', 'lv', 'mc', 'md', 'me', 'mk', 'mt',
+    'nl', 'no', 'pl', 'pt', 'ro', 'rs', 'ru', 'se', 'si', 'sk', 'sm',
+    'tr', 'ua', 'va', 'xk',
 ]
 
 
