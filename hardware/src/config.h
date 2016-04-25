@@ -1,7 +1,14 @@
 #ifndef __IR_CONFIG_H__
 #define __IR_CONFIG_H__
 
-#define FW_VERSION 0x001UL
+/**
+ * Changelog:
+ *
+ * 0x001: initial version.
+ * 0x002: added keyboard mode selection.
+ */
+
+#define FW_VERSION 0x002UL
 #define HW_VERSION 0x1UL
 
 /******************************************************************************/
@@ -27,6 +34,11 @@
  * Minimum debounce time for reading state from IR gate.
  */
 #define IR_DEBOUNCE_TIME 100 //ms
+
+/**
+ * Keyboard mode. Do not delete input state after Modbus reading.
+ */
+#define IR_KEYBOARD_MODE 1
 
 /**
  * RX buffer size for RS485 (UART).
