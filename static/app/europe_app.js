@@ -43,14 +43,19 @@ App.on('start', function(global_options) {
       value = args[0];
       console.log("on_keyboard() event received");
       console.log(value);
-      if (value & 1) {
-        window.channel.trigger('key', 'left');
-      } else if (value & 2) {
-        window.channel.trigger('key', 'right');
-      } else if (value & 4) {
-        window.channel.trigger('key', 'fire');
+      if (value & 8) {
+        console.log("RELOADING browser baby...");
+        return window.location.reload();
+      } else {
+        if (value & 1) {
+          window.channel.trigger('key', 'left');
+        } else if (value & 2) {
+          window.channel.trigger('key', 'right');
+        } else if (value & 4) {
+          window.channel.trigger('key', 'fire');
+        }
+        return window.channel.trigger('keypress');
       }
-      return window.channel.trigger('keypress');
     };
     session.subscribe('com.europe.keyboard', on_keyboard).then(function(sub) {
       return console.log("subscribed to topic 'com.europe.keyboard'");

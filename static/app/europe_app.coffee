@@ -43,14 +43,19 @@ App.on 'start', (global_options) ->
             console.log("on_keyboard() event received")
             console.log(value)
 
-            if value & 1
-                window.channel.trigger('key', 'left')
-            else if value & 2
-                window.channel.trigger('key', 'right')
-            else if value & 4
-                window.channel.trigger('key', 'fire')
+            if value & 8
+                # reload browser
+                console.log("RELOADING browser baby...")
+                window.location.reload()
+            else 
+                if value & 1
+                    window.channel.trigger('key', 'left')
+                else if value & 2
+                    window.channel.trigger('key', 'right')
+                else if value & 4
+                    window.channel.trigger('key', 'fire')
 
-            window.channel.trigger('keypress')
+                window.channel.trigger('keypress')
 
         session.subscribe('com.europe.keyboard', on_keyboard).then(
             (sub) ->
