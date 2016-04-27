@@ -32,6 +32,7 @@ services:
     volumes:
       - $PWD/europe:/src/app 
       - data:/uploads
+      - $PWD/content:/content
     ports:
       - "8084:8084"
     command: --socket 0.0.0.0:8084 --master --processes 1 --max-requests 1 --env DJANGO_SETTINGS_MODULE=europe.settings_admin --module europe.wsgi_admin:application --chdir /src/app

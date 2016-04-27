@@ -8,8 +8,3 @@ services:
       LED_OFF: 1
     volumes:
       - $PWD/watcher/watcher:/src
-
-  # share folder with content, for easier game initialization
-  admin:
-    volumes:
-      - $PWD/content:/content
