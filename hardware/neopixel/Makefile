@@ -7,11 +7,11 @@ TARGET = main
 # Hardware specific configuration
 #--------------------------------
 
-DEVICE = atmega328p
-CLOCK = 16000000
-
-# DEVICE = atmega88p
+# DEVICE = atmega328p
 # CLOCK = 16000000
+
+DEVICE = atmega88p
+CLOCK = 16000000
 
 #----------------------------
 # Programmer type and options

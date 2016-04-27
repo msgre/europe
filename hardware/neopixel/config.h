@@ -40,7 +40,7 @@
 /**
  * Number of WS2812 (Neopixel) LEDs.
  */
-#define WS2812_NUM 24
+#define WS2812_NUM 48
 
 /**
  * Data port where WS2812 are connected.

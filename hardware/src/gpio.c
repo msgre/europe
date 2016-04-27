@@ -38,26 +38,36 @@ ISR(PCINT1_vect) {
  }
 
 uint8_t gpio_loop(void) {
-    gpio_now = timer1_get();
-    if((gpio_now - gpio_new_state_time) > IR_DEBOUNCE_TIME) {
-        // Re-enable PCINT from IR inputs after some "debounce" time.
-        PCINT_ENABLE();
-        gpio_tmp = 0;
-        LED_OFF();
-    } else {
+    #ifndef IR_KEYBOARD_MODE
+        gpio_now = timer1_get();
+        if((gpio_now - gpio_new_state_time) > IR_DEBOUNCE_TIME) {
+            // Re-enable PCINT from IR inputs after some "debounce" time.
+            PCINT_ENABLE();
+            gpio_tmp = 0;
+            LED_OFF();
+        } else {
+            gpio_tmp = gpio_new_state;
+            if(gpio_tmp) {
+                #ifdef DEBUG_MAIN
+                rs485_puthex4(gpio_now);
+                rs485_putp(PSTR(": GPIO "));
+                rs485_puthex2(gpio_tmp);
+                rs485_putc('\n');
+                #endif
+
+                LED_ON();
+                gpio_new_state = 0;
+            }
+        }
+    #else
         gpio_tmp = gpio_new_state;
         if(gpio_tmp) {
-            #ifdef DEBUG_MAIN
-            rs485_puthex4(gpio_now);
-            rs485_putp(PSTR(": GPIO "));
-            rs485_puthex2(gpio_tmp);
-            rs485_putc('\n');
-            #endif
-
             LED_ON();
-            gpio_new_state = 0;
+        } else {
+            LED_OFF();
         }
-    }
+        PCINT_ENABLE();
+    #endif
 
     return gpio_tmp;
 }
