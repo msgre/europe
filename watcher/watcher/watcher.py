@@ -140,6 +140,8 @@ class AppSession(ApplicationSession):
             return new_state
         out = {}
         for k in old_state:
+            if k in [self.led_gate, self.keyboard_gate]:
+                continue
             if old_state[k] != new_state[k] and new_state[k] != 0:
                 out[k] = new_state[k]
         return out
