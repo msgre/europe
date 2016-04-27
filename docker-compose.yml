@@ -55,6 +55,7 @@ services:
     image: msgre/common:europe-watcher.latest 
     volumes:
       - $PWD/watcher/gates:/root/gates 
+      - $PWD/watcher/poweroff:/root/poweroff 
     ports:
       - "8082:8082"
     tty: true

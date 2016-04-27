@@ -3,6 +3,7 @@ import os
 import re
 import shlex
 import subprocess
+from pathlib import Path
 from time import sleep as time_sleep
 
 from twisted.internet.defer import inlineCallbacks
@@ -19,6 +20,7 @@ import neopixels
 DEBUG = os.environ.get('DEBUG', False)
 LED_OFF = os.environ.get('LED_OFF', False)
 DEBUG_PATH = '~/gates'
+POWEROFF_PATH = '~/poweroff'
 
 # TODO: try lower to 0.02 value, we have now 2 separate ModBus instrutions in main loop
 CYCLE_SLEEP = 0.005          # during each cycle, all instruments are readed; this is sleep time between each round
@@ -49,10 +51,20 @@ class AppSession(ApplicationSession):
         self.log.info('led gate: {gate}', gate=self.led_gate)
         self.keyboard_gate = extra['keyboard_gate']
         self.log.info('keyboard gate: {gate}', gate=self.keyboard_gate)
+        self.poweroff_button = extra['poweroff_button']
+        self.log.info('poweroff button: {button}', button=self.poweroff_button)
         self.gates = extra['gates'] + [self.keyboard_gate]
         self.log.info('list of gates: {gates}', gates=self.gates)
+
+        # directory for poweroff flag
+        self.poweroff_path = os.path.expanduser(POWEROFF_PATH)
+        self.log.info('poweroff directory is set to {path}', path=self.poweroff_path)
+        if not os.path.exists(self.poweroff_path):
+            os.makedirs(self.poweroff_path)
+        
         # state
         self.watch_gates = False
+        
         # neopixel's LED
         self.neopixel = None
 
@@ -79,9 +91,8 @@ class AppSession(ApplicationSession):
         self.debug_path = os.path.expanduser(DEBUG_PATH)
         self.log.info('we are in debug mode, watching directory {path}', path=self.debug_path)
 
-        if os.path.exists(self.debug_path) and os.path.isdir(self.debug_path):
-            return
-        os.makedirs(self.debug_path)
+        if not os.path.exists(self.debug_path):
+            os.makedirs(self.debug_path)
 
     def find_usb_device(self, regex):
         if DEBUG:
@@ -231,24 +242,31 @@ class AppSession(ApplicationSession):
             
             # tlacitka
             if self.keyboard_gate in value:
-                # stiskle tlacitko
+                # event on button (press or release)
                 if value[self.keyboard_gate] == 0:
+                    # released button
                     last_key_value = None
                 else:
-                    if value[self.keyboard_gate] == last_key_value:
-                        # stejne jako minule
-                        if last_key_value_counter < 1:
-                            self.log.info("repeated key value detected {keys}, event 'com.europe.keyboard' published", keys=value[self.keyboard_gate])
-                            yield self.publish('com.europe.keyboard', value[self.keyboard_gate])
-                            last_key_value_counter = KEYBOARD_REPEAT_COUNTER
-                        else:
-                            last_key_value_counter -= 1
+                    # pressed button
+                    if value[self.keyboard_gate] & self.poweroff_button:
+                        # poweroff button
+                        self.log.warn("PowerOff button pressed")
+                        Path(os.path.join(self.poweroff_path, 'flag')).touch()
                     else:
-                        # jine nez minule
-                        self.log.info("new key value detected {keys}, event 'com.europe.keyboard' published", keys=value[self.keyboard_gate])
-                        yield self.publish('com.europe.keyboard', value[self.keyboard_gate])
-                        last_key_value = value[self.keyboard_gate]
-                        last_key_value_counter = KEYBOARD_WAIT_COUNTER
+                        if value[self.keyboard_gate] == last_key_value:
+                            # same button, still pressed
+                            if last_key_value_counter < 1:
+                                self.log.info("repeated key value detected {keys}, event 'com.europe.keyboard' published", keys=value[self.keyboard_gate])
+                                yield self.publish('com.europe.keyboard', value[self.keyboard_gate])
+                                last_key_value_counter = KEYBOARD_REPEAT_COUNTER
+                            else:
+                                last_key_value_counter -= 1
+                        else:
+                            # new pressed button
+                            self.log.info("new key value detected {keys}, event 'com.europe.keyboard' published", keys=value[self.keyboard_gate])
+                            yield self.publish('com.europe.keyboard', value[self.keyboard_gate])
+                            last_key_value = value[self.keyboard_gate]
+                            last_key_value_counter = KEYBOARD_WAIT_COUNTER
 
                 if self.keyboard_gate in diff:
                     del diff[self.keyboard_gate]
