@@ -28,8 +28,8 @@ INSTRUMENT_SLEEP = 0.005     # sleep between ModBus read_registers calls; sleep 
 
 GATE_ADDRESS = 0x0000
 
-KEYBOARD_REPEAT_COUNTER = 1
-KEYBOARD_WAIT_COUNTER = 6
+KEYBOARD_REPEAT_COUNTER = 0
+KEYBOARD_WAIT_COUNTER = 7
 
 
 class AppSession(ApplicationSession):
@@ -236,8 +236,11 @@ class AppSession(ApplicationSession):
             diff = self.get_state_diff(old_value, value)
             if old_value != value:
                 if self.watch_gates and len(diff) > 0:
-                    yield self.publish('com.europe.gate', diff)
-                    self.log.info("gate passing detected {diff}, event 'com.europe.gate' published", diff=diff)
+                    if len([i for i in diff.values() if i == None]) == len(diff.values()):
+                        self.log.info("None gate detected {diff}, no event 'com.europe.gate' published", diff=diff)
+                    else:
+                        yield self.publish('com.europe.gate', diff)
+                        self.log.info("gate passing detected {diff}, event 'com.europe.gate' published", diff=diff)
                 old_value = value
             
             # tlacitka
