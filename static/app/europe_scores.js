@@ -68,7 +68,7 @@ App.module("Scores", function(Mod, App, Backbone, Marionette, $, _) {
   CategoryResultItemView = Marionette.ItemView.extend({
     tagName: "tr",
     template: function(serialized_model) {
-      return _.template("<td class=\"text-right\"><% if (show) {%><%= order %><% } %></td>\n<td><%= name %></td>\n<td class=\"text-right\"><%= show_time() %></td>")(serialized_model);
+      return _.template("<td class=\"text-right\"><% if (show) {%><%= order %><% } %></td>\n<td width=\"80%\"><%= name %></td>\n<td style=\"border-left:1px red solid\" class=\"text-right\"><%= show_time() %></td>")(serialized_model);
     },
     templateHelpers: function() {
       return {

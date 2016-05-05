@@ -69,7 +69,7 @@ App.module "Scores", (Mod, App, Backbone, Marionette, $, _) ->
         template: (serialized_model) ->
             _.template("""
                 <td class="text-right"><% if (show) {%><%= order %><% } %></td>
-                <td><%= name %></td>
+                <td width="80%"><%= name %></td>
                 <td class="text-right"><%= show_time() %></td>""")(serialized_model)
         templateHelpers: ->
             show_time: ->
