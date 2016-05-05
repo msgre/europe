@@ -54,10 +54,17 @@ App.module "Intro", (Mod, App, Backbone, Marionette, $, _) ->
                     <img src="img/brandenburg.jpg">
                     <img src="img/titul1.png">
                     <img src="img/brusel.jpg">
+
+                    <img src="img/titul1.png">
+                    <img src="img/hraci_03.jpg">
+                    
                     <img src="img/titul1.png">
                     <img src="img/london.jpg">
                     <img src="img/titul1.png">
                     <img src="img/budapest.jpg">
+
+                    <img src="img/titul1.png">
+                    <img src="img/hraci_02.jpg">
                 </div>
             """)(serialized_model)
 

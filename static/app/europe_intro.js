@@ -43,7 +43,7 @@ App.module("Intro", function(Mod, App, Backbone, Marionette, $, _) {
   });
   Slideshow = Marionette.ItemView.extend({
     template: function(serialized_model) {
-      return _.template("<div class=\"fadein\">\n    <img src=\"img/titul1.png\">\n    <img src=\"img/brandenburg.jpg\">\n    <img src=\"img/titul1.png\">\n    <img src=\"img/brusel.jpg\">\n    <img src=\"img/titul1.png\">\n    <img src=\"img/london.jpg\">\n    <img src=\"img/titul1.png\">\n    <img src=\"img/budapest.jpg\">\n</div>")(serialized_model);
+      return _.template("<div class=\"fadein\">\n    <img src=\"img/titul1.png\">\n    <img src=\"img/brandenburg.jpg\">\n    <img src=\"img/titul1.png\">\n    <img src=\"img/brusel.jpg\">\n\n    <img src=\"img/titul1.png\">\n    <img src=\"img/hraci_03.jpg\">\n    \n    <img src=\"img/titul1.png\">\n    <img src=\"img/london.jpg\">\n    <img src=\"img/titul1.png\">\n    <img src=\"img/budapest.jpg\">\n\n    <img src=\"img/titul1.png\">\n    <img src=\"img/hraci_02.jpg\">\n</div>")(serialized_model);
     }
   });
   ScreenLayout = Marionette.LayoutView.extend({
