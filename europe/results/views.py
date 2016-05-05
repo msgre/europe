@@ -59,13 +59,13 @@ class ResultRank(generics.RetrieveAPIView):
         count = Option.objects.get(key='RESULT_COUNT')
         count = int(count.value)
 
-        position = Result.objects.filter(category=category, difficulty=difficulty, time__lte=time, top=True).count()
+        position = Result.objects.filter(category=category, difficulty=difficulty, time__lt=time, top=True).count()
         total = Result.objects.filter(category=category, difficulty=difficulty, top=True).count()
 
         return {
-            'position': position,
+            'position': position + 1,
             'total': total,
-            'top': correct >= count/2 and position < count,
+            'top': correct >= count/2 and (position + 1) <= count,
         }
 
 
