@@ -361,13 +361,21 @@ App.module("Result", function(Mod, App, Backbone, Marionette, $, _) {
           return i.key === letter;
         });
         index = _temp.indexOf(true);
-        if (msg === 'left' && index > 0) {
+        if (msg === 'left') {
+          if (index > 0) {
+            index -= 1;
+          } else {
+            index = LETTERS.length - 1;
+          }
           window.sfx.button.play();
-          index -= 1;
           that.model.set('letter', LETTERS[index].key);
-        } else if (msg === 'right' && index < (LETTERS.length - 1)) {
+        } else if (msg === 'right') {
+          if (index < (LETTERS.length - 1)) {
+            index += 1;
+          } else {
+            index = 0;
+          }
           window.sfx.button.play();
-          index += 1;
           that.model.set('letter', LETTERS[index].key);
         }
         return set_delay(handler, _options.options.IDLE_RESULT);

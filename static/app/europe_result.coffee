@@ -215,13 +215,19 @@ App.module "Result", (Mod, App, Backbone, Marionette, $, _) ->
                     i.key == letter
                 index = _temp.indexOf(true)
 
-                if msg == 'left' and index > 0
+                if msg == 'left'
+                    if index > 0
+                        index -= 1
+                    else
+                        index = LETTERS.length - 1
                     window.sfx.button.play()
-                    index -= 1
                     that.model.set('letter', LETTERS[index].key)
-                else if msg == 'right' and index < (LETTERS.length - 1)
+                else if msg == 'right'
+                    if index < (LETTERS.length - 1)
+                        index += 1
+                    else
+                        index = 0
                     window.sfx.button.play()
-                    index += 1
                     that.model.set('letter', LETTERS[index].key)
 
                 set_delay(handler, _options.options.IDLE_RESULT)
