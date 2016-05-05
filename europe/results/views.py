@@ -65,7 +65,7 @@ class ResultRank(generics.RetrieveAPIView):
         return {
             'position': position,
             'total': total,
-            'top': correct >= count/2 and position <= count,
+            'top': correct >= count/2 and position < count,
         }
 
 

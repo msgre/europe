@@ -118,10 +118,10 @@ App.module "Game", (Mod, App, Backbone, Marionette, $, _) ->
                         gate_passing_time = now
                     delta = now - gate_passing_time
                     if delta <= _options.options.DUMBNESS_TIME
-                        # ignoruju udalost (at projede jakoukoliv spatnou branou)
+                        # ignore event (we dont care about gates for while)
                         ''
                     else
-                        # vyprsel ca
+                        # timeout
                         local_channel.trigger('penalty', PENALTY_TIME)
                         gate_passing_time = now
 
