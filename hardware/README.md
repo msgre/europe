@@ -123,7 +123,7 @@ To use neopixel firmware on slave 13 (example expects 24 WS2812 LEDs):
 There are two types of wires.
 
 First wire is for RS485/Modbus and connects
-together gate boards. This is at least 2 twisted pairs with RJ12 (6p6c) on both
+together gate boards. This should be at least 2 twisted pairs with RJ12 (6p6c) on both
 ends. All gate boards are daisy chained from first to last board and to Modbus
 master.
 
@@ -133,7 +133,9 @@ types can be used.
 
 ### RS485/Modbus Wires
 
-**TODO**
+The cable for RS485 is Ethernet Cat 5e, stranded. Orange and orange/wite pair is not used.
+
+![RS485 cable with RJ12 connector](https://github.com/msgre/europe/blob/master/hardware/imgs/wire-rs485.jpg)
 
 ### IR Boards Wires
 
