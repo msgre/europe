@@ -20,3 +20,16 @@ class CountryAdmin(admin.ModelAdmin):
             'fields': (('board', 'gate', 'led', ), )
         }),
     )
+    actions = ['enable_questions', 'disable_questions']
+
+    def enable_questions(self, request, queryset):
+        self._update_questions(queryset, True)
+    enable_questions.short_description = "Enable questions for selected countries"
+    
+    def disable_questions(self, request, queryset):
+        self._update_questions(queryset, False)
+    disable_questions.short_description = "Disable questions for selected countries"
+
+    def _update_questions(self, queryset, enabled):
+        from quiz.models import Question
+        Question.objects.filter(country__in=queryset).update(enabled=enabled)
