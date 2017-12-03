@@ -3,7 +3,6 @@
 Stored on Google docs: 
 https://docs.google.com/document/d/1SYrjAHexw3LlzOskLTjt9yeirrrmdV1CG6Bf5Hr2Jm0/edit
 
-
 # Timelog
 
 Programming
@@ -17,3 +16,8 @@ Programming
 Planing, preparations
 
 * around 3 days
+
+# Photos
+
+* `bottom/`
+  Bottom part of boardgame. You could find there location of individual boards, gates and wiring.
